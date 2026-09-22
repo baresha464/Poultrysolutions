@@ -60,17 +60,69 @@ builder.Services.AddCascadingAuthenticationState();
 // ---------------- App services ----------------
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<FarmService>();
+builder.Services.AddScoped<PlatformAdminService>();
+builder.Services.AddScoped<DemoDataSeeder>();
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 var app = builder.Build();
 
-// ---------------- First-run schema + seed (houses, Admin role/user) ----------------
+// ---------------- Schema + Super Admin bootstrap ----------------
+// No more global "seed houses/admin if empty" — houses/roles/an admin user now only get created
+// per-tenant, when a Super Admin creates that client (PlatformAdminService.CreateTenantAsync).
+// Startup's only job is: the schema exists, and exactly one platform Super Admin account exists.
+// Skipped under `dotnet ef` (set EF_DESIGN_TIME=1 when running migration commands) — everything
+// between Build() and Run() executes during design-time tooling too, and this block needs a real
+// reachable database, which design-time generation shouldn't depend on.
+if (Environment.GetEnvironmentVariable("EF_DESIGN_TIME") != "1")
 using (var scope = app.Services.CreateScope())
 {
-    var farmService = scope.ServiceProvider.GetRequiredService<FarmService>();
-    await farmService.InitializeAsync();
+    using var db = scope.ServiceProvider.GetRequiredService<IDbContextFactory<FarmDbContext>>().CreateDbContext();
+    if (string.Equals(databaseProvider, "Sqlite", StringComparison.OrdinalIgnoreCase))
+    {
+        // SQLite stays EnsureCreated — it's throwaway local dev, not worth a second migration
+        // history alongside SQL Server's real one.
+        await db.Database.EnsureCreatedAsync();
+    }
+    else
+    {
+        await db.Database.MigrateAsync();
+    }
+
+    var platformAdmin = scope.ServiceProvider.GetRequiredService<PlatformAdminService>();
+    var seeded = await platformAdmin.EnsureSuperAdminSeededAsync();
+    if (seeded is { } credentials)
+    {
+        Console.WriteLine("============================================================");
+        Console.WriteLine(" Super Admin account created — this is the only time the");
+        Console.WriteLine(" password is shown. Sign in and change it, then create your");
+        Console.WriteLine(" first client from the Super Admin area.");
+        Console.WriteLine($"   Username: {credentials.Username}");
+        Console.WriteLine($"   Password: {credentials.Password}");
+        Console.WriteLine("============================================================");
+    }
+}
+
+// ---------------- Demo data seeding (dev only) ----------------
+// `dotnet run -- seed-demo [Tenant Name]` provisions a brand-new tenant the same way the Super
+// Admin UI does (houses/Admin role/admin login) and fills it with a few realistic batches, then
+// exits without starting Kestrel. Doesn't touch existing tenants — safe to run any time.
+if (args.Contains("seed-demo"))
+{
+    using var scope = app.Services.CreateScope();
+    var seeder = scope.ServiceProvider.GetRequiredService<DemoDataSeeder>();
+    var tenantNameArg = args.SkipWhile(a => a != "seed-demo").Skip(1).FirstOrDefault();
+    var result = await seeder.SeedAsync(tenantNameArg);
+
+    Console.WriteLine("============================================================");
+    Console.WriteLine(" Demo data seeded.");
+    Console.WriteLine($"   Tenant:   {result.Tenant.Name}");
+    Console.WriteLine($"   Username: {result.AdminUsername}");
+    Console.WriteLine($"   Password: {result.AdminPassword}");
+    Console.WriteLine(" Sign in at /Account/Login with these credentials.");
+    Console.WriteLine("============================================================");
+    return;
 }
 
 if (!app.Environment.IsDevelopment())
@@ -95,11 +147,20 @@ app.MapPost("/Account/LoginSubmit", async (HttpContext http, AuthService authSer
     var username = form["username"].ToString();
     var password = form["password"].ToString();
 
+    string BackTo(int error) =>
+        $"/Account/Login?error={error}" + (string.IsNullOrWhiteSpace(returnUrl) ? "" : $"&returnUrl={Uri.EscapeDataString(returnUrl)}");
+
     var user = await authService.ValidateCredentialsAsync(username, password);
     if (user is null)
     {
-        var back = string.IsNullOrWhiteSpace(returnUrl) ? "" : $"&returnUrl={Uri.EscapeDataString(returnUrl)}";
-        return Results.Redirect($"/Account/Login?error=1{back}");
+        return Results.Redirect(BackTo(1));
+    }
+
+    // Checked before issuing the cookie (not left for the next circuit's LoadFromPrincipalAsync
+    // to discover) so a deactivated tenant's user gets a clear message right at sign-in.
+    if (!await authService.CanSignInAsync(user))
+    {
+        return Results.Redirect(BackTo(2));
     }
 
     var claims = new List<Claim>
@@ -111,7 +172,8 @@ app.MapPost("/Account/LoginSubmit", async (HttpContext http, AuthService authSer
     await http.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity),
         new Microsoft.AspNetCore.Authentication.AuthenticationProperties { IsPersistent = true });
 
-    var target = string.IsNullOrWhiteSpace(returnUrl) || !returnUrl.StartsWith('/') ? "/" : returnUrl;
+    var defaultTarget = user.IsSuperAdmin ? "/superadmin" : "/";
+    var target = string.IsNullOrWhiteSpace(returnUrl) || !returnUrl.StartsWith('/') ? defaultTarget : returnUrl;
     return Results.Redirect(target);
 }).DisableAntiforgery();
 
@@ -120,6 +182,20 @@ app.MapPost("/Account/Logout", async (HttpContext http) =>
     await http.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     return Results.Redirect("/Account/Login");
 }).DisableAntiforgery();
+
+// Tenant logo, referenced as <img src="/tenant-logo/{id}"> from MainLayout — a plain GET endpoint
+// (not a data-URI embedded in the page) so the logo bytes aren't re-sent on every circuit render.
+// No auth required: it's just an image keyed by a numeric id, equivalent to any static asset.
+app.MapGet("/tenant-logo/{tenantId:int}", async (int tenantId, HttpContext http, IDbContextFactory<FarmDbContext> dbFactory) =>
+{
+    using var db = dbFactory.CreateDbContext();
+    var tenant = await db.Tenants.FirstOrDefaultAsync(t => t.Id == tenantId);
+    if (tenant?.LogoBytes is null || tenant.LogoContentType is null)
+        return Results.Redirect("/images/logo-mark.png");
+
+    http.Response.Headers.CacheControl = "public, max-age=3600";
+    return Results.File(tenant.LogoBytes, tenant.LogoContentType);
+});
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
