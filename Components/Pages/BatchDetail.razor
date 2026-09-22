@@ -11,11 +11,11 @@
 }
 else if (batch is null)
 {
-    <p class="empty-state">Loading…</p>
+    <p class="empty-state">@(loaded ? "Batch not found." : "Loading…")</p>
 }
 else
 {
-    <PageTitle>@batch.BatchCode — AMR Poultry Farms</PageTitle>
+    <PageTitle>@batch.BatchCode — @(AuthService.CurrentTenant?.Name ?? "AMR Poultry Farms")</PageTitle>
 
     <div class="page-head">
         <div>
@@ -404,6 +404,7 @@ else
 @code {
     [Parameter] public int Id { get; set; }
     private Batch? batch;
+    private bool loaded;
     private BatchPerformance perf = new();
     private List<DailyRecord> daily = new();
     private List<FeedDelivery> feeds = new();
@@ -579,6 +580,7 @@ else
     protected override async Task OnParametersSetAsync()
     {
         batch = await FarmService.GetBatchAsync(Id);
+        loaded = true;
         if (batch is null) return;
 
         perf = await FarmService.GetPerformanceAsync(Id);

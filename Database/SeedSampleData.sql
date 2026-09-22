@@ -1,5 +1,14 @@
 /* ============================================================
-   AMR Poultry Farms — sample data seeder
+   LEGACY — pre-multi-tenant sample data. Left here for reference only.
+   ============================================================
+   Written against the pre-multi-tenant schema (no TenantId column
+   on any table) — running this against the current database will
+   fail or insert rows with no tenant, which the app's tenant query
+   filters will then never show anyone. Create a tenant from the
+   Super Admin area instead, which seeds its houses/admin the same
+   way this script used to for the whole (single-tenant) install.
+   ============================================================
+   AMR Poultry Farms — sample data seeder (ORIGINAL, STALE)
    ============================================================
    Adds realistic demo data so the app isn't empty:
      - 2 integrators (Suguna Foods, Venky's India Ltd) if missing

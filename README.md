@@ -10,6 +10,12 @@ calculations, permissions system) now run as a normal ASP.NET Core site with a m
 anyone on the network can open it in a browser instead of installing a mobile app, and multiple
 people can use it — including at the same time — against one shared database.
 
+**Multi-tenant**: this is a single installation shared by multiple clients ("tenants"), each with
+its own houses, batches, users and data — fully isolated from every other tenant, in one shared
+database. A platform **Super Admin** creates and manages clients (`/superadmin`) but never sees
+any client's farm data. Each client's own Admin can rename the app, upload a logo and pick brand
+colors for their tenant under **Settings → Branding**. See [Multi-tenancy](#multi-tenancy) below.
+
 ## What changed vs. the original MAUI app
 
 - **Database**: SQL Server by default (was: a local SQLite file on-device only). SQLite is
@@ -42,23 +48,22 @@ concurrent users):
 1. Have a SQL Server instance reachable from wherever this app runs (local SQL Server
    Express/Developer edition, or a shared server).
 2. Set `ConnectionStrings:Farm` to point at it. The database itself doesn't need to exist yet —
-   the app creates the schema automatically on first run (`EnsureCreatedAsync`) and seeds the
-   default houses + an `admin` user (see below).
+   the app applies EF Core migrations automatically on first run (`Database.MigrateAsync()`,
+   from `Migrations/`) and seeds the one platform Super Admin account (see
+   [Multi-tenancy](#multi-tenancy) below — there's no more global houses/admin seed).
 3. For a SQL-authenticated login instead of Windows/trusted auth:
    `Server=YOUR_SERVER;Database=AmrPoultryFarm;User Id=...;Password=...;TrustServerCertificate=True;`
 4. Don't commit a real password into `appsettings.json` — use `dotnet user-secrets` locally or
    an environment variable (`ConnectionStrings__Farm`) in deployment.
 
-**Prefer to create the database yourself instead of letting the app auto-create it on first
-run?** `Database/CreateAmrPoultryFarmDatabase.sql` has the full schema — every table, foreign
-key, index — plus the same seed data (3 houses, the Admin role with every permission, and the
-`admin`/`admin` login) the app would otherwise create automatically. Run it with:
+**Evolving the schema**: after changing anything under `Models/` or `Data/FarmDbContext.cs`, add
+a new migration and it'll apply automatically next run:
 ```bash
-sqlcmd -S YOUR_SERVER -i Database/CreateAmrPoultryFarmDatabase.sql
+dotnet ef migrations add <DescriptiveName> --context FarmDbContext -o Migrations
 ```
-or open it in SQL Server Management Studio / Azure Data Studio and execute it directly. It's
-idempotent — safe to run again later (every `CREATE TABLE` is guarded, and the seed inserts
-only fire on an empty install).
+`Database/CreateAmrPoultryFarmDatabase.sql` and `Database/SeedSampleData.sql` are kept only as
+historical reference to the pre-multi-tenant schema — they're stale (no `TenantId` columns) and
+shouldn't be run against a real database anymore; use migrations instead.
 
 **SQLite** (local dev only — zero setup, a single `.db3` file under `App_Data/`):
 ```jsonc
@@ -76,33 +81,62 @@ dotnet run
 ```
 
 Then open the URL it prints (typically `https://localhost:5001` or similar). First run creates
-the schema and seeds:
-- Three houses: **House 1**, **House 2**, **House 3**
-- One admin login: **username `admin`, password `admin`** — holding every permission.
+the schema and prints a one-time **Super Admin** login to the console — copy it down, it's not
+shown again:
+```
+Username: superadmin
+Password: <randomly generated>
+```
+Sign in with it, then create your first client from **Clients → +** — that's what seeds a
+tenant's default 3 houses, its Admin role, and its first admin login. See
+[Multi-tenancy](#multi-tenancy) below.
 
-**Change the admin password immediately** (Settings → Users → admin → Reset Password) before
-using this anywhere besides your own machine.
+## Multi-tenancy
+
+This install is shared by multiple clients ("tenants"), isolated from each other in one database:
+
+- **Super Admin** (`/superadmin`, the account seeded on first run above) creates/deactivates
+  clients and can reset a client's admin password — nothing else. It deliberately never sees any
+  tenant's houses, batches, or other farm data (`Services/PlatformAdminService.cs`).
+- **Tenant Admin** (the user created when a client is provisioned) manages their own houses,
+  batches, users, roles — the same feature set this app always had — plus **Settings →
+  Branding**, where they can rename the app, upload a logo and pick brand colors for their own
+  tenant only.
+- Every login goes through the same shared `/Account/Login` page; which tenant (or the platform)
+  a user lands in is resolved server-side after authenticating, not by subdomain or URL.
+- Isolation is enforced by an EF Core global query filter keyed on `FarmDbContext.TenantId`
+  (`Data/FarmDbContext.cs`) — fail-closed, so a context with no tenant set reads every
+  tenant-scoped table as empty rather than as "everything." New tenant-scoped rows get their
+  `TenantId` stamped automatically on save; see the comments in `FarmDbContext` for the details.
 
 ## Project layout
 
 ```
 AmrPoultryFarmWeb/
-  Program.cs                  — DB provider selection, cookie auth, login/logout endpoints, seeding
-  Data/FarmDbContext.cs       — EF Core model (SQL Server or SQLite via config)
+  Program.cs                  — DB provider selection, cookie auth, login/logout/tenant-logo
+                                 endpoints, migration + Super Admin bootstrap
+  Migrations/                  — EF Core migrations (SQL Server path)
+  Data/FarmDbContext.cs       — EF Core model, tenant query filters + TenantId auto-stamp
+  Data/ITenantScoped.cs       — marker interface for every tenant-owned entity
+  Models/Tenant.cs            — client row: name, logo, brand colors, active flag
   Models/FarmModels.cs        — Batch, DailyRecord, FeedDelivery, HealthEvent, Lifting, Settlement, Expense, House, Integrator, User, Role...
   Models/Permissions.cs       — permission-code catalog used by the role editor
   Services/
-    FarmService.cs            — CRUD + FCR/EEF/livability performance calculations
-    AuthService.cs            — login validation, permission/session snapshot, user & role CRUD
+    FarmService.cs            — CRUD + FCR/EEF/livability performance calculations + tenant branding save
+    AuthService.cs            — login validation, tenant/permission/session snapshot, user & role CRUD
+    PlatformAdminService.cs   — Super Admin bootstrap + client create/activate/password-reset
     PasswordHasher.cs         — PBKDF2 hashing
   Components/
     App.razor, Routes.razor   — host page / router (with auth-aware routing)
     RedirectToLogin.razor     — sends unauthenticated visitors to /Account/Login
-    Account/Login.razor       — sign-in screen
-    Layout/MainLayout.razor   — header + bottom nav shell
+    Account/Login.razor       — shared sign-in screen (same login for every tenant + Super Admin)
+    Layout/MainLayout.razor   — tenant-branded header + nav shell (name/logo/colors)
+    Layout/SuperAdminLayout.razor — platform admin shell, no farm nav
     Layout/EmptyLayout.razor  — bare layout used by the login/error pages
     Pages/                    — Home, Batches, BatchDetail, forms for every record type,
-                                 Houses, Integrators, Users, Roles, Expenses, Reports, Settings
+                                 Houses, Integrators, Users, Roles, Expenses, Reports, Settings,
+                                 BrandingSettings
+    Pages/SuperAdmin/         — client list, create client, client detail
     Shared/                   — BatchRow, Dropdown, PoultryHouseArt, BarChart, LineChart
   wwwroot/
     css/app.css                — full design system (colors, cards, KPIs, forms, charts, nav)
@@ -127,7 +161,7 @@ nothing house-related). Manage all of this under **Settings → Roles / Users / 
 - **Concurrent editing**: this is now a shared multi-user app — two people editing the same
   batch at once will simply have the later save win (no optimistic-concurrency conflict
   handling was added). Fine for a small farm team; worth revisiting if usage grows.
-- **EF Core Migrations**: the app currently uses `EnsureCreatedAsync()` for simplicity (same as
-  the original). If you need to evolve the schema after going live on SQL Server without losing
-  data, switch to proper EF Core Migrations (`dotnet ef migrations add ...`) rather than
-  `EnsureCreated`.
+- **`ConnectionStrings:Farm` in `appsettings.json`**: this repo currently has a real connection
+  string (host + credentials) committed in plain text. Rotate that password and move the real
+  value to `dotnet user-secrets` or an environment variable before treating this repo as public
+  or handing it to anyone else — see the "Don't commit a real password" note above.

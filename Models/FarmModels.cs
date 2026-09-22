@@ -1,13 +1,15 @@
 using System.ComponentModel.DataAnnotations;
+using AmrPoultryFarmWeb.Data;
 
 namespace AmrPoultryFarmWeb.Models;
 
 public enum BatchStatus { Active = 0, Closed = 1 }
 
 /// <summary>A physical broiler house / shed on the farm. Houses run many batches over their lifetime.</summary>
-public class House
+public class House : ITenantScoped
 {
     public int Id { get; set; }
+    public int TenantId { get; set; }
 
     [Required, MaxLength(50)]
     public string Name { get; set; } = "";
@@ -26,9 +28,10 @@ public class House
 }
 
 /// <summary>A company/integrator the farm grows birds for. Managed centrally so batches pick from one list.</summary>
-public class Integrator
+public class Integrator : ITenantScoped
 {
     public int Id { get; set; }
+    public int TenantId { get; set; }
 
     [Required, MaxLength(80)]
     public string Name { get; set; } = "";
@@ -44,9 +47,10 @@ public class Integrator
 }
 
 /// <summary>One growing cycle / flock placed in a house.</summary>
-public class Batch
+public class Batch : ITenantScoped
 {
     public int Id { get; set; }
+    public int TenantId { get; set; }
 
     [Required, MaxLength(30)]
     public string BatchCode { get; set; } = "";          // e.g. AMR-2026-04
@@ -86,9 +90,10 @@ public class Batch
 }
 
 /// <summary>Daily house record — the core of farm data entry.</summary>
-public class DailyRecord
+public class DailyRecord : ITenantScoped
 {
     public int Id { get; set; }
+    public int TenantId { get; set; }
     public int BatchId { get; set; }
     public Batch? Batch { get; set; }
 
@@ -109,9 +114,10 @@ public class DailyRecord
 }
 
 /// <summary>Feed received from the integrator (Pre-starter/Starter/Finisher).</summary>
-public class FeedDelivery
+public class FeedDelivery : ITenantScoped
 {
     public int Id { get; set; }
+    public int TenantId { get; set; }
     public int BatchId { get; set; }
     public Batch? Batch { get; set; }
 
@@ -134,9 +140,10 @@ public class FeedDelivery
 public enum HealthEventType { Vaccination = 0, Medication = 1, Supplement = 2, Disinfection = 3 }
 
 /// <summary>Vaccination / medication / supplement given to the flock.</summary>
-public class HealthEvent
+public class HealthEvent : ITenantScoped
 {
     public int Id { get; set; }
+    public int TenantId { get; set; }
     public int BatchId { get; set; }
     public Batch? Batch { get; set; }
 
@@ -159,9 +166,10 @@ public class HealthEvent
 }
 
 /// <summary>Farm-side running expense (electricity, litter, labour, diesel, brooding...).</summary>
-public class Expense
+public class Expense : ITenantScoped
 {
     public int Id { get; set; }
+    public int TenantId { get; set; }
     public int? BatchId { get; set; }                    // null = general farm expense
     public Batch? Batch { get; set; }
 
@@ -177,9 +185,10 @@ public class Expense
 }
 
 /// <summary>Bird lifting / harvest by the integrator.</summary>
-public class Lifting
+public class Lifting : ITenantScoped
 {
     public int Id { get; set; }
+    public int TenantId { get; set; }
     public int BatchId { get; set; }
     public Batch? Batch { get; set; }
 
@@ -200,9 +209,10 @@ public class Lifting
 }
 
 /// <summary>Final settlement figures from the integrator when the batch closes.</summary>
-public class Settlement
+public class Settlement : ITenantScoped
 {
     public int Id { get; set; }
+    public int TenantId { get; set; }
     public int BatchId { get; set; }
     public Batch? Batch { get; set; }
 
@@ -217,10 +227,18 @@ public class Settlement
     public string Remarks { get; set; } = "";
 }
 
-/// <summary>A person who can log into the app.</summary>
+/// <summary>A person who can log into the app. Deliberately NOT ITenantScoped/query-filtered — login
+/// must be able to look up a username before any tenant is known. TenantId is null only for the one
+/// platform Super Admin account; every tenant user has a real TenantId.</summary>
 public class User
 {
     public int Id { get; set; }
+
+    public int? TenantId { get; set; }
+
+    /// <summary>Platform-level account (manages clients only, never sees tenant farm data). Not tied
+    /// to any tenant, so TenantId is null for this user.</summary>
+    public bool IsSuperAdmin { get; set; }
 
     [Required, MaxLength(40)]
     public string Username { get; set; } = "";
@@ -241,9 +259,10 @@ public class User
 }
 
 /// <summary>A named set of permissions. Admins can create any number of these.</summary>
-public class Role
+public class Role : ITenantScoped
 {
     public int Id { get; set; }
+    public int TenantId { get; set; }
 
     [Required, MaxLength(50)]
     public string Name { get; set; } = "";
@@ -259,9 +278,10 @@ public class Role
 }
 
 /// <summary>Join: which roles a user holds. Effective permissions are the union across all of them.</summary>
-public class UserRole
+public class UserRole : ITenantScoped
 {
     public int Id { get; set; }
+    public int TenantId { get; set; }
     public int UserId { get; set; }
     public User? User { get; set; }
     public int RoleId { get; set; }
@@ -269,9 +289,10 @@ public class UserRole
 }
 
 /// <summary>Join: which permission codes a role grants. Codes come from the code-defined <see cref="Permissions"/> catalog.</summary>
-public class RolePermission
+public class RolePermission : ITenantScoped
 {
     public int Id { get; set; }
+    public int TenantId { get; set; }
     public int RoleId { get; set; }
     public Role? Role { get; set; }
 
@@ -280,9 +301,10 @@ public class RolePermission
 }
 
 /// <summary>Join: which houses a user is scoped to. Empty set + non-system-admin = sees nothing.</summary>
-public class UserHouse
+public class UserHouse : ITenantScoped
 {
     public int Id { get; set; }
+    public int TenantId { get; set; }
     public int UserId { get; set; }
     public User? User { get; set; }
     public int HouseId { get; set; }

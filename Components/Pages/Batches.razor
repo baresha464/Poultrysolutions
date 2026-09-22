@@ -3,7 +3,7 @@
 @inject AuthService AuthService
 @inject NavigationManager Nav
 
-<PageTitle>Batches — AMR Poultry Farms</PageTitle>
+<PageTitle>Batches — @(AuthService.CurrentTenant?.Name ?? "AMR Poultry Farms")</PageTitle>
 
 @if (!AuthService.HasPermission(Permissions.Batches.View))
 {

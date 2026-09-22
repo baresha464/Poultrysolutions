@@ -22,7 +22,16 @@ public class AuthService
         this.dbFactory = dbFactory;
     }
 
-    private FarmDbContext NewContext() => dbFactory.CreateDbContext();
+    // Tenant-scoped: every call this makes is filtered to CurrentTenantId (null while logged out
+    // or for the Super Admin, whose own farm-data reads must fail-closed to empty — see
+    // FarmDbContext.TenantId). Login and the initial principal lookup use their own unscoped
+    // context instead, since the tenant isn't known yet at that point.
+    private FarmDbContext NewContext()
+    {
+        var db = dbFactory.CreateDbContext();
+        db.TenantId = CurrentTenantId;
+        return db;
+    }
 
     public User? CurrentUser { get; private set; }
     public HashSet<string> CurrentPermissions { get; private set; } = new();
@@ -30,25 +39,51 @@ public class AuthService
     public bool IsSystemAdmin { get; private set; }
     public bool IsAuthenticated => CurrentUser is not null;
 
+    /// <summary>Tenant the current session belongs to; null while logged out or for the Super Admin
+    /// (who isn't tied to any tenant).</summary>
+    public int? CurrentTenantId { get; private set; }
+
+    /// <summary>The tenant row itself — name/logo/colors — for MainLayout's branding.</summary>
+    public Tenant? CurrentTenant { get; private set; }
+
+    /// <summary>Platform-level account: can manage clients, never sees any tenant's farm data.</summary>
+    public bool IsSuperAdmin { get; private set; }
+
     /// <summary>Raised after the session snapshot changes so subscribed components can re-render.</summary>
     public event Action? StateChanged;
 
     // ---------------- Session (claims-backed) ----------------
 
     /// <summary>Verifies credentials for the login endpoint. Does not touch the auth cookie itself —
-    /// the endpoint calls HttpContext.SignInAsync with the returned user's id.</summary>
+    /// the endpoint calls HttpContext.SignInAsync with the returned user's id. Usernames are unique
+    /// across the whole install (not per-tenant) precisely so this lookup — which happens before any
+    /// tenant is known — is unambiguous.</summary>
     public async Task<User?> ValidateCredentialsAsync(string username, string password)
     {
         if (string.IsNullOrWhiteSpace(username)) return null;
-        using var db = NewContext();
+        using var db = dbFactory.CreateDbContext();
         var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username && u.IsActive);
         if (user is null || !PasswordHasher.Verify(password, user.PasswordHash, user.PasswordSalt))
             return null;
         return user;
     }
 
+    /// <summary>True if this user is safe to sign in: a Super Admin always is (no tenant to be
+    /// deactivated); a tenant user needs their tenant to still exist and be active.</summary>
+    public async Task<bool> CanSignInAsync(User user)
+    {
+        if (user.IsSuperAdmin) return true;
+        if (user.TenantId is null) return false;
+        using var db = dbFactory.CreateDbContext();
+        return await db.Tenants.AnyAsync(t => t.Id == user.TenantId && t.IsActive);
+    }
+
     /// <summary>Populates the session snapshot from the signed-in cookie principal. Call once per
-    /// circuit (MainLayout does this via the cascading AuthenticationState).</summary>
+    /// circuit (MainLayout does this via the cascading AuthenticationState).
+    /// Two-phase read because the tenant isn't known until the User row is read: phase 1 looks the
+    /// user up on an unscoped context (User has no query filter, by design); phase 2 — only for a
+    /// tenant user — switches that same context's TenantId over and re-queries with the
+    /// role/permission/house includes, which now resolve correctly scoped.</summary>
     public async Task LoadFromPrincipalAsync(ClaimsPrincipal principal)
     {
         if (principal.Identity?.IsAuthenticated != true)
@@ -64,7 +99,34 @@ public class AuthService
             return;
         }
 
-        using var db = NewContext();
+        using var db = dbFactory.CreateDbContext();
+        var basic = await db.Users.FirstOrDefaultAsync(u => u.Id == userId && u.IsActive);
+        if (basic is null)
+        {
+            Clear();
+            return;
+        }
+
+        if (basic.IsSuperAdmin)
+        {
+            ApplySuperAdminSession(basic);
+            return;
+        }
+
+        if (basic.TenantId is null)
+        {
+            Clear();
+            return;
+        }
+
+        var tenant = await db.Tenants.FirstOrDefaultAsync(t => t.Id == basic.TenantId);
+        if (tenant is null || !tenant.IsActive)
+        {
+            Clear();
+            return;
+        }
+
+        db.TenantId = tenant.Id;
         var user = await db.Users
             .Include(u => u.UserRoles).ThenInclude(ur => ur.Role).ThenInclude(r => r!.RolePermissions)
             .Include(u => u.UserHouses)
@@ -76,14 +138,17 @@ public class AuthService
             return;
         }
 
-        ApplySession(user);
+        ApplySession(user, tenant);
     }
 
     public bool HasPermission(string code) => CurrentPermissions.Contains(code);
 
-    private void ApplySession(User user)
+    private void ApplySession(User user, Tenant tenant)
     {
         CurrentUser = user;
+        CurrentTenantId = tenant.Id;
+        CurrentTenant = tenant;
+        IsSuperAdmin = false;
         CurrentPermissions = user.UserRoles
             .Where(ur => ur.Role is not null)
             .SelectMany(ur => ur.Role!.RolePermissions)
@@ -94,9 +159,24 @@ public class AuthService
         StateChanged?.Invoke();
     }
 
+    private void ApplySuperAdminSession(User user)
+    {
+        CurrentUser = user;
+        CurrentTenantId = null;
+        CurrentTenant = null;
+        IsSuperAdmin = true;
+        CurrentPermissions = new();
+        CurrentAssignedHouseIds = new();
+        IsSystemAdmin = false;
+        StateChanged?.Invoke();
+    }
+
     private void Clear()
     {
         CurrentUser = null;
+        CurrentTenantId = null;
+        CurrentTenant = null;
+        IsSuperAdmin = false;
         CurrentPermissions = new();
         CurrentAssignedHouseIds = new();
         IsSystemAdmin = false;
@@ -104,22 +184,28 @@ public class AuthService
     }
 
     // ---------------- Users ----------------
+    // User has no query filter (see its doc comment), so every method here filters TenantId by
+    // hand — this is the small, deliberate cost of keeping login able to look up a username before
+    // any tenant is known.
     public async Task<List<User>> GetUsersAsync()
     {
         using var db = NewContext();
-        return await db.Users.Include(u => u.UserRoles).ThenInclude(ur => ur.Role)
+        return await db.Users.Where(u => u.TenantId == CurrentTenantId)
+            .Include(u => u.UserRoles).ThenInclude(ur => ur.Role)
             .OrderBy(u => u.Username).ToListAsync();
     }
 
     public async Task<User?> GetUserAsync(int id)
     {
         using var db = NewContext();
-        return await db.Users.Include(u => u.UserRoles).ThenInclude(ur => ur.Role)
+        return await db.Users.Where(u => u.TenantId == CurrentTenantId)
+            .Include(u => u.UserRoles).ThenInclude(ur => ur.Role)
             .Include(u => u.UserHouses)
             .FirstOrDefaultAsync(u => u.Id == id);
     }
 
-    /// <summary>Creates or updates a user. Pass a non-empty <paramref name="newPassword"/> to set/reset it.</summary>
+    /// <summary>Creates or updates a user in the current tenant. Pass a non-empty
+    /// <paramref name="newPassword"/> to set/reset it.</summary>
     public async Task<int> SaveUserAsync(User user, List<int> roleIds, List<int> houseIds, string? newPassword)
     {
         using var db = NewContext();
@@ -133,12 +219,13 @@ public class AuthService
 
         if (user.Id == 0)
         {
+            user.TenantId = CurrentTenantId;
             db.Users.Add(user);
         }
         else
         {
             var existing = await db.Users.Include(u => u.UserRoles).Include(u => u.UserHouses)
-                .FirstAsync(u => u.Id == user.Id);
+                .FirstAsync(u => u.Id == user.Id && u.TenantId == CurrentTenantId);
             existing.Username = user.Username;
             existing.DisplayName = user.DisplayName;
             existing.IsActive = user.IsActive;
@@ -164,7 +251,8 @@ public class AuthService
     public async Task<bool> DeleteUserAsync(int userId)
     {
         using var db = NewContext();
-        var user = await db.Users.Include(u => u.UserRoles).ThenInclude(ur => ur.Role)
+        var user = await db.Users.Where(u => u.TenantId == CurrentTenantId)
+            .Include(u => u.UserRoles).ThenInclude(ur => ur.Role)
             .FirstOrDefaultAsync(u => u.Id == userId);
         if (user is null) return false;
 

@@ -5,7 +5,7 @@
 @using AmrPoultryFarmWeb.Components.Shared.Charts
 @using static AmrPoultryFarmWeb.Components.Shared.Charts.ChartTheme
 
-<PageTitle>Dashboard — AMR Poultry Farms</PageTitle>
+<PageTitle>Dashboard — @(AuthService.CurrentTenant?.Name ?? "AMR Poultry Farms")</PageTitle>
 
 @if (loading)
 {

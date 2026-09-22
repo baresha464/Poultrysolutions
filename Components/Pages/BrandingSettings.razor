@@ -1,0 +1,118 @@
+@page "/settings/branding"
+@inject FarmService FarmService
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<div class="page-title">Branding</div>
+
+@if (!AuthService.IsSystemAdmin)
+{
+    <div class="card empty-state">You don't have permission to view this.</div>
+}
+else if (loading)
+{
+    <p class="empty-state">Loading…</p>
+}
+else
+{
+    <div class="card">
+        <div class="form-grid single">
+            <div class="field">
+                <label>App Name *</label>
+                <input @bind="name" placeholder="e.g. Sneha Farms" />
+            </div>
+            <div class="field">
+                <label>Logo</label>
+                <img src="@LogoPreviewUrl" alt="Current logo" style="height:48px; display:block; margin-bottom:8px;" />
+                <InputFile OnChange="OnLogoSelected" accept="image/png,image/jpeg,image/svg+xml" />
+                <div class="list-row-sub">PNG, JPEG or SVG, up to 512 KB.</div>
+            </div>
+            <div class="field">
+                <label>Primary Color</label>
+                <input type="color" @bind="primaryColor" @bind:event="oninput" style="width:60px; height:36px; padding:2px;" />
+            </div>
+            <div class="field">
+                <label>Accent Color</label>
+                <input type="color" @bind="accentColor" @bind:event="oninput" style="width:60px; height:36px; padding:2px;" />
+            </div>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(error))
+    {
+        <div class="validation-errors">@error</div>
+    }
+    @if (saved)
+    {
+        <p>Saved — reload the page to see the new branding everywhere.</p>
+    }
+
+    <div class="action-row">
+        <button type="button" class="btn btn-primary btn-block" @onclick="Save">Save Branding</button>
+    </div>
+}
+
+@code {
+    private bool loading = true;
+    private string name = "";
+    private string primaryColor = "#0284c7";
+    private string accentColor = "#e8a33d";
+    private byte[]? pendingLogoBytes;
+    private string? pendingLogoContentType;
+    private string? error;
+    private bool saved;
+    private int tenantId;
+
+    private const long MaxLogoBytes = 512 * 1024;
+
+    private string LogoPreviewUrl => $"/tenant-logo/{tenantId}?v={(pendingLogoBytes is null ? "0" : Guid.NewGuid().ToString("N"))}";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!AuthService.IsSystemAdmin || AuthService.CurrentTenant is null)
+        {
+            loading = false;
+            return;
+        }
+
+        var tenant = AuthService.CurrentTenant;
+        tenantId = tenant.Id;
+        name = tenant.Name;
+        primaryColor = tenant.PrimaryColorHex;
+        accentColor = tenant.AccentColorHex;
+        loading = false;
+    }
+
+    private async Task OnLogoSelected(InputFileChangeEventArgs e)
+    {
+        error = null;
+        var file = e.File;
+        if (file.Size > MaxLogoBytes)
+        {
+            error = "Logo must be 512 KB or smaller.";
+            return;
+        }
+
+        using var stream = file.OpenReadStream(MaxLogoBytes);
+        using var ms = new MemoryStream();
+        await stream.CopyToAsync(ms);
+        pendingLogoBytes = ms.ToArray();
+        pendingLogoContentType = file.ContentType;
+    }
+
+    private async Task Save()
+    {
+        error = null;
+        saved = false;
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            error = "App name is required.";
+            return;
+        }
+
+        await FarmService.SaveTenantBrandingAsync(name, pendingLogoBytes, pendingLogoContentType, primaryColor, accentColor);
+        pendingLogoBytes = null;
+        pendingLogoContentType = null;
+        saved = true;
+    }
+}

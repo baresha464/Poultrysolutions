@@ -10,6 +10,16 @@ public class FarmDbContext : DbContext
     // path, which doesn't exist outside a MAUI host.
     public FarmDbContext(DbContextOptions<FarmDbContext> options) : base(options) { }
 
+    // Set by the caller (FarmService/AuthService's NewContext(), or a platform-admin routine)
+    // right after CreateDbContext(). Deliberately a plain mutable property, not DI-injected —
+    // IDbContextFactory-created contexts don't reliably support scoped-service constructor
+    // injection. Every ITenantScoped query filter below closes over this property, and
+    // SaveChanges uses it to auto-stamp new rows. Left null = every tenant-scoped table reads as
+    // empty (fail-closed), which is what makes it impossible for the Super Admin's own context
+    // (TenantId always null) to ever see tenant farm data.
+    public int? TenantId { get; set; }
+
+    public DbSet<Tenant> Tenants => Set<Tenant>();
     public DbSet<House> Houses => Set<House>();
     public DbSet<Integrator> Integrators => Set<Integrator>();
     public DbSet<Batch> Batches => Set<Batch>();
@@ -27,6 +37,25 @@ public class FarmDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Fail-closed tenant isolation: every ITenantScoped table only ever returns rows for the
+        // TenantId currently set on this context instance, and returns nothing at all if it's
+        // unset. User is deliberately excluded — login needs to look up a username before any
+        // tenant is known (see User's doc comment) — the handful of AuthService methods that read
+        // tenant users filter TenantId by hand instead.
+        modelBuilder.Entity<House>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
+        modelBuilder.Entity<Integrator>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
+        modelBuilder.Entity<Batch>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
+        modelBuilder.Entity<DailyRecord>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
+        modelBuilder.Entity<FeedDelivery>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
+        modelBuilder.Entity<HealthEvent>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
+        modelBuilder.Entity<Expense>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
+        modelBuilder.Entity<Lifting>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
+        modelBuilder.Entity<Settlement>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
+        modelBuilder.Entity<Role>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
+        modelBuilder.Entity<RolePermission>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
+        modelBuilder.Entity<UserRole>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
+        modelBuilder.Entity<UserHouse>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
+
         modelBuilder.Entity<House>()
             .HasMany(h => h.Batches).WithOne(b => b.House!)
             .HasForeignKey(b => b.HouseId).OnDelete(DeleteBehavior.Restrict);
@@ -34,6 +63,12 @@ public class FarmDbContext : DbContext
         modelBuilder.Entity<Integrator>()
             .HasMany(i => i.Batches).WithOne(b => b.Integrator!)
             .HasForeignKey(b => b.IntegratorId).OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<House>().HasIndex(h => h.TenantId);
+        modelBuilder.Entity<Integrator>().HasIndex(i => i.TenantId);
+        modelBuilder.Entity<Batch>().HasIndex(b => b.TenantId);
+        modelBuilder.Entity<Role>().HasIndex(r => r.TenantId);
+        modelBuilder.Entity<User>().HasIndex(u => u.TenantId);
 
         modelBuilder.Entity<Batch>().HasIndex(b => b.HouseId);
         modelBuilder.Entity<Batch>().HasIndex(b => b.IntegratorId);
@@ -92,5 +127,33 @@ public class FarmDbContext : DbContext
             .HasOne(uh => uh.House).WithMany()
             .HasForeignKey(uh => uh.HouseId).OnDelete(DeleteBehavior.Cascade);
         modelBuilder.Entity<UserHouse>().HasIndex(uh => new { uh.UserId, uh.HouseId }).IsUnique();
+    }
+
+    // Stamps TenantId onto every newly-added ITenantScoped entity from this context's own
+    // TenantId, so FarmService's CRUD methods never have to set it themselves. Entities that
+    // already carry an explicit TenantId (tenant-provisioning, which inserts rows for a
+    // newly-created tenant before this context's own TenantId is switched over) are left alone.
+    private void StampTenantId()
+    {
+        foreach (var entry in ChangeTracker.Entries())
+        {
+            if (entry.State == EntityState.Added && entry.Entity is ITenantScoped scoped && scoped.TenantId == 0)
+            {
+                scoped.TenantId = TenantId ?? throw new InvalidOperationException(
+                    $"Cannot insert a {entry.Entity.GetType().Name} row: FarmDbContext.TenantId is not set.");
+            }
+        }
+    }
+
+    public override int SaveChanges(bool acceptAllChangesOnSuccess)
+    {
+        StampTenantId();
+        return base.SaveChanges(acceptAllChangesOnSuccess);
+    }
+
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+    {
+        StampTenantId();
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
     }
 }

@@ -1,11 +1,23 @@
 /* ============================================================
-   AMR Poultry Farms — SQL Server schema + seed data
+   LEGACY — pre-multi-tenant schema. Left here for reference only.
    ============================================================
-   Creates every table the app's EF Core model maps (same shape
-   EnsureCreatedAsync() would build on first run), with the same
-   foreign keys, unique indexes, and default constraints as
-   Data/FarmDbContext.cs + Models/FarmModels.cs — plus the same
-   first-run seed data FarmService.InitializeAsync() inserts:
+   The app is now multi-tenant (see Migrations/) — every table below
+   is missing the TenantId column the real schema now has, and
+   FarmService.InitializeAsync() (the seeding step this script
+   mirrors) no longer exists; seeding now happens per-tenant via
+   Services/PlatformAdminService.CreateTenantAsync when a Super Admin
+   creates a client. Don't run this against a real deployment — use
+   `dotnet ef database update` (SQL Server) or EnsureCreatedAsync()
+   (SQLite dev) instead, both wired up in Program.cs.
+   ============================================================
+   AMR Poultry Farms — SQL Server schema + seed data (ORIGINAL, STALE)
+   ============================================================
+   Creates every table the app's EF Core model mapped BEFORE
+   multi-tenancy (same shape EnsureCreatedAsync() used to build on
+   first run), with the same foreign keys, unique indexes, and
+   default constraints as Data/FarmDbContext.cs + Models/FarmModels.cs
+   had at the time — plus the same first-run seed data
+   FarmService.InitializeAsync() used to insert:
      - 3 houses (House 1 / House 2 / House 3)
      - the built-in "Admin" role holding every permission code
      - one login: username "admin", password "admin"

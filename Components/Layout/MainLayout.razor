@@ -1,17 +1,25 @@
 @inherits LayoutComponentBase
 @inject AuthService AuthService
 @inject IJSRuntime JS
+@inject NavigationManager Nav
 
 <CascadingValue Value="AuthService">
 @if (!authReady)
 {
     <div class="boot-loading">
-        <img src="images/logo-mark.png" alt="AMR Poultry Farms" />
-        <span>Loading AMR Poultry Farms…</span>
+        <img src="images/logo-mark.png" alt="Loading" />
+        <span>Loading…</span>
     </div>
 }
 else
 {
+    <style>
+        :root {
+            --green: @(AuthService.CurrentTenant?.PrimaryColorHex ?? "#0284c7");
+            --amber: @(AuthService.CurrentTenant?.AccentColorHex ?? "#e8a33d");
+        }
+    </style>
+
     <div class="shell">
         <div class="sidebar-scrim @(sidebarOpen ? "open" : "")" @onclick="CloseSidebar"></div>
 
@@ -21,9 +29,9 @@ else
             </button>
 
             <div class="sidebar-brand">
-                <img src="images/logo-mark.png" alt="AMR" />
+                <img src="@LogoUrl" alt="@TenantName" />
                 <div class="sidebar-brand-text">
-                    <div class="sidebar-brand-name">AMR Poultry Farms</div>
+                    <div class="sidebar-brand-name">@TenantName</div>
                     <div class="sidebar-brand-sub">Broiler Operations</div>
                 </div>
                 <button class="sidebar-close-btn" @onclick="CloseSidebar" title="Close menu">
@@ -86,9 +94,9 @@ else
                 </button>
 
                 <div class="topbar-org">
-                    <img src="images/logo-mark.png" alt="AMR" class="topbar-org-mark" />
+                    <img src="@LogoUrl" alt="@TenantName" class="topbar-org-mark" />
                     <span class="topbar-org-text">
-                        <span class="topbar-title">AMR Poultry Farms</span>
+                        <span class="topbar-title">@TenantName</span>
                         <span class="topbar-subtitle">Broiler Operations</span>
                     </span>
                     <span class="topbar-live-pill"><span class="topbar-live-dot"></span>Live</span>
@@ -125,6 +133,9 @@ else
     private bool authReady;
     private const string CollapseStorageKey = "amr-sidebar-collapsed";
 
+    private string TenantName => AuthService.CurrentTenant?.Name ?? "AMR Poultry Farms";
+    private string LogoUrl => AuthService.CurrentTenant is { } t ? $"/tenant-logo/{t.Id}" : "images/logo-mark.png";
+
     private string Initials
     {
         get
@@ -149,6 +160,13 @@ else
         // AuthService/FarmService (and race the permission/house-scoping load above)
         // before the session snapshot is actually populated.
         authReady = true;
+
+        // Symmetric with SuperAdminLayout bouncing a tenant user away from /superadmin — a Super
+        // Admin has no farm data to see, so any farm route sends them to their own area instead.
+        if (AuthService.IsSuperAdmin)
+        {
+            Nav.NavigateTo("/superadmin", forceLoad: true);
+        }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

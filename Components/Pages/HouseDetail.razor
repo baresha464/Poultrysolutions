@@ -9,7 +9,7 @@
 }
 else if (house is null)
 {
-    <p class="empty-state">Loading…</p>
+    <p class="empty-state">@(loaded ? "House not found." : "Loading…")</p>
 }
 else
 {
@@ -85,6 +85,7 @@ else
 @code {
     [Parameter] public int Id { get; set; }
     private House? house;
+    private bool loaded;
     private List<Batch> all = new();
     private List<Batch> filtered = new();
     private List<int> years = new();
@@ -96,6 +97,7 @@ else
     protected override async Task OnParametersSetAsync()
     {
         house = await FarmService.GetHouseAsync(Id);
+        loaded = true;
         if (house is null) return;
 
         all = await FarmService.GetBatchesAsync(houseId: Id);

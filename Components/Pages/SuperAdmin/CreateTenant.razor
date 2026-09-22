@@ -1,0 +1,91 @@
+@page "/superadmin/tenants/new"
+@layout SuperAdminLayout
+@using Microsoft.EntityFrameworkCore
+@inject PlatformAdminService PlatformAdminService
+@inject NavigationManager Nav
+
+<PageTitle>New Client — Platform Admin</PageTitle>
+
+<div class="page-title">New Client</div>
+
+@if (result is not null)
+{
+    <div class="card">
+        <div class="section-title">@result.Tenant.Name created</div>
+        <p>Share these sign-in details with the client's admin — this password is shown only once.</p>
+        <div class="form-grid single">
+            <div class="field">
+                <label>Username</label>
+                <input value="@result.AdminUsername" readonly />
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <input value="@result.AdminPassword" readonly />
+            </div>
+        </div>
+    </div>
+    <div class="action-row">
+        <button class="btn btn-primary btn-block" @onclick='() => Nav.NavigateTo("superadmin")'>Done</button>
+    </div>
+}
+else
+{
+    <EditForm Model="this" OnValidSubmit="Create">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="card">
+            <div class="form-grid single">
+                <div class="field">
+                    <label>Client / Company Name *</label>
+                    <InputText @bind-Value="tenantName" placeholder="e.g. Sneha Farms" />
+                </div>
+                <div class="field">
+                    <label>Admin Username *</label>
+                    <InputText @bind-Value="adminUsername" placeholder="e.g. snehafarms_admin" />
+                    <div class="list-row-sub">Usernames are shared across every client, so pick something distinctive.</div>
+                </div>
+                <div class="field">
+                    <label>Initial Password</label>
+                    <InputText @bind-Value="initialPassword" placeholder="Leave blank to generate one" />
+                </div>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(error))
+        {
+            <div class="validation-errors">@error</div>
+        }
+
+        <div class="action-row">
+            <button type="submit" class="btn btn-primary btn-block">Create Client</button>
+        </div>
+    </EditForm>
+}
+
+@code {
+    private string tenantName = "";
+    private string adminUsername = "";
+    private string initialPassword = "";
+    private string? error;
+    private TenantProvisionResult? result;
+
+    private async Task Create()
+    {
+        error = null;
+        if (string.IsNullOrWhiteSpace(tenantName) || string.IsNullOrWhiteSpace(adminUsername))
+        {
+            error = "Client name and admin username are required.";
+            return;
+        }
+
+        try
+        {
+            result = await PlatformAdminService.CreateTenantAsync(tenantName, adminUsername.Trim(), initialPassword);
+        }
+        catch (DbUpdateException)
+        {
+            error = "That username is already taken — pick another one.";
+        }
+    }
+}

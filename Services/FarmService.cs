@@ -18,31 +18,21 @@ public class FarmService
     }
 
     // A fresh, short-lived DbContext per operation, created via the DI factory (was `new()`
-    // against a MAUI-only FileSystem path in the original app).
-    private FarmDbContext NewContext() => dbFactory.CreateDbContext();
+    // against a MAUI-only FileSystem path in the original app), pinned to the caller's current
+    // tenant so every ITenantScoped query/write on it is automatically scoped (see
+    // FarmDbContext.TenantId). Startup schema/seeding and cross-tenant Super Admin actions don't
+    // go through this service at all — see Program.cs and PlatformAdminService.
+    private FarmDbContext NewContext()
+    {
+        var db = dbFactory.CreateDbContext();
+        db.TenantId = authService.CurrentTenantId;
+        return db;
+    }
 
     // House-level data scoping: the system Admin role always sees everything; every other user
     // sees only houses explicitly assigned to them (empty assignment = sees nothing, not everything).
     private bool CanAccessHouse(int houseId) =>
         authService.IsSystemAdmin || authService.CurrentAssignedHouseIds.Contains(houseId);
-
-    public async Task InitializeAsync()
-    {
-        using var db = NewContext();
-        await db.Database.EnsureCreatedAsync();
-
-        // The raw-SQL upgrade path below (PRAGMA table_info, sqlite_master, ALTER TABLE ...
-        // DROP COLUMN) is SQLite syntax only — it exists solely to migrate old MAUI-app SQLite
-        // files that predate the Houses/Integrators lookup tables. A SQL Server database is
-        // always fresh (EnsureCreated already builds the current schema), so skip it there.
-        if (db.Database.IsSqlite())
-        {
-            await UpgradeSchemaAsync(db);
-        }
-
-        await SeedDefaultHousesAsync(db);
-        await SeedDefaultAdminAsync(db);
-    }
 
     // EnsureCreated only builds a fresh schema for a brand-new database file — it never
     // reconciles an existing one. Older installs may still have pre-refactor columns (free-text
@@ -268,48 +258,6 @@ public class FarmService
                 return true;
         }
         return false;
-    }
-
-    // Fresh installs (and legacy DBs with no house data to backfill) start with the
-    // farm's real 3-house layout instead of an empty picker.
-    private static async Task SeedDefaultHousesAsync(FarmDbContext db)
-    {
-        if (await db.Houses.AnyAsync()) return;
-
-        db.Houses.AddRange(
-            new House { Name = "House 1", SortOrder = 1 },
-            new House { Name = "House 2", SortOrder = 2 },
-            new House { Name = "House 3", SortOrder = 3 });
-        await db.SaveChangesAsync();
-    }
-
-    // Guarantees there is always at least one way into the app: an Admin role holding every
-    // permission, and a seeded user in it. Without this, a bad login-page bug or an empty
-    // Roles table would lock everyone out of a tool holding real farm data with no recovery path.
-    private static async Task SeedDefaultAdminAsync(FarmDbContext db)
-    {
-        if (await db.Roles.AnyAsync()) return;
-
-        var adminRole = new Role { Name = "Admin", IsSystemRole = true, SortOrder = 1 };
-        adminRole.RolePermissions = PermissionCatalog.AllCodes
-            .Select(code => new RolePermission { PermissionCode = code })
-            .ToList();
-        db.Roles.Add(adminRole);
-
-        var (hash, salt) = PasswordHasher.Hash("admin");
-        var adminUser = new User
-        {
-            Username = "admin",
-            DisplayName = "Administrator",
-            PasswordHash = hash,
-            PasswordSalt = salt,
-            IsActive = true
-        };
-        db.Users.Add(adminUser);
-
-        db.UserRoles.Add(new UserRole { User = adminUser, Role = adminRole });
-
-        await db.SaveChangesAsync();
     }
 
     // ---------------- Houses ----------------
@@ -696,5 +644,30 @@ public class FarmService
             DailyGainGm = dailyGainGm,
             TotalExpenses = expenses.Sum(e => e.Amount)
         };
+    }
+
+    // ---------------- Tenant branding ----------------
+    // Tenant itself isn't ITenantScoped (it's the row that defines a tenant, not one that belongs
+    // to one), so it carries no query filter — these methods always target the caller's own
+    // CurrentTenantId explicitly rather than trusting any id a form might pass in, so a tenant
+    // admin can never edit another tenant's branding.
+    public async Task<int> SaveTenantBrandingAsync(string name, byte[]? logoBytes, string? logoContentType,
+        string primaryColorHex, string accentColorHex)
+    {
+        if (authService.CurrentTenantId is not { } tenantId)
+            throw new InvalidOperationException("No current tenant.");
+
+        using var db = NewContext();
+        var tenant = await db.Tenants.FirstAsync(t => t.Id == tenantId);
+        tenant.Name = name;
+        if (logoBytes is not null)
+        {
+            tenant.LogoBytes = logoBytes;
+            tenant.LogoContentType = logoContentType;
+        }
+        tenant.PrimaryColorHex = primaryColorHex;
+        tenant.AccentColorHex = accentColorHex;
+        await db.SaveChangesAsync();
+        return tenant.Id;
     }
 }

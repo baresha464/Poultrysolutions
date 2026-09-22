@@ -44,4 +44,14 @@
             <span class="dd-caret">▸</span>
         </a>
     }
+    @if (AuthService.IsSystemAdmin)
+    {
+        <a class="list-row" href="settings/branding">
+            <div>
+                <div class="list-row-title">Branding</div>
+                <div class="list-row-sub">App name, logo and colors for your organization</div>
+            </div>
+            <span class="dd-caret">▸</span>
+        </a>
+    }
 </div>

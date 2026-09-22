@@ -1,0 +1,110 @@
+@inherits LayoutComponentBase
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<CascadingValue Value="AuthService">
+@if (!authReady)
+{
+    <div class="boot-loading">
+        <img src="images/logo-mark.png" alt="Platform Admin" />
+        <span>Loading…</span>
+    </div>
+}
+else if (!AuthService.IsSuperAdmin)
+{
+    <div class="boot-loading">
+        <span>Redirecting…</span>
+    </div>
+}
+else
+{
+    <div class="shell">
+        <aside class="sidebar open">
+            <div class="sidebar-brand">
+                <img src="images/logo-mark.png" alt="Platform Admin" />
+                <div class="sidebar-brand-text">
+                    <div class="sidebar-brand-name">Platform Admin</div>
+                    <div class="sidebar-brand-sub">Client Management</div>
+                </div>
+            </div>
+
+            <div class="sidebar-eyebrow">Navigation</div>
+            <nav class="sidebar-nav">
+                <NavLink href="superadmin" Match="NavLinkMatch.All" class="sidebar-link" title="Clients">
+                    <span class="material-symbols-outlined">apartment</span><span>Clients</span>
+                </NavLink>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-user-avatar">@Initials</div>
+                <div class="sidebar-user-text">
+                    <div class="sidebar-user-name">@(AuthService.CurrentUser?.DisplayName is { Length: > 0 } dn ? dn : AuthService.CurrentUser?.Username)</div>
+                    <div class="sidebar-user-role">Super Admin</div>
+                </div>
+                <form method="post" action="Account/Logout">
+                    <button type="submit" class="sidebar-icon-btn" title="Log out">
+                        <span class="material-symbols-outlined">logout</span>
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <div class="main-col">
+            <header class="topbar">
+                <div class="topbar-org">
+                    <img src="images/logo-mark.png" alt="Platform Admin" class="topbar-org-mark" />
+                    <span class="topbar-org-text">
+                        <span class="topbar-title">Platform Admin</span>
+                        <span class="topbar-subtitle">Client Management</span>
+                    </span>
+                </div>
+                <div class="topbar-spacer"></div>
+                <div class="topbar-toolbar">
+                    <form method="post" action="Account/Logout">
+                        <button type="submit" class="topbar-action danger" title="Log out">
+                            <span class="material-symbols-outlined">logout</span>
+                        </button>
+                    </form>
+                </div>
+            </header>
+
+            <main class="content">
+                @Body
+            </main>
+        </div>
+    </div>
+}
+</CascadingValue>
+
+@code {
+    [CascadingParameter] private Task<Microsoft.AspNetCore.Components.Authorization.AuthenticationState>? AuthStateTask { get; set; }
+
+    private bool authReady;
+
+    private string Initials
+    {
+        get
+        {
+            var name = AuthService.CurrentUser?.DisplayName is { Length: > 0 } dn ? dn : AuthService.CurrentUser?.Username ?? "?";
+            var parts = name.Split(new[] { ' ', '_', '.' }, StringSplitOptions.RemoveEmptyEntries);
+            return parts.Length >= 2
+                ? $"{parts[0][0]}{parts[1][0]}".ToUpperInvariant()
+                : name.Length >= 2 ? name[..2].ToUpperInvariant() : name.ToUpperInvariant();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthStateTask is not null)
+        {
+            var state = await AuthStateTask;
+            await AuthService.LoadFromPrincipalAsync(state.User);
+        }
+        authReady = true;
+
+        if (authReady && !AuthService.IsSuperAdmin)
+        {
+            Nav.NavigateTo("/", forceLoad: true);
+        }
+    }
+}

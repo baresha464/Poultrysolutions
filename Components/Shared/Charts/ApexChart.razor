@@ -22,8 +22,14 @@
     public async ValueTask DisposeAsync()
     {
         disposed = true;
+        // Nothing was ever rendered into the JS side (e.g. disposed during static prerendering,
+        // before OnAfterRenderAsync/InvokeVoidAsync("chartHelpers.render") ever ran) — there's
+        // nothing to destroy, and calling JS interop here would throw (no circuit is attached yet).
+        if (lastOptions is null) return;
+
         try { await JS.InvokeVoidAsync("chartHelpers.destroy", elementId); }
         catch (JSDisconnectedException) { /* circuit already gone */ }
         catch (ObjectDisposedException) { /* circuit already gone */ }
+        catch (InvalidOperationException) { /* statically rendering — no circuit to call into */ }
     }
 }

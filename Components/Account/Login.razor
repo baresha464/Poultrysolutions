@@ -39,11 +39,18 @@
                 <p class="auth-card-sub">Sign in to continue</p>
             </div>
 
-            @if (HasError)
+            @if (Error == "1")
             {
                 <div class="auth-alert">
                     <span class="material-symbols-outlined">error</span>
                     <span>Invalid username or password. Please contact your administrator.</span>
+                </div>
+            }
+            else if (Error == "2")
+            {
+                <div class="auth-alert">
+                    <span class="material-symbols-outlined">error</span>
+                    <span>This account is deactivated. Contact your administrator for access.</span>
                 </div>
             }
 
@@ -84,6 +91,4 @@
 @code {
     [SupplyParameterFromQuery] public string? Error { get; set; }
     [SupplyParameterFromQuery] public string? ReturnUrl { get; set; }
-
-    private bool HasError => Error == "1";
 }

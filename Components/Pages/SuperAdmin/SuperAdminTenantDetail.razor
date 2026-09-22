@@ -1,0 +1,105 @@
+@page "/superadmin/tenants/{Id:int}"
+@layout SuperAdminLayout
+@inject PlatformAdminService PlatformAdminService
+@inject NavigationManager Nav
+
+<PageTitle>@(tenant?.Name ?? "Client") — Platform Admin</PageTitle>
+
+@if (loading)
+{
+    <p class="empty-state">Loading…</p>
+}
+else if (tenant is null)
+{
+    <div class="card empty-state">Client not found.</div>
+}
+else
+{
+    <div class="page-title">@tenant.Name</div>
+
+    <div class="card">
+        <div class="form-grid single">
+            <div class="field">
+                <label>Status</label>
+                <div>@(tenant.IsActive ? "Active" : "Deactivated")</div>
+            </div>
+            <div class="field">
+                <label>Created</label>
+                <div>@tenant.CreatedAtUtc.ToLocalTime().ToString("d MMM yyyy")</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-row">
+        @if (tenant.IsActive)
+        {
+            <button class="btn btn-danger btn-block" @onclick="Deactivate">Deactivate Client</button>
+        }
+        else
+        {
+            <button class="btn btn-primary btn-block" @onclick="Activate">Reactivate Client</button>
+        }
+    </div>
+
+    <div class="section-title">Reset Admin Password</div>
+    <div class="card">
+        <div class="form-grid single">
+            <div class="field">
+                <label>New Password *</label>
+                <input @bind="newPassword" type="text" placeholder="Leave blank to generate one" />
+            </div>
+        </div>
+        @if (!string.IsNullOrEmpty(resetMessage))
+        {
+            <p>@resetMessage</p>
+        }
+    </div>
+    <div class="action-row">
+        <button class="btn btn-primary btn-block" @onclick="ResetPassword">Reset Password</button>
+    </div>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private bool loading = true;
+    private Tenant? tenant;
+    private string newPassword = "";
+    private string? resetMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        tenant = await PlatformAdminService.GetTenantAsync(Id);
+        loading = false;
+    }
+
+    private async Task Deactivate()
+    {
+        await PlatformAdminService.SetTenantActiveAsync(Id, false);
+        tenant = await PlatformAdminService.GetTenantAsync(Id);
+    }
+
+    private async Task Activate()
+    {
+        await PlatformAdminService.SetTenantActiveAsync(Id, true);
+        tenant = await PlatformAdminService.GetTenantAsync(Id);
+    }
+
+    private async Task ResetPassword()
+    {
+        var password = string.IsNullOrWhiteSpace(newPassword) ? GenerateSuggestedPassword() : newPassword;
+        var ok = await PlatformAdminService.ResetTenantAdminPasswordAsync(Id, password);
+        resetMessage = ok
+            ? $"New password: {password} — share this with the client now, it won't be shown again."
+            : "No admin user found for this client.";
+        newPassword = "";
+    }
+
+    private static string GenerateSuggestedPassword()
+    {
+        const string chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
+        var rnd = System.Security.Cryptography.RandomNumberGenerator.GetBytes(16);
+        var result = new char[16];
+        for (var i = 0; i < 16; i++) result[i] = chars[rnd[i] % chars.Length];
+        return new string(result);
+    }
+}
