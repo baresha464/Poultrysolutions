@@ -1,0 +1,29 @@
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<div id="@elementId" class="apex-chart-host" style="min-height:@(Height)px"></div>
+
+@code {
+    [Parameter, EditorRequired] public string OptionsJson { get; set; } = "{}";
+    [Parameter] public int Height { get; set; } = 260;
+
+    private readonly string elementId = $"chart-{Guid.NewGuid():N}";
+    private string? lastOptions;
+    private bool disposed;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (disposed || OptionsJson == lastOptions) return;
+        var isFirst = lastOptions is null;
+        lastOptions = OptionsJson;
+        await JS.InvokeVoidAsync(isFirst ? "chartHelpers.render" : "chartHelpers.update", elementId, OptionsJson);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        disposed = true;
+        try { await JS.InvokeVoidAsync("chartHelpers.destroy", elementId); }
+        catch (JSDisconnectedException) { /* circuit already gone */ }
+        catch (ObjectDisposedException) { /* circuit already gone */ }
+    }
+}

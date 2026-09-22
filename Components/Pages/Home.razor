@@ -1,0 +1,320 @@
+@page "/"
+@inject FarmService FarmService
+@inject AuthService AuthService
+@inject NavigationManager Nav
+@using AmrPoultryFarmWeb.Components.Shared.Charts
+@using static AmrPoultryFarmWeb.Components.Shared.Charts.ChartTheme
+
+<PageTitle>Dashboard — AMR Poultry Farms</PageTitle>
+
+@if (loading)
+{
+    <p class="empty-state">Loading…</p>
+}
+else if (!AuthService.HasPermission(Permissions.Houses.View))
+{
+    <div class="card empty-state">Welcome — ask an admin to grant you access to a section.</div>
+}
+else
+{
+    <div class="ops-hero">
+        <video class="ops-hero-video" autoplay muted loop playsinline poster="images/farm/hero-aerial.jpg">
+            <source src="videos/farm/hero-live.mp4" type="video/mp4" />
+        </video>
+        <div class="ops-hero-top">
+            <span class="ops-hero-top-left">
+                <span class="ops-hero-eyebrow"><span class="ops-hero-dot"></span> Operational Hub</span>
+                <span class="ops-hero-live-badge"><span class="ops-hero-live-dot"></span> Live</span>
+            </span>
+            <span class="ops-hero-meta">@DateTime.Now.ToString("dd MMM yyyy") · @ActiveHouseCount active shed@(ActiveHouseCount == 1 ? "" : "s")</span>
+        </div>
+        <div class="ops-hero-body">
+            <h1 class="ops-hero-title">Farm Overview &amp; Operations</h1>
+            <p class="ops-hero-sub">
+                @(ActiveHouseCount == 0
+                    ? "No batches are currently active. Start a new placement to begin tracking a flock."
+                    : $"Live telemetry across {ActiveHouseCount} active house{(ActiveHouseCount == 1 ? "" : "s")}, {totalLiveBirds:N0} birds on the ground.")
+            </p>
+            <div class="ops-hero-actions">
+                @if (AuthService.HasPermission(Permissions.Houses.View))
+                {
+                    <a class="btn btn-ghost" href="houses"><span class="material-symbols-outlined">home_work</span> Manage Houses</a>
+                }
+                @if (AuthService.HasPermission(Permissions.Batches.Add))
+                {
+                    <button class="btn btn-amber" @onclick='() => Nav.NavigateTo("batch/new")'>
+                        <span class="material-symbols-outlined">add_circle</span> New Batch Placement
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-grid">
+        <div class="stat-card">
+            <div class="stat-label"><span>Total Live Birds</span><span class="material-symbols-outlined pulse-dot" style="color:var(--green);">pets</span></div>
+            <div class="stat-value"><CountUpValue Value="totalLiveBirds" /></div>
+            <div class="stat-sub">Across @ActiveHouseCount active batch@(ActiveHouseCount == 1 ? "" : "es")</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label"><span>Average Farm FCR</span><span class="material-symbols-outlined">show_chart</span></div>
+            <div class="stat-value"><CountUpValue Value="@((double)avgFcr)" Decimals="3" /></div>
+            <div class="stat-sub">Weighted by live weight</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label"><span>Cumulative Livability</span><span class="material-symbols-outlined">verified</span></div>
+            <div class="stat-value"><CountUpValue Value="@((double)avgLivability)" Decimals="1" Suffix="%" /></div>
+            <div class="stat-sub">@totalMortality.ToString("N0") total mortality</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label"><span>Feed In Stock</span><span class="material-symbols-outlined">grain</span></div>
+            <div class="stat-value"><CountUpValue Value="@((double)totalFeedStock)" Suffix=" kg" /></div>
+            <div class="stat-sub">Estimated across active houses</div>
+        </div>
+    </div>
+
+    @if (!houses.Any())
+    {
+        <div class="card empty-state">No houses set up yet.</div>
+    }
+    else
+    {
+        <div class="ops-layout">
+            <div>
+                <div class="panel-title">
+                    <h2><span class="material-symbols-outlined">home_work</span> Active Sheds &amp; Housing Status</h2>
+                </div>
+
+                @foreach (var h in houses)
+                {
+                    var active = activeByHouse.GetValueOrDefault(h.Id);
+                    var perf = active is null ? null : perfByBatch.GetValueOrDefault(active.Id);
+                    var today = active is null ? null : todayByBatch.GetValueOrDefault(active.Id);
+                    var variant = VariantFor(h.Id);
+
+                    <div class="card op-card @(active is null ? "muted" : variant)">
+                        <div class="op-card-bar"></div>
+                        <div class="op-card-body">
+                            <div class="op-card-head">
+                                <div class="op-chip @(active is null ? "muted" : variant)">@Abbrev(h.Name)</div>
+                                <div>
+                                    <div class="op-card-title-row">
+                                        <span class="op-card-name">@h.Name</span>
+                                        @if (active is not null)
+                                        {
+                                            <span class="status-chip @(perf!.LivabilityPct >= 95 ? "" : "amber")">Day @active.AgeDays</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-chip muted">Ready for DOC Intake</span>
+                                        }
+                                    </div>
+                                    @if (active is not null)
+                                    {
+                                        <div class="op-card-sub">Batch #@active.BatchCode · @active.Integrator?.Name · @active.Breed</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="op-card-sub">Capacity @h.CapacityBirds.ToString("N0") birds · no active batch</div>
+                                    }
+                                </div>
+                            </div>
+
+                            @if (active is not null && perf is not null)
+                            {
+                                <div class="op-progress-label">
+                                    <span>Growth Cycle</span>
+                                    <span>Day @active.AgeDays / @TargetCycleDays</span>
+                                </div>
+                                <div class="op-progress-track">
+                                    <div class="op-progress-fill @(active.AgeDays >= TargetCycleDays ? "amber" : "")" style="width:@(Math.Min(100, active.AgeDays * 100 / TargetCycleDays))%"></div>
+                                </div>
+
+                                <div class="op-stat-grid">
+                                    <div class="op-stat"><div class="op-stat-label">Live Birds</div><div class="op-stat-value">@perf.LiveBirds.ToString("N0")</div></div>
+                                    <div class="op-stat"><div class="op-stat-label">Avg Weight</div><div class="op-stat-value">@perf.AvgBodyWeightKg.ToString("0.00") kg</div></div>
+                                    <div class="op-stat"><div class="op-stat-label">FCR</div><div class="op-stat-value">@perf.Fcr.ToString("0.000")</div></div>
+                                    <div class="op-stat">
+                                        <div class="op-stat-label">Today's Feed</div>
+                                        <div class="op-stat-value">@(today is null ? "—" : today.FeedConsumedBags > 0 ? $"{today.FeedConsumedBags:0.#} bags" : $"{today.FeedConsumedKg:0} kg")</div>
+                                    </div>
+                                </div>
+
+                                <div class="op-card-footline">
+                                    <span class="foot-note"><span class="material-symbols-outlined">warning</span> Mort: @perf.TotalMortality (@perf.MortalityPct.ToString("0.0")%)</span>
+                                    @if (today is null && AuthService.HasPermission(Permissions.DailyRecords.Add))
+                                    {
+                                        <a class="btn btn-primary" href="@($"batch/{active.Id}/daily/new")">Log Today</a>
+                                    }
+                                    <a class="btn btn-outline" href="@($"batch/{active.Id}")">View Batch</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="op-card-footline" style="border-top:none; padding-top:0;">
+                                    <span class="foot-note"><span class="material-symbols-outlined">task_alt</span> Shed ready for placement</span>
+                                    @if (AuthService.HasPermission(Permissions.Batches.Add))
+                                    {
+                                        <a class="btn btn-primary" href="@($"batch/new?HouseId={h.Id}")">+ Start New Batch</a>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div>
+                <div class="panel-title"><h2><span class="material-symbols-outlined">verified</span> Flock Livability</h2></div>
+                <div class="chart-card">
+                    <ApexChart OptionsJson="@LivabilityGaugeJson" Height="180" />
+                </div>
+
+                @if (growthTrend.Count >= 2)
+                {
+                    <div class="panel-title"><h2><span class="material-symbols-outlined">trending_up</span> Growth Curve</h2></div>
+                    <div class="chart-card">
+                        <div class="chart-card-sub" style="margin-bottom:6px;">@growthBatchLabel · Avg Body Weight</div>
+                        <ApexChart OptionsJson="@GrowthChartJson" Height="220" />
+                    </div>
+                }
+
+                <div class="panel-title"><h2><span class="material-symbols-outlined">history</span> Recent Activity</h2></div>
+                <div class="card" style="padding:6px 14px;">
+                    @if (!recentActivity.Any())
+                    {
+                        <div class="empty-state">No logs recorded today yet.</div>
+                    }
+                    else
+                    {
+                        @foreach (var (icon, title, sub) in recentActivity)
+                        {
+                            <div class="feed-row">
+                                <div class="feed-icon"><span class="material-symbols-outlined">@icon</span></div>
+                                <div class="feed-body">
+                                    <div class="feed-title">@title</div>
+                                    <div class="feed-sub">@sub</div>
+                                </div>
+                                <div class="feed-time">Today</div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    }
+}
+
+@code {
+    private const int TargetCycleDays = 42; // standard broiler grow-out cycle, used to render progress only
+
+    private bool loading = true;
+    private List<House> houses = new();
+    private Dictionary<int, Batch> activeByHouse = new();
+    private Dictionary<int, BatchPerformance> perfByBatch = new();
+    private Dictionary<int, DailyRecord> todayByBatch = new();
+
+    private int ActiveHouseCount => activeByHouse.Count;
+    private int totalLiveBirds;
+    private decimal avgFcr;
+    private decimal avgLivability;
+    private int totalMortality;
+    private decimal totalFeedStock;
+
+    private List<LineChartPoint> growthTrend = new();
+    private string growthBatchLabel = "";
+    private List<(string Icon, string Title, string Sub)> recentActivity = new();
+
+    private string GrowthChartJson
+    {
+        get
+        {
+            var fill = Opt(("type", "gradient"), ("gradient", Opt(("shadeIntensity", 1), ("opacityFrom", 0.45), ("opacityTo", 0.05), ("stops", new[] { 0, 90, 100 }))));
+            var yaxisLabels = Opt(("formatter", Fn("function(v){ return v.toFixed(0) + 'g'; }")));
+
+            return Json(Opt(
+                ("chart", Opt(("type", "area"), ("toolbar", Opt(("show", false))), ("fontFamily", "IBM Plex Sans, sans-serif"), ("animations", Opt(("speed", 500))))),
+                ("series", new object[] { Opt(("name", "Avg Body Weight"), ("data", growthTrend.Select(p => p.Value).ToArray())) }),
+                ("xaxis", Opt(("categories", growthTrend.Select(p => p.Label).ToArray()), ("labels", Opt(("style", Opt(("fontSize", "10.5px"))))))),
+                ("yaxis", Opt(("labels", yaxisLabels))),
+                ("colors", new[] { PrimaryBright }),
+                ("fill", fill),
+                ("stroke", Opt(("curve", "smooth"), ("width", 3))),
+                ("dataLabels", Opt(("enabled", false))),
+                ("grid", Opt(("borderColor", Line), ("strokeDashArray", 4))),
+                ("tooltip", Opt(("theme", "light")))
+            ));
+        }
+    }
+
+    private string LivabilityGaugeJson
+    {
+        get
+        {
+            var valueStyle = Opt(("fontSize", "22px"), ("fontWeight", 700), ("color", Ink), ("formatter", Fn("function(v){ return v + '%'; }")));
+            var nameStyle = Opt(("fontSize", "11px"), ("color", InkSoft));
+            var radialBar = Opt(("hollow", Opt(("size", "62%"))), ("dataLabels", Opt(("name", nameStyle), ("value", valueStyle))));
+
+            return Json(Opt(
+                ("chart", Opt(("type", "radialBar"), ("fontFamily", "IBM Plex Sans, sans-serif"), ("sparkline", Opt(("enabled", true))))),
+                ("series", new[] { (double)avgLivability }),
+                ("labels", new[] { "Livability" }),
+                ("colors", new[] { Primary }),
+                ("plotOptions", Opt(("radialBar", radialBar))),
+                ("stroke", Opt(("lineCap", "round")))
+            ));
+        }
+    }
+
+    private static readonly string[] Variants = { "green", "amber", "clay", "blue", "plum" };
+    private static string VariantFor(int houseId) => Variants[Math.Abs(houseId) % Variants.Length];
+
+    private static string Abbrev(string houseName)
+    {
+        var digits = new string(houseName.Where(char.IsDigit).ToArray());
+        return digits.Length > 0 ? $"H{digits}" : houseName.Length >= 2 ? houseName[..2].ToUpperInvariant() : houseName.ToUpperInvariant();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        houses = await FarmService.GetHousesAsync();
+        var activeBatches = await FarmService.GetBatchesAsync(activeOnly: true);
+
+        decimal totalLiveWeight = 0, totalFeedConsumed = 0;
+
+        foreach (var b in activeBatches)
+        {
+            activeByHouse[b.HouseId] = b;
+            var perf = await FarmService.GetPerformanceAsync(b.Id);
+            perfByBatch[b.Id] = perf;
+
+            var records = await FarmService.GetDailyRecordsAsync(b.Id);
+            var today = records.FirstOrDefault(r => r.Date.Date == DateTime.Today);
+            if (today is not null)
+            {
+                todayByBatch[b.Id] = today;
+                recentActivity.Add(("edit_note", $"{b.House?.Name}: Today's log recorded",
+                    $"Mort {today.Mortality} · Feed {(today.FeedConsumedBags > 0 ? $"{today.FeedConsumedBags:0.#} bags" : $"{today.FeedConsumedKg:0}kg")} · Wt {today.AvgBodyWeightGm:0}g"));
+            }
+
+            totalLiveBirds += perf.LiveBirds;
+            totalMortality += perf.TotalMortality;
+            totalFeedStock += Math.Max(0, perf.FeedStockKg);
+            totalLiveWeight += perf.TotalLiveWeightKg;
+            totalFeedConsumed += perf.FeedConsumedKg;
+
+            if (records.Count >= 2 && growthTrend.Count == 0)
+            {
+                growthTrend = records.OrderBy(r => r.Date)
+                    .Select(r => new LineChartPoint(r.Date.ToString("dd MMM"), (double)r.AvgBodyWeightGm))
+                    .ToList();
+                growthBatchLabel = $"{b.House?.Name} · {b.BatchCode}";
+            }
+        }
+
+        avgFcr = totalLiveWeight > 0 ? Math.Round(totalFeedConsumed / totalLiveWeight, 3) : 0;
+        avgLivability = activeBatches.Count > 0 ? Math.Round(perfByBatch.Values.Average(p => p.LivabilityPct), 1) : 0;
+
+        loading = false;
+    }
+}

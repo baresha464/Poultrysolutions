@@ -1,0 +1,87 @@
+@page "/batch/{BatchId:int}/lifting/new"
+@page "/batch/{BatchId:int}/lifting/{RecordId:int}"
+@inject FarmService FarmService
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<div class="page-title">Lifting / Harvest</div>
+
+@if (!CanEdit || !batchAccessible)
+{
+    <div class="card empty-state">You don't have permission to do this.</div>
+}
+else
+{
+    <EditForm Model="lift" OnValidSubmit="Save">
+        <div class="card">
+            <div class="form-grid">
+                <div class="field">
+                    <label>Date</label>
+                    <InputDate @bind-Value="lift.Date" />
+                </div>
+                <div class="field">
+                    <label>Birds Lifted</label>
+                    <InputNumber @bind-Value="lift.BirdsLifted" />
+                </div>
+                <div class="field">
+                    <label>Total Weight (kg)</label>
+                    <InputNumber @bind-Value="lift.TotalWeightKg" step="0.1" />
+                </div>
+                <div class="field">
+                    <label>Vehicle Number</label>
+                    <InputText @bind-Value="lift.VehicleNumber" />
+                </div>
+                <div class="field">
+                    <label>DC Number</label>
+                    <InputText @bind-Value="lift.DcNumber" />
+                </div>
+                <div class="field full">
+                    <label>Remarks</label>
+                    <InputTextArea @bind-Value="lift.Remarks" />
+                </div>
+            </div>
+            <div class="list-row"><span>Avg Weight / Bird</span><b>@lift.AvgWeightKg.ToString("0.000")kg</b></div>
+        </div>
+
+        <div class="action-row">
+            <button type="submit" class="btn btn-primary btn-block">Save</button>
+            @if (RecordId.HasValue && AuthService.HasPermission(Permissions.Lifting.Delete))
+            {
+                <button type="button" class="btn btn-danger" @onclick="Delete">Delete</button>
+            }
+        </div>
+    </EditForm>
+}
+
+@code {
+    [Parameter] public int BatchId { get; set; }
+    [Parameter] public int? RecordId { get; set; }
+    private Lifting lift = new();
+    private bool batchAccessible;
+
+    private bool CanEdit => AuthService.HasPermission(RecordId.HasValue ? Permissions.Lifting.Edit : Permissions.Lifting.Add);
+
+    protected override async Task OnInitializedAsync()
+    {
+        lift.BatchId = BatchId;
+        batchAccessible = await FarmService.GetBatchAsync(BatchId) is not null;
+        if (RecordId.HasValue)
+        {
+            var list = await FarmService.GetLiftingsAsync(BatchId);
+            var existing = list.FirstOrDefault(r => r.Id == RecordId.Value);
+            if (existing != null) lift = existing;
+        }
+    }
+
+    private async Task Save()
+    {
+        await FarmService.SaveLiftingAsync(lift);
+        Nav.NavigateTo($"batch/{BatchId}");
+    }
+
+    private async Task Delete()
+    {
+        if (RecordId.HasValue) await FarmService.DeleteLiftingAsync(RecordId.Value);
+        Nav.NavigateTo($"batch/{BatchId}");
+    }
+}

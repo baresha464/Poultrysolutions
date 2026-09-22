@@ -1,0 +1,42 @@
+@page "/settings/users"
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<div class="page-title">Users</div>
+
+@if (loading)
+{
+    <p class="empty-state">Loading…</p>
+}
+else if (!users.Any())
+{
+    <div class="card empty-state">No users yet.</div>
+}
+else
+{
+    <div class="card" style="padding:4px 10px;">
+        @foreach (var u in users)
+        {
+            <a class="list-row" href="@($"settings/users/{u.Id}/edit")">
+                <div>
+                    <div class="list-row-title">@u.Username @(string.IsNullOrWhiteSpace(u.DisplayName) ? "" : $"· {u.DisplayName}")</div>
+                    <div class="list-row-sub">@string.Join(", ", u.UserRoles.Select(ur => ur.Role?.Name).Where(n => n != null))</div>
+                </div>
+                <span class="badge @(u.IsActive ? "" : "closed")">@(u.IsActive ? "Active" : "Disabled")</span>
+            </a>
+        }
+    </div>
+}
+
+<button class="btn-fab" @onclick='() => Nav.NavigateTo("settings/users/new")' title="New user">+</button>
+
+@code {
+    private bool loading = true;
+    private List<User> users = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await AuthService.GetUsersAsync();
+        loading = false;
+    }
+}

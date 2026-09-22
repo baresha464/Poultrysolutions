@@ -1,0 +1,23 @@
+@inject IJSRuntime JS
+
+<span id="@elementId" class="@CssClass">@Formatted(Value)</span>
+
+@code {
+    [Parameter, EditorRequired] public double Value { get; set; }
+    [Parameter] public int Decimals { get; set; } = 0;
+    [Parameter] public string? Prefix { get; set; }
+    [Parameter] public string? Suffix { get; set; }
+    [Parameter] public string? CssClass { get; set; }
+
+    private readonly string elementId = $"cu-{Guid.NewGuid():N}";
+    private double? lastValue;
+
+    private string Formatted(double v) => $"{Prefix}{v.ToString("N" + Decimals)}{Suffix}";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (lastValue.HasValue && Math.Abs(Value - lastValue.Value) < 0.0001) return;
+        lastValue = Value;
+        await JS.InvokeVoidAsync("chartHelpers.countUp", elementId, Value, Decimals, Prefix ?? "", Suffix ?? "");
+    }
+}

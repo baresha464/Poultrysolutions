@@ -1,0 +1,44 @@
+@page "/settings/roles"
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<div class="page-title">Roles</div>
+
+@if (loading)
+{
+    <p class="empty-state">Loading…</p>
+}
+else if (!roles.Any())
+{
+    <div class="card empty-state">No roles yet.</div>
+}
+else
+{
+    <div class="card" style="padding:4px 10px;">
+        @foreach (var r in roles)
+        {
+            <a class="list-row" href="@($"settings/roles/{r.Id}/edit")">
+                <div>
+                    <div class="list-row-title">@r.Name</div>
+                </div>
+                @if (r.IsSystemRole)
+                {
+                    <span class="badge">Built-in</span>
+                }
+            </a>
+        }
+    </div>
+}
+
+<button class="btn-fab" @onclick='() => Nav.NavigateTo("settings/roles/new")' title="New role">+</button>
+
+@code {
+    private bool loading = true;
+    private List<Role> roles = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        roles = await AuthService.GetRolesAsync();
+        loading = false;
+    }
+}

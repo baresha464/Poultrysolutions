@@ -1,0 +1,18 @@
+@using AmrPoultryFarmWeb.Components.Layout
+
+<Router AppAssembly="typeof(Program).Assembly">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)">
+            <NotAuthorized>
+                <RedirectToLogin />
+            </NotAuthorized>
+        </AuthorizeRouteView>
+        <FocusOnNavigate RouteData="routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>Not found</PageTitle>
+        <LayoutView Layout="typeof(MainLayout)">
+            <div class="card empty-state">Page not found.</div>
+        </LayoutView>
+    </NotFound>
+</Router>

@@ -1,0 +1,75 @@
+@page "/batch/{BatchId:int}/settlement"
+@inject FarmService FarmService
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<div class="page-title">Settlement</div>
+
+@if (!CanEdit || !batchAccessible)
+{
+    <div class="card empty-state">You don't have permission to do this.</div>
+}
+else
+{
+    <EditForm Model="settlement" OnValidSubmit="Save">
+        <div class="card">
+            <div class="form-grid">
+                <div class="field">
+                    <label>Date</label>
+                    <InputDate @bind-Value="settlement.Date" />
+                </div>
+                <div class="field">
+                    <label>Growing Charge / kg (₹)</label>
+                    <InputNumber @bind-Value="settlement.GrowingChargePerKg" step="0.01" />
+                </div>
+                <div class="field">
+                    <label>Performance Incentive (₹)</label>
+                    <InputNumber @bind-Value="settlement.PerformanceIncentive" step="0.01" />
+                </div>
+                <div class="field">
+                    <label>Deductions (₹)</label>
+                    <InputNumber @bind-Value="settlement.Deductions" step="0.01" />
+                </div>
+                <div class="field">
+                    <label>Amount Received (₹)</label>
+                    <InputNumber @bind-Value="settlement.AmountReceived" step="0.01" />
+                </div>
+                <div class="field full">
+                    <label>Remarks</label>
+                    <InputTextArea @bind-Value="settlement.Remarks" />
+                </div>
+            </div>
+        </div>
+
+        <div class="action-row">
+            <button type="submit" class="btn btn-primary btn-block">Save Settlement</button>
+        </div>
+    </EditForm>
+}
+
+@code {
+    [Parameter] public int BatchId { get; set; }
+    private Settlement settlement = new();
+    private bool isNew = true;
+    private bool batchAccessible;
+
+    private bool CanEdit => AuthService.HasPermission(isNew ? Permissions.Settlement.Add : Permissions.Settlement.Edit);
+
+    protected override async Task OnInitializedAsync()
+    {
+        settlement.BatchId = BatchId;
+        batchAccessible = await FarmService.GetBatchAsync(BatchId) is not null;
+        var existing = await FarmService.GetSettlementAsync(BatchId);
+        if (existing != null)
+        {
+            settlement = existing;
+            isNew = false;
+        }
+    }
+
+    private async Task Save()
+    {
+        await FarmService.SaveSettlementAsync(settlement);
+        Nav.NavigateTo($"batch/{BatchId}");
+    }
+}

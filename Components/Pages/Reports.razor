@@ -1,0 +1,402 @@
+@page "/reports"
+@inject FarmService FarmService
+@inject AuthService AuthService
+@using AmrPoultryFarmWeb.Components.Shared.Charts
+@using static AmrPoultryFarmWeb.Components.Shared.Charts.ChartTheme
+
+<PageTitle>Reports — AMR Poultry Farms</PageTitle>
+
+@if (!AuthService.HasPermission(Permissions.Reports.View))
+{
+    <div class="card empty-state">You don't have permission to view reports.</div>
+}
+else
+{
+    <div class="page-head">
+        <div>
+            <div class="page-eyebrow">Agritech Analytics</div>
+            <h1 class="page-title">Reports &amp; Analytics</h1>
+            <div class="page-head-sub">Breed benchmarks, cost efficiency, and farm-wide performance across every batch.</div>
+        </div>
+    </div>
+
+    <div class="form-grid" style="margin-bottom:16px;">
+        <div class="field">
+            <label>House</label>
+            <Dropdown TValue="int?" Value="houseId" ValueChanged="OnHouseChanged"
+                      Options="houseOptions" Placeholder="All houses" />
+        </div>
+        <div class="field">
+            <label>Year</label>
+            <Dropdown TValue="int?" Value="year" ValueChanged="OnYearChanged"
+                      Options="yearOptions" Placeholder="All years" />
+        </div>
+    </div>
+
+    @if (loading)
+    {
+        <div class="skeleton-grid">
+            <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+            <div class="skeleton"></div><div class="skeleton"></div>
+        </div>
+        <div class="chart-grid">
+            <div class="skeleton skeleton-block"></div>
+            <div class="skeleton skeleton-block"></div>
+        </div>
+    }
+    else if (!batches.Any())
+    {
+        <div class="card empty-state">No batches to report on yet.</div>
+    }
+    else
+    {
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-label"><span>Chicks Placed</span><span class="material-symbols-outlined">egg</span></div>
+                <div class="stat-value"><CountUpValue Value="batches.Sum(b => b.ChicksPlaced)" /></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label"><span>Total Mortality</span><span class="material-symbols-outlined">warning</span></div>
+                <div class="stat-value"><CountUpValue Value="perf.Values.Sum(p => p.TotalMortality)" /></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label"><span>Birds Lifted</span><span class="material-symbols-outlined">local_shipping</span></div>
+                <div class="stat-value"><CountUpValue Value="perf.Values.Sum(p => p.BirdsLifted)" /></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label"><span>Feed Consumed</span><span class="material-symbols-outlined">grain</span></div>
+                <div class="stat-value"><CountUpValue Value="@((double)perf.Values.Sum(p => p.FeedConsumedKg))" Suffix=" kg" /></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label"><span>Total Expenses</span><span class="material-symbols-outlined">payments</span></div>
+                <div class="stat-value"><CountUpValue Value="@((double)perf.Values.Sum(p => p.TotalExpenses))" Prefix="₹" /></div>
+            </div>
+        </div>
+
+        <div class="chart-grid">
+            <div class="chart-card">
+                <div class="chart-card-head">
+                    <div>
+                        <h3><span class="material-symbols-outlined">show_chart</span> FCR by Batch</h3>
+                        <div class="chart-card-sub">Lower is better · target ≤ 1.60</div>
+                    </div>
+                </div>
+                <ApexChart OptionsJson="@FcrChartJson" Height="@ChartHeight" />
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-card-head">
+                    <div>
+                        <h3><span class="material-symbols-outlined">verified</span> Livability by Batch</h3>
+                        <div class="chart-card-sub">Higher is better · industry benchmark 95%</div>
+                    </div>
+                </div>
+                <ApexChart OptionsJson="@LivabilityChartJson" Height="@ChartHeight" />
+            </div>
+        </div>
+
+        <div class="chart-grid">
+            <div class="chart-card">
+                <div class="chart-card-head">
+                    <div>
+                        <h3><span class="material-symbols-outlined">donut_large</span> Expense Breakdown</h3>
+                        <div class="chart-card-sub">All recorded farm expenses, by category</div>
+                    </div>
+                </div>
+                @if (expenseCategories.Count == 0)
+                {
+                    <div class="empty-state">No expenses recorded yet.</div>
+                }
+                else
+                {
+                    <ApexChart OptionsJson="@ExpenseDonutJson" Height="@ChartHeight" />
+                }
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-card-head">
+                    <div>
+                        <h3><span class="material-symbols-outlined">speed</span> Farm Efficiency</h3>
+                        <div class="chart-card-sub">Average across @(batches.Count) filtered batches</div>
+                    </div>
+                </div>
+                <ApexChart OptionsJson="@EfficiencyGaugeJson" Height="@ChartHeight" />
+            </div>
+        </div>
+
+        @if (growthSeries.Count > 0)
+        {
+            <div class="chart-grid">
+                <div class="chart-card span-2">
+                    <div class="chart-card-head">
+                        <div>
+                            <h3><span class="material-symbols-outlined">trending_up</span> Growth Trend Comparison</h3>
+                            <div class="chart-card-sub">Avg body weight by day of cycle · up to @growthSeries.Count most recent batches</div>
+                        </div>
+                    </div>
+                    <ApexChart OptionsJson="@GrowthComparisonJson" Height="320" />
+                </div>
+            </div>
+        }
+
+        <div class="panel-title"><h2><span class="material-symbols-outlined">table_rows</span> Batch Performance</h2></div>
+        <div class="card data-table-wrap" style="padding:4px;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th @onclick='() => SetSort("batch")' class="@SortClass("batch")">Batch<span class="sort-arrow">@SortArrow("batch")</span></th>
+                        <th @onclick='() => SetSort("house")' class="@SortClass("house")">House<span class="sort-arrow">@SortArrow("house")</span></th>
+                        <th @onclick='() => SetSort("status")' class="@SortClass("status")">Status<span class="sort-arrow">@SortArrow("status")</span></th>
+                        <th @onclick='() => SetSort("fcr")' class="@SortClass("fcr")">FCR<span class="sort-arrow">@SortArrow("fcr")</span></th>
+                        <th @onclick='() => SetSort("eef")' class="@SortClass("eef")">EEF<span class="sort-arrow">@SortArrow("eef")</span></th>
+                        <th @onclick='() => SetSort("livability")' class="@SortClass("livability")">Livability<span class="sort-arrow">@SortArrow("livability")</span></th>
+                        <th @onclick='() => SetSort("expenses")' class="@SortClass("expenses")">Expenses<span class="sort-arrow">@SortArrow("expenses")</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var b in SortedBatches)
+                    {
+                        var p = perf[b.Id];
+                        <tr>
+                            <td><a href="@($"batch/{b.Id}")" style="font-weight:700; color:var(--ink); text-decoration:none;">@b.BatchCode</a></td>
+                            <td>@b.House?.Name</td>
+                            <td><span class="status-chip @(b.Status == BatchStatus.Closed ? "muted" : "")">@(b.Status == BatchStatus.Closed ? "Closed" : $"Day {b.AgeDays}")</span></td>
+                            <td>@p.Fcr.ToString("0.000")</td>
+                            <td>@p.Eef.ToString("0.0")</td>
+                            <td>@p.LivabilityPct.ToString("0.0")%</td>
+                            <td>₹@p.TotalExpenses.ToString("N0")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
+
+@code {
+    private const int ChartHeight = 260;
+
+    private bool loading = true;
+    private List<Batch> batches = new();
+    private Dictionary<int, BatchPerformance> perf = new();
+    private Dictionary<int, List<DailyRecord>> dailyByBatch = new();
+    private List<Expense> allExpenses = new();
+    private int? houseId;
+    private int? year;
+    private List<(int? Value, string Label)> houseOptions = new();
+    private List<(int? Value, string Label)> yearOptions = new();
+
+    private string sortColumn = "placement";
+    private bool sortAsc = false;
+
+    // ---------------- Sorting ----------------
+    private IEnumerable<Batch> SortedBatches
+    {
+        get
+        {
+            Func<Batch, IComparable> key = sortColumn switch
+            {
+                "batch" => b => b.BatchCode,
+                "house" => b => b.House?.Name ?? "",
+                "status" => b => b.Status,
+                "fcr" => b => perf[b.Id].Fcr,
+                "eef" => b => perf[b.Id].Eef,
+                "livability" => b => perf[b.Id].LivabilityPct,
+                "expenses" => b => perf[b.Id].TotalExpenses,
+                _ => b => b.PlacementDate,
+            };
+            return sortAsc ? batches.OrderBy(key) : batches.OrderByDescending(key);
+        }
+    }
+
+    private void SetSort(string col)
+    {
+        if (sortColumn == col) sortAsc = !sortAsc;
+        else { sortColumn = col; sortAsc = false; }
+    }
+
+    private string SortClass(string col) => sortColumn == col ? "sorted" : "";
+    private string SortArrow(string col) => sortColumn != col ? "" : sortAsc ? "↑" : "↓";
+
+    // ---------------- Chart data ----------------
+    private List<(string Category, double Total)> expenseCategories => allExpenses
+        .GroupBy(e => e.Category)
+        .Select(g => (g.Key, (double)g.Sum(e => e.Amount)))
+        .OrderByDescending(x => x.Item2)
+        .ToList();
+
+    private List<(string Label, List<double?> Data)> growthSeries = new();
+
+    private static string FillFor(decimal fcr) => fcr <= 1.60m ? Primary : fcr <= 1.75m ? Amber : Danger;
+    private static string FillForLivability(decimal pct) => pct >= 96 ? Primary : pct >= 93 ? Amber : Danger;
+
+    private string FcrChartJson
+    {
+        get
+        {
+            var chart = Opt(("type", "bar"), ("height", ChartHeight), ("toolbar", Opt(("show", false))), ("fontFamily", "IBM Plex Sans, sans-serif"));
+            var bar = Opt(("horizontal", true), ("borderRadius", 4), ("barHeight", "55%"));
+            var data = batches.Select(b => (object)Opt(("x", b.BatchCode), ("y", perf[b.Id].Fcr), ("fillColor", FillFor(perf[b.Id].Fcr)))).ToArray();
+            var dataLabelStyle = Opt(("fontSize", "11px"), ("fontWeight", 700));
+            var dataLabels = Opt(("enabled", true), ("formatter", Fn("function(v){ return v.toFixed(3); }")), ("style", dataLabelStyle));
+            var xaxisLabelStyle = Opt(("style", Opt(("fontSize", "11px"))));
+            var xaxis = Opt(("categories", batches.Select(b => b.BatchCode).ToArray()), ("labels", xaxisLabelStyle));
+
+            return Json(Opt(
+                ("chart", chart),
+                ("plotOptions", Opt(("bar", bar))),
+                ("series", new object[] { Opt(("name", "FCR"), ("data", data)) }),
+                ("dataLabels", dataLabels),
+                ("xaxis", xaxis),
+                ("grid", Opt(("borderColor", Line), ("strokeDashArray", 4))),
+                ("tooltip", Opt(("theme", "light")))
+            ));
+        }
+    }
+
+    private string LivabilityChartJson
+    {
+        get
+        {
+            var chart = Opt(("type", "bar"), ("height", ChartHeight), ("toolbar", Opt(("show", false))), ("fontFamily", "IBM Plex Sans, sans-serif"));
+            var bar = Opt(("horizontal", true), ("borderRadius", 4), ("barHeight", "55%"));
+            var data = batches.Select(b => (object)Opt(("x", b.BatchCode), ("y", perf[b.Id].LivabilityPct), ("fillColor", FillForLivability(perf[b.Id].LivabilityPct)))).ToArray();
+            var dataLabelStyle = Opt(("fontSize", "11px"), ("fontWeight", 700));
+            var dataLabels = Opt(("enabled", true), ("formatter", Fn("function(v){ return v.toFixed(1) + '%'; }")), ("style", dataLabelStyle));
+            var xaxis = Opt(("categories", batches.Select(b => b.BatchCode).ToArray()), ("max", 100));
+
+            return Json(Opt(
+                ("chart", chart),
+                ("plotOptions", Opt(("bar", bar))),
+                ("series", new object[] { Opt(("name", "Livability"), ("data", data)) }),
+                ("dataLabels", dataLabels),
+                ("xaxis", xaxis),
+                ("grid", Opt(("borderColor", Line), ("strokeDashArray", 4))),
+                ("tooltip", Opt(("theme", "light")))
+            ));
+        }
+    }
+
+    private string ExpenseDonutJson
+    {
+        get
+        {
+            var chart = Opt(("type", "donut"), ("height", ChartHeight), ("fontFamily", "IBM Plex Sans, sans-serif"));
+            var tooltipY = Opt(("formatter", Fn("function(v){ return '₹' + v.toLocaleString('en-IN'); }")));
+            var tooltip = Opt(("theme", "light"), ("y", tooltipY));
+
+            var totalLabel = Opt(("show", true), ("label", "Total"), ("formatter", Fn("function(w){ return '₹' + w.globals.seriesTotals.reduce((a,b)=>a+b,0).toLocaleString('en-IN'); }")));
+            var donutLabels = Opt(("show", true), ("total", totalLabel));
+            var donut = Opt(("labels", donutLabels));
+            var pie = Opt(("donut", donut));
+            var plotOptions = Opt(("pie", pie));
+
+            return Json(Opt(
+                ("chart", chart),
+                ("series", expenseCategories.Select(x => x.Total).ToArray()),
+                ("labels", expenseCategories.Select(x => x.Category).ToArray()),
+                ("colors", Series),
+                ("legend", Opt(("position", "bottom"), ("fontSize", "12px"))),
+                ("dataLabels", Opt(("formatter", Fn("function(v){ return v.toFixed(0) + '%'; }")))),
+                ("tooltip", tooltip),
+                ("plotOptions", plotOptions)
+            ));
+        }
+    }
+
+    private string EfficiencyGaugeJson
+    {
+        get
+        {
+            var nameStyle = Opt(("fontSize", "12px"), ("color", InkSoft));
+            var valueStyle = Opt(("fontSize", "24px"), ("fontWeight", 700), ("color", Ink), ("formatter", Fn("function(v){ return v + '%'; }")));
+            var dataLabels = Opt(("name", nameStyle), ("value", valueStyle));
+            var radialBar = Opt(("hollow", Opt(("size", "58%"))), ("dataLabels", dataLabels));
+            var avgLivability = batches.Count == 0 ? 0 : Math.Round((double)perf.Values.Average(p => p.LivabilityPct), 1);
+
+            return Json(Opt(
+                ("chart", Opt(("type", "radialBar"), ("height", ChartHeight), ("fontFamily", "IBM Plex Sans, sans-serif"))),
+                ("series", new[] { avgLivability }),
+                ("labels", new[] { "Avg Livability" }),
+                ("colors", new[] { Primary }),
+                ("plotOptions", Opt(("radialBar", radialBar))),
+                ("stroke", Opt(("lineCap", "round")))
+            ));
+        }
+    }
+
+    private string GrowthComparisonJson
+    {
+        get
+        {
+            var maxLen = growthSeries.Count == 0 ? 0 : growthSeries.Max(s => s.Data.Count);
+            var categories = Enumerable.Range(1, maxLen).Select(d => $"D{d}").ToArray();
+            var series = growthSeries.Select(s => (object)Opt(("name", s.Label), ("data", s.Data.ToArray()))).ToArray();
+            var xaxisLabels = Opt(("style", Opt(("fontSize", "10.5px"))));
+            var yaxisLabels = Opt(("formatter", Fn("function(v){ return v.toFixed(0) + 'g'; }")));
+
+            return Json(Opt(
+                ("chart", Opt(("type", "line"), ("toolbar", Opt(("show", false))), ("fontFamily", "IBM Plex Sans, sans-serif"), ("animations", Opt(("speed", 500))))),
+                ("series", series),
+                ("colors", Series),
+                ("xaxis", Opt(("categories", categories), ("labels", xaxisLabels))),
+                ("yaxis", Opt(("labels", yaxisLabels))),
+                ("stroke", Opt(("curve", "smooth"), ("width", 2.5))),
+                ("dataLabels", Opt(("enabled", false))),
+                ("legend", Opt(("position", "top"), ("fontSize", "12px"))),
+                ("grid", Opt(("borderColor", Line), ("strokeDashArray", 4))),
+                ("tooltip", Opt(("theme", "light"), ("shared", true)))
+            ));
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var houses = await FarmService.GetHousesAsync();
+        houseOptions = new List<(int?, string)> { (null, "All houses") }
+            .Concat(houses.Select(h => ((int?)h.Id, h.Name))).ToList();
+
+        var years = await FarmService.GetBatchYearsAsync();
+        yearOptions = new List<(int?, string)> { (null, "All years") }
+            .Concat(years.Select(y => ((int?)y, y.ToString()))).ToList();
+        year = years.Contains(DateTime.Today.Year) ? DateTime.Today.Year : null;
+
+        allExpenses = await FarmService.GetAllExpensesAsync();
+
+        await Reload();
+    }
+
+    private async Task Reload()
+    {
+        loading = true;
+        perf.Clear();
+        dailyByBatch.Clear();
+        growthSeries.Clear();
+
+        batches = await FarmService.GetBatchesAsync(houseId: houseId, year: year);
+        foreach (var b in batches)
+            perf[b.Id] = await FarmService.GetPerformanceAsync(b.Id);
+
+        foreach (var b in batches.OrderByDescending(b => b.PlacementDate).Take(6))
+        {
+            var daily = await FarmService.GetDailyRecordsAsync(b.Id);
+            if (daily.Count < 2) continue;
+            var ordered = daily.OrderBy(d => d.Date).Select(d => (double?)d.AvgBodyWeightGm).ToList();
+            growthSeries.Add((b.BatchCode, ordered));
+        }
+
+        loading = false;
+    }
+
+    private async Task OnHouseChanged(int? v)
+    {
+        houseId = v;
+        await Reload();
+    }
+
+    private async Task OnYearChanged(int? v)
+    {
+        year = v;
+        await Reload();
+    }
+}

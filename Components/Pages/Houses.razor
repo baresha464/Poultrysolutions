@@ -1,0 +1,104 @@
+@page "/houses"
+@inject FarmService FarmService
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<div class="page-title">Houses</div>
+
+@if (!AuthService.HasPermission(Permissions.Houses.View))
+{
+    <div class="card empty-state">You don't have permission to view houses.</div>
+}
+else if (loading)
+{
+    <p class="empty-state">Loading…</p>
+}
+else if (!houses.Any())
+{
+    <div class="card empty-state">No houses set up yet. Tap + to add one.</div>
+}
+else
+{
+    @foreach (var h in houses)
+    {
+        var active = activeByHouse.GetValueOrDefault(h.Id);
+        var perf = active is null ? null : perfByBatch.GetValueOrDefault(active.Id);
+        var batchCount = countByHouse.GetValueOrDefault(h.Id);
+
+        <a class="card house-card" href="@($"houses/{h.Id}")">
+            <div class="house-card-photo @VariantFor(h.Id)">
+                <div class="house-card-photo-title">@h.Name</div>
+            </div>
+            <div class="house-card-head">
+                <div>
+                    <div class="list-row-sub">@batchCount.ToString("N0") batch@(batchCount == 1 ? "" : "es") this year@(h.CapacityBirds > 0 ? $" · Capacity {h.CapacityBirds:N0}" : "")</div>
+                </div>
+                @if (active is not null)
+                {
+                    <span class="badge">Day @active.AgeDays</span>
+                }
+                else
+                {
+                    <span class="badge closed">Empty</span>
+                }
+            </div>
+
+            @if (active is not null && perf is not null)
+            {
+                <div class="divider" style="margin:10px 0;"></div>
+                <div class="house-card-batch">
+                    <span class="list-row-title">@active.BatchCode</span>
+                    <span class="list-row-sub">@active.Breed · @active.Integrator?.Name</span>
+                </div>
+                <div class="kpi-grid" style="margin-top:8px; margin-bottom:0;">
+                    <div class="kpi amber"><div class="kpi-label">Live Birds</div><div class="kpi-value">@perf.LiveBirds.ToString("N0")</div></div>
+                    <div class="kpi"><div class="kpi-label">Livability</div><div class="kpi-value">@perf.LivabilityPct.ToString("0.0")%</div></div>
+                    <div class="kpi clay"><div class="kpi-label">FCR</div><div class="kpi-value">@perf.Fcr.ToString("0.000")</div></div>
+                    <div class="kpi"><div class="kpi-label">Avg Wt</div><div class="kpi-value">@perf.AvgBodyWeightKg.ToString("0.00")kg</div></div>
+                </div>
+            }
+            else
+            {
+                <div class="divider" style="margin:10px 0;"></div>
+                <div class="empty-state" style="padding:6px 0;">Ready for a new batch</div>
+            }
+        </a>
+    }
+}
+
+@if (AuthService.HasPermission(Permissions.Houses.Add))
+{
+    <button class="btn-fab" @onclick='() => Nav.NavigateTo("houses/new")' title="New house">+</button>
+}
+
+@code {
+    private bool loading = true;
+    private List<House> houses = new();
+    private Dictionary<int, Batch> activeByHouse = new();
+    private Dictionary<int, BatchPerformance> perfByBatch = new();
+    private Dictionary<int, int> countByHouse = new();
+
+    private static readonly string[] Variants = { "green", "amber", "clay", "blue", "plum" };
+    private static string VariantFor(int houseId) => Variants[Math.Abs(houseId) % Variants.Length];
+
+    protected override async Task OnInitializedAsync()
+    {
+        houses = await FarmService.GetHousesAsync();
+        var thisYear = DateTime.Today.Year;
+
+        foreach (var h in houses)
+        {
+            var houseBatches = await FarmService.GetBatchesAsync(houseId: h.Id);
+            countByHouse[h.Id] = houseBatches.Count(b => b.PlacementDate.Year == thisYear);
+
+            var active = houseBatches.FirstOrDefault(b => b.Status == BatchStatus.Active);
+            if (active is not null)
+            {
+                activeByHouse[h.Id] = active;
+                perfByBatch[active.Id] = await FarmService.GetPerformanceAsync(active.Id);
+            }
+        }
+
+        loading = false;
+    }
+}

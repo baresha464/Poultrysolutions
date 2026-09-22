@@ -1,0 +1,191 @@
+@inherits LayoutComponentBase
+@inject AuthService AuthService
+@inject IJSRuntime JS
+
+<CascadingValue Value="AuthService">
+@if (!authReady)
+{
+    <div class="boot-loading">
+        <img src="images/logo-mark.png" alt="AMR Poultry Farms" />
+        <span>Loading AMR Poultry Farms…</span>
+    </div>
+}
+else
+{
+    <div class="shell">
+        <div class="sidebar-scrim @(sidebarOpen ? "open" : "")" @onclick="CloseSidebar"></div>
+
+        <aside class="sidebar @(sidebarOpen ? "open" : "") @(sidebarCollapsed ? "collapsed" : "")">
+            <button class="sidebar-collapse-handle" @onclick="ToggleCollapse" title="@(sidebarCollapsed ? "Expand menu" : "Collapse menu")">
+                <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+
+            <div class="sidebar-brand">
+                <img src="images/logo-mark.png" alt="AMR" />
+                <div class="sidebar-brand-text">
+                    <div class="sidebar-brand-name">AMR Poultry Farms</div>
+                    <div class="sidebar-brand-sub">Broiler Operations</div>
+                </div>
+                <button class="sidebar-close-btn" @onclick="CloseSidebar" title="Close menu">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <div class="sidebar-eyebrow">Navigation</div>
+            <nav class="sidebar-nav" @onclick="CloseSidebar">
+                <NavLink href="" Match="NavLinkMatch.All" class="sidebar-link" title="Dashboard">
+                    <span class="material-symbols-outlined">grid_view</span><span>Dashboard</span>
+                </NavLink>
+                @if (AuthService.HasPermission(Permissions.Houses.View))
+                {
+                    <NavLink href="houses" class="sidebar-link" title="Houses &amp; Sheds">
+                        <span class="material-symbols-outlined">home_work</span><span>Houses &amp; Sheds</span>
+                    </NavLink>
+                }
+                @if (AuthService.HasPermission(Permissions.Batches.View))
+                {
+                    <NavLink href="batches" class="sidebar-link" title="Batches">
+                        <span class="material-symbols-outlined">layers</span><span>Batches</span>
+                    </NavLink>
+                }
+                @if (AuthService.HasPermission(Permissions.Expenses.View))
+                {
+                    <NavLink href="expenses" class="sidebar-link" title="Financials &amp; Expenses">
+                        <span class="material-symbols-outlined">payments</span><span>Financials &amp; Expenses</span>
+                    </NavLink>
+                }
+                @if (AuthService.HasPermission(Permissions.Reports.View))
+                {
+                    <NavLink href="reports" class="sidebar-link" title="Analytics &amp; Reports">
+                        <span class="material-symbols-outlined">monitoring</span><span>Analytics &amp; Reports</span>
+                    </NavLink>
+                }
+                <NavLink href="settings" class="sidebar-link" title="Settings">
+                    <span class="material-symbols-outlined">settings</span><span>Settings</span>
+                </NavLink>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-user-avatar">@Initials</div>
+                <div class="sidebar-user-text">
+                    <div class="sidebar-user-name">@(AuthService.CurrentUser?.DisplayName is { Length: > 0 } dn ? dn : AuthService.CurrentUser?.Username)</div>
+                    <div class="sidebar-user-role">@(AuthService.IsSystemAdmin ? "Administrator" : "Operations")</div>
+                </div>
+                <form method="post" action="Account/Logout">
+                    <button type="submit" class="sidebar-icon-btn" title="Log out">
+                        <span class="material-symbols-outlined">logout</span>
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <div class="main-col @(sidebarCollapsed ? "collapsed" : "")">
+            <header class="topbar">
+                <button class="topbar-menu-btn" @onclick="ToggleSidebar" title="Menu">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+
+                <div class="topbar-org">
+                    <img src="images/logo-mark.png" alt="AMR" class="topbar-org-mark" />
+                    <span class="topbar-org-text">
+                        <span class="topbar-title">AMR Poultry Farms</span>
+                        <span class="topbar-subtitle">Broiler Operations</span>
+                    </span>
+                    <span class="topbar-live-pill"><span class="topbar-live-dot"></span>Live</span>
+                </div>
+
+                <div class="topbar-spacer"></div>
+
+                <div class="topbar-toolbar">
+                    <a class="topbar-action" href="settings" title="Settings">
+                        <span class="material-symbols-outlined">settings</span>
+                    </a>
+                    <span class="topbar-toolbar-divider"></span>
+                    <form method="post" action="Account/Logout">
+                        <button type="submit" class="topbar-action danger" title="Log out">
+                            <span class="material-symbols-outlined">logout</span>
+                        </button>
+                    </form>
+                </div>
+            </header>
+
+            <main class="content">
+                @Body
+            </main>
+        </div>
+    </div>
+}
+</CascadingValue>
+
+@code {
+    [CascadingParameter] private Task<Microsoft.AspNetCore.Components.Authorization.AuthenticationState>? AuthStateTask { get; set; }
+
+    private bool sidebarOpen;
+    private bool sidebarCollapsed;
+    private bool authReady;
+    private const string CollapseStorageKey = "amr-sidebar-collapsed";
+
+    private string Initials
+    {
+        get
+        {
+            var name = AuthService.CurrentUser?.DisplayName is { Length: > 0 } dn ? dn : AuthService.CurrentUser?.Username ?? "?";
+            var parts = name.Split(new[] { ' ', '_', '.' }, StringSplitOptions.RemoveEmptyEntries);
+            return parts.Length >= 2
+                ? $"{parts[0][0]}{parts[1][0]}".ToUpperInvariant()
+                : name.Length >= 2 ? name[..2].ToUpperInvariant() : name.ToUpperInvariant();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthStateTask is not null)
+        {
+            var state = await AuthStateTask;
+            await AuthService.LoadFromPrincipalAsync(state.User);
+        }
+
+        // @Body only renders once this flips true, so no page can start reading
+        // AuthService/FarmService (and race the permission/house-scoping load above)
+        // before the session snapshot is actually populated.
+        authReady = true;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // js/ui.js loads as a separate <script> after blazor.web.js, so on a cold
+            // cache it can still be mid-download when the circuit connects and this
+            // fires. uiHelpers being undefined must not throw here — that would take
+            // down the whole circuit, not just this best-effort preference restore.
+            try
+            {
+                var stored = await JS.InvokeAsync<string?>("uiHelpers.getItem", CollapseStorageKey);
+                if (stored == "1")
+                {
+                    sidebarCollapsed = true;
+                    StateHasChanged();
+                }
+            }
+            catch (JSException)
+            {
+            }
+        }
+    }
+
+    private void ToggleSidebar() => sidebarOpen = !sidebarOpen;
+    private void CloseSidebar() => sidebarOpen = false;
+
+    private async Task ToggleCollapse()
+    {
+        sidebarCollapsed = !sidebarCollapsed;
+        try
+        {
+            await JS.InvokeVoidAsync("uiHelpers.setItem", CollapseStorageKey, sidebarCollapsed ? "1" : "0");
+        }
+        catch (JSException)
+        {
+        }
+    }
+}

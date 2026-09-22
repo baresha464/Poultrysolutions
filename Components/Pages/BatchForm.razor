@@ -1,0 +1,120 @@
+@page "/batch/new"
+@page "/batch/{Id:int}/edit"
+@inject FarmService FarmService
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<div class="page-title">@(Id.HasValue ? "Edit Batch" : "New Batch")</div>
+
+@if (!AuthService.HasPermission(Id.HasValue ? Permissions.Batches.Edit : Permissions.Batches.Add))
+{
+    <div class="card empty-state">You don't have permission to do this.</div>
+}
+else if (Id.HasValue && !loading && batch.Id == 0)
+{
+    <div class="card empty-state">Batch not found, or you don't have access to it.</div>
+}
+else
+{
+<EditForm Model="batch" OnValidSubmit="Save">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="card">
+        <div class="form-grid">
+            <div class="field">
+                <label>Batch Number *</label>
+                <InputText @bind-Value="batch.BatchCode" placeholder="AMR-2026-05" />
+            </div>
+            <div class="field">
+                <label>House *</label>
+                <Dropdown TValue="int" Value="batch.HouseId" ValueChanged="v => batch.HouseId = v"
+                          Options="houseOptions" Placeholder="Select house…" />
+            </div>
+            <div class="field">
+                <label>Integrator / Company *</label>
+                @if (integratorOptions.Count == 0)
+                {
+                    <div class="empty-state" style="padding:10px 0; text-align:left;">
+                        No integrators set up yet. <a href="settings/integrators">Add one</a> before placing a batch.
+                    </div>
+                }
+                else
+                {
+                    <Dropdown TValue="int" Value="batch.IntegratorId" ValueChanged="v => batch.IntegratorId = v"
+                              Options="integratorOptions" Placeholder="Select integrator…" />
+                }
+            </div>
+            <div class="field">
+                <label>Branch Code</label>
+                <InputText @bind-Value="batch.BranchCode" placeholder="e.g. BR-04" />
+            </div>
+            <div class="field">
+                <label>Breed</label>
+                <InputText @bind-Value="batch.Breed" />
+            </div>
+            <div class="field">
+                <label>Placement Date</label>
+                <InputDate @bind-Value="batch.PlacementDate" />
+            </div>
+            <div class="field">
+                <label>Chicks Placed</label>
+                <InputNumber @bind-Value="batch.ChicksPlaced" />
+            </div>
+            <div class="field">
+                <label>Chick Cost / Bird (₹)</label>
+                <InputNumber @bind-Value="batch.ChickCostPerBird" step="0.01" />
+            </div>
+            <div class="field">
+                <label>Target Weight (kg)</label>
+                <InputNumber @bind-Value="batch.TargetWeightKg" step="0.01" />
+            </div>
+            <div class="field full">
+                <label>Notes</label>
+                <InputTextArea @bind-Value="batch.Notes" />
+            </div>
+        </div>
+    </div>
+
+    <div class="action-row">
+        <button type="submit" class="btn btn-primary btn-block">Save Batch</button>
+    </div>
+</EditForm>
+}
+
+@code {
+    [Parameter] public int? Id { get; set; }
+    [SupplyParameterFromQuery] public int? HouseId { get; set; }
+    private Batch batch = new();
+    private List<(int Value, string Label)> houseOptions = new();
+    private List<(int Value, string Label)> integratorOptions = new();
+    private bool loading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var houses = await FarmService.GetHousesAsync();
+        houseOptions = houses.Select(h => (h.Id, h.Name)).ToList();
+
+        var integrators = await FarmService.GetIntegratorsAsync();
+        integratorOptions = integrators.Select(i => (i.Id, i.Name)).ToList();
+
+        if (Id.HasValue)
+        {
+            var existing = await FarmService.GetBatchAsync(Id.Value);
+            if (existing != null) batch = existing;
+        }
+        else
+        {
+            batch.HouseId = HouseId ?? (houses.Count > 0 ? houses[0].Id : 0);
+            batch.IntegratorId = integrators.Count > 0 ? integrators[0].Id : 0;
+        }
+
+        loading = false;
+    }
+
+    private async Task Save()
+    {
+        var id = await FarmService.SaveBatchAsync(batch);
+        Nav.NavigateTo($"batch/{id}");
+    }
+}

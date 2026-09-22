@@ -1,0 +1,158 @@
+@page "/expenses"
+@inject FarmService FarmService
+@inject AuthService AuthService
+
+<div class="page-title">Expenses</div>
+
+@if (!AuthService.HasPermission(Permissions.Expenses.View))
+{
+    <div class="card empty-state">You don't have permission to view expenses.</div>
+}
+else if (showForm)
+{
+    <EditForm Model="expense" OnValidSubmit="Save">
+        <div class="card">
+            <div class="form-grid">
+                <div class="field">
+                    <label>Date</label>
+                    <InputDate @bind-Value="expense.Date" />
+                </div>
+                <div class="field">
+                    <label>Category</label>
+                    <Dropdown TValue="string" @bind-Value="expense.Category" Options="_categoryOptions" />
+                </div>
+                <div class="field">
+                    <label>Batch (optional)</label>
+                    <Dropdown TValue="int" @bind-Value="selectedBatchId" Options="BatchOptions" />
+                </div>
+                <div class="field">
+                    <label>Amount (₹)</label>
+                    <InputNumber @bind-Value="expense.Amount" step="0.01" />
+                </div>
+                <div class="field full">
+                    <label>Description</label>
+                    <InputText @bind-Value="expense.Description" />
+                </div>
+            </div>
+        </div>
+        <div class="action-row">
+            <button type="submit" class="btn btn-primary btn-block">Save Expense</button>
+            <button type="button" class="btn btn-outline" @onclick="() => showForm = false">Cancel</button>
+        </div>
+    </EditForm>
+}
+else
+{
+    @if (AuthService.HasPermission(Permissions.Expenses.Add))
+    {
+        <button class="btn btn-primary btn-block" @onclick="NewExpense">+ Add Expense</button>
+    }
+
+    <div class="kpi-grid" style="margin-top:12px;">
+        <div class="kpi danger">
+            <div class="kpi-label">Total (all time)</div>
+            <div class="kpi-value">₹@all.Sum(e => e.Amount).ToString("N0")</div>
+        </div>
+        <div class="kpi amber">
+            <div class="kpi-label">This Month</div>
+            <div class="kpi-value">₹@thisMonthTotal.ToString("N0")</div>
+        </div>
+    </div>
+
+    @if (CategoryItems.Count > 0)
+    {
+        <div class="section-title">By Category</div>
+        <div class="card">
+            <BarChart Items="CategoryItems" Variant="clay" ValueFormat="N0" ValuePrefix="₹" />
+        </div>
+    }
+
+    <div class="section-title">All Expenses</div>
+    <div class="card" style="padding:4px 10px;">
+        @if (!all.Any())
+        {
+            <div class="empty-state">No expenses recorded yet.</div>
+        }
+        else
+        {
+            @foreach (var e in all)
+            {
+                <div class="list-row">
+                    <div>
+                        <div class="list-row-title">@e.Category · ₹@e.Amount.ToString("N0")</div>
+                        <div class="list-row-sub">@e.Date.ToString("dd MMM yyyy") @(e.Description != "" ? " · " + e.Description : "")</div>
+                    </div>
+                    @if (AuthService.HasPermission(Permissions.Expenses.Delete))
+                    {
+                        <button class="btn btn-outline" style="padding:6px 10px;" @onclick="() => Delete(e.Id)">✕</button>
+                    }
+                </div>
+            }
+        }
+    </div>
+}
+
+@code {
+    private List<Expense> all = new();
+    private List<Batch> batches = new();
+    private Expense expense = new();
+    private int selectedBatchId = 0;
+    private bool showForm = false;
+    private decimal thisMonthTotal;
+
+    private static readonly (string Value, string Label)[] _categoryOptions =
+    {
+        ("Electricity", "Electricity"),
+        ("Litter", "Litter"),
+        ("Labour", "Labour"),
+        ("Diesel/Gas", "Diesel/Gas"),
+        ("Repairs", "Repairs"),
+        ("Transport", "Transport"),
+        ("Medicine", "Medicine"),
+        ("Other", "Other"),
+    };
+
+    private IEnumerable<(int Value, string Label)> BatchOptions =>
+        new (int, string)[] { (0, "General (not batch-specific)") }
+            .Concat(batches.Select(b => (b.Id, b.BatchCode)));
+
+    private List<BarChartItem> CategoryItems => all
+        .GroupBy(e => e.Category)
+        .Select(g => new BarChartItem(g.Key, (double)g.Sum(e => e.Amount)))
+        .OrderByDescending(i => i.Value)
+        .ToList();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Load();
+    }
+
+    private async Task Load()
+    {
+        all = await FarmService.GetAllExpensesAsync();
+        batches = await FarmService.GetBatchesAsync();
+        var now = DateTime.Today;
+        thisMonthTotal = all.Where(e => e.Date.Month == now.Month && e.Date.Year == now.Year).Sum(e => e.Amount);
+    }
+
+    private void NewExpense()
+    {
+        expense = new Expense();
+        selectedBatchId = 0;
+        showForm = true;
+    }
+
+    private async Task Save()
+    {
+        expense.BatchId = selectedBatchId == 0 ? null : selectedBatchId;
+        await FarmService.SaveExpenseAsync(expense);
+        showForm = false;
+        await Load();
+    }
+
+    private async Task Delete(int id)
+    {
+        await FarmService.DeleteExpenseAsync(id);
+        await Load();
+    }
+}

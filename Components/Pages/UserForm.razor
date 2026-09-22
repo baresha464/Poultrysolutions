@@ -1,0 +1,152 @@
+@page "/settings/users/new"
+@page "/settings/users/{Id:int}/edit"
+@inject AuthService AuthService
+@inject FarmService FarmService
+@inject NavigationManager Nav
+
+<div class="page-title">@(Id.HasValue ? "Edit User" : "New User")</div>
+
+<EditForm Model="user" OnValidSubmit="Save">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="card">
+        <div class="form-grid single">
+            <div class="field">
+                <label>Username *</label>
+                <InputText @bind-Value="user.Username" placeholder="e.g. rahul" />
+            </div>
+            <div class="field">
+                <label>Display Name</label>
+                <InputText @bind-Value="user.DisplayName" />
+            </div>
+            <div class="field">
+                <label>@(Id.HasValue ? "Reset Password" : "Password *")</label>
+                <InputText @bind-Value="newPassword" type="password"
+                           placeholder="@(Id.HasValue ? "Leave blank to keep current password" : "")" />
+            </div>
+            <div class="field">
+                <label style="display:flex; align-items:center; gap:8px; flex-direction:row;">
+                    <InputCheckbox @bind-Value="user.IsActive" /> Active
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title">Roles</div>
+    <div class="card">
+        @if (!allRoles.Any())
+        {
+            <div class="empty-state">No roles yet — <a href="settings/roles/new">create one</a> first.</div>
+        }
+        else
+        {
+            @foreach (var r in allRoles)
+            {
+                <label class="perm-check" style="display:flex; margin-bottom:8px;">
+                    <input type="checkbox" checked="@selectedRoleIds.Contains(r.Id)" @onchange="e => ToggleRole(r.Id, e)" />
+                    @r.Name
+                </label>
+            }
+        }
+    </div>
+
+    <div class="section-title">Houses</div>
+    <div class="card">
+        <div class="list-row-sub" style="margin-bottom:8px;">
+            No houses checked = sees nothing house-related (unless the user holds the built-in Admin role, which always sees everything).
+        </div>
+        @if (!allHouses.Any())
+        {
+            <div class="empty-state">No houses set up yet.</div>
+        }
+        else
+        {
+            @foreach (var h in allHouses)
+            {
+                <label class="perm-check" style="display:flex; margin-bottom:8px;">
+                    <input type="checkbox" checked="@selectedHouseIds.Contains(h.Id)" @onchange="e => ToggleHouse(h.Id, e)" />
+                    @h.Name
+                </label>
+            }
+        }
+    </div>
+
+    @if (!string.IsNullOrEmpty(error))
+    {
+        <div class="validation-errors">@error</div>
+    }
+
+    <div class="action-row">
+        <button type="submit" class="btn btn-primary btn-block">Save User</button>
+    </div>
+    @if (Id.HasValue)
+    {
+        <div class="action-row">
+            <button type="button" class="btn btn-danger btn-block" @onclick="Delete">Delete User</button>
+        </div>
+    }
+</EditForm>
+
+@code {
+    [Parameter] public int? Id { get; set; }
+    private User user = new();
+    private string newPassword = "";
+    private List<Role> allRoles = new();
+    private HashSet<int> selectedRoleIds = new();
+    private List<House> allHouses = new();
+    private HashSet<int> selectedHouseIds = new();
+    private string? error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        allRoles = await AuthService.GetRolesAsync();
+        allHouses = await FarmService.GetHousesAsync();
+
+        if (Id.HasValue)
+        {
+            var existing = await AuthService.GetUserAsync(Id.Value);
+            if (existing != null)
+            {
+                user = existing;
+                selectedRoleIds = existing.UserRoles.Select(ur => ur.RoleId).ToHashSet();
+                selectedHouseIds = existing.UserHouses.Select(uh => uh.HouseId).ToHashSet();
+            }
+        }
+    }
+
+    private void ToggleRole(int roleId, ChangeEventArgs e)
+    {
+        var isChecked = (bool)(e.Value ?? false);
+        if (isChecked) selectedRoleIds.Add(roleId);
+        else selectedRoleIds.Remove(roleId);
+    }
+
+    private void ToggleHouse(int houseId, ChangeEventArgs e)
+    {
+        var isChecked = (bool)(e.Value ?? false);
+        if (isChecked) selectedHouseIds.Add(houseId);
+        else selectedHouseIds.Remove(houseId);
+    }
+
+    private async Task Save()
+    {
+        error = null;
+        if (!Id.HasValue && string.IsNullOrWhiteSpace(newPassword))
+        {
+            error = "Password is required for a new user.";
+            return;
+        }
+
+        await AuthService.SaveUserAsync(user, selectedRoleIds.ToList(), selectedHouseIds.ToList(), newPassword);
+        Nav.NavigateTo("settings/users");
+    }
+
+    private async Task Delete()
+    {
+        if (!Id.HasValue) return;
+        var ok = await AuthService.DeleteUserAsync(Id.Value);
+        if (ok) Nav.NavigateTo("settings/users");
+        else error = "This is the last user with the Admin role — add another admin before removing this one.";
+    }
+}

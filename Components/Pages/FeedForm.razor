@@ -1,0 +1,94 @@
+@page "/batch/{BatchId:int}/feed/new"
+@page "/batch/{BatchId:int}/feed/{RecordId:int}"
+@inject FarmService FarmService
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<div class="page-title">Feed Delivery</div>
+
+@if (!CanEdit || !batchAccessible)
+{
+    <div class="card empty-state">You don't have permission to do this.</div>
+}
+else
+{
+    <EditForm Model="feed" OnValidSubmit="Save">
+        <div class="card">
+            <div class="form-grid">
+                <div class="field">
+                    <label>Date</label>
+                    <InputDate @bind-Value="feed.Date" />
+                </div>
+                <div class="field">
+                    <label>Feed Type</label>
+                    <Dropdown TValue="string" @bind-Value="feed.FeedType" Options="_feedTypeOptions" />
+                </div>
+                <div class="field">
+                    <label>Bags</label>
+                    <InputNumber @bind-Value="feed.Bags" />
+                </div>
+                <div class="field">
+                    <label>Bag Weight (kg)</label>
+                    <InputNumber @bind-Value="feed.BagWeightKg" step="0.5" />
+                </div>
+                <div class="field">
+                    <label>DC Number</label>
+                    <InputText @bind-Value="feed.DcNumber" />
+                </div>
+                <div class="field full">
+                    <label>Remarks</label>
+                    <InputTextArea @bind-Value="feed.Remarks" />
+                </div>
+            </div>
+            <div class="list-row"><span>Total</span><b>@feed.TotalKg.ToString("N0") kg</b></div>
+        </div>
+
+        <div class="action-row">
+            <button type="submit" class="btn btn-primary btn-block">Save</button>
+            @if (RecordId.HasValue && AuthService.HasPermission(Permissions.Feed.Delete))
+            {
+                <button type="button" class="btn btn-danger" @onclick="Delete">Delete</button>
+            }
+        </div>
+    </EditForm>
+}
+
+@code {
+    [Parameter] public int BatchId { get; set; }
+    [Parameter] public int? RecordId { get; set; }
+    private FeedDelivery feed = new();
+    private bool batchAccessible;
+
+    private bool CanEdit => AuthService.HasPermission(RecordId.HasValue ? Permissions.Feed.Edit : Permissions.Feed.Add);
+
+    private static readonly (string Value, string Label)[] _feedTypeOptions =
+    {
+        ("Pre-starter", "Pre-starter"),
+        ("Starter", "Starter"),
+        ("Finisher", "Finisher"),
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        feed.BatchId = BatchId;
+        batchAccessible = await FarmService.GetBatchAsync(BatchId) is not null;
+        if (RecordId.HasValue)
+        {
+            var list = await FarmService.GetFeedDeliveriesAsync(BatchId);
+            var existing = list.FirstOrDefault(r => r.Id == RecordId.Value);
+            if (existing != null) feed = existing;
+        }
+    }
+
+    private async Task Save()
+    {
+        await FarmService.SaveFeedDeliveryAsync(feed);
+        Nav.NavigateTo($"batch/{BatchId}");
+    }
+
+    private async Task Delete()
+    {
+        if (RecordId.HasValue) await FarmService.DeleteFeedDeliveryAsync(RecordId.Value);
+        Nav.NavigateTo($"batch/{BatchId}");
+    }
+}

@@ -1,0 +1,84 @@
+@page "/settings/integrators/new"
+@page "/settings/integrators/{Id:int}/edit"
+@inject FarmService FarmService
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<div class="page-title">@(Id.HasValue ? "Edit Integrator" : "New Integrator")</div>
+
+@if (!AuthService.HasPermission(Id.HasValue ? Permissions.Integrators.Edit : Permissions.Integrators.Add))
+{
+    <div class="card empty-state">You don't have permission to do this.</div>
+}
+else
+{
+<EditForm Model="integrator" OnValidSubmit="Save">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="card">
+        <div class="form-grid single">
+            <div class="field">
+                <label>Name *</label>
+                <InputText @bind-Value="integrator.Name" placeholder="e.g. Sneha Farms" />
+            </div>
+            <div class="field">
+                <label>Weight of 1 Bag (kg)</label>
+                <InputNumber @bind-Value="integrator.BagWeightKg" step="0.5" />
+            </div>
+            <div class="field">
+                <label>Order</label>
+                <InputNumber @bind-Value="integrator.SortOrder" />
+            </div>
+            <div class="field">
+                <label>Notes</label>
+                <InputTextArea @bind-Value="integrator.Notes" />
+            </div>
+        </div>
+    </div>
+
+    @if (batchCount > 0)
+    {
+        <div class="card empty-state">@batchCount.ToString("N0") batch@(batchCount == 1 ? "" : "es") on record for this integrator — it can't be deleted while that history exists.</div>
+    }
+
+    <div class="action-row">
+        <button type="submit" class="btn btn-primary btn-block">Save Integrator</button>
+    </div>
+    @if (Id.HasValue && batchCount == 0 && AuthService.HasPermission(Permissions.Integrators.Delete))
+    {
+        <div class="action-row">
+            <button type="button" class="btn btn-danger btn-block" @onclick="Delete">Delete Integrator</button>
+        </div>
+    }
+</EditForm>
+}
+
+@code {
+    [Parameter] public int? Id { get; set; }
+    private Integrator integrator = new();
+    private int batchCount;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id.HasValue)
+        {
+            var existing = await FarmService.GetIntegratorAsync(Id.Value);
+            if (existing != null) integrator = existing;
+            batchCount = await FarmService.CountBatchesForIntegratorAsync(Id.Value);
+        }
+    }
+
+    private async Task Save()
+    {
+        await FarmService.SaveIntegratorAsync(integrator);
+        Nav.NavigateTo("settings/integrators");
+    }
+
+    private async Task Delete()
+    {
+        if (!Id.HasValue) return;
+        var ok = await FarmService.DeleteIntegratorAsync(Id.Value);
+        if (ok) Nav.NavigateTo("settings/integrators");
+    }
+}

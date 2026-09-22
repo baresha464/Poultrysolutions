@@ -1,0 +1,34 @@
+@typeparam TValue
+@inject IJSRuntime JS
+
+<div class="dd" tabindex="0">
+    <div class="dd-trigger">
+        <span class="dd-trigger-label @(SelectedLabel is null ? "placeholder" : "")">@(SelectedLabel ?? Placeholder ?? "Select…")</span>
+        <span class="dd-caret">▾</span>
+    </div>
+    <div class="dd-panel">
+        @foreach (var opt in Options)
+        {
+            <div class="dd-option @(EqualityComparer<TValue>.Default.Equals(opt.Value, Value) ? "selected" : "")"
+                 @onclick="() => SelectAsync(opt.Value)">
+                @opt.Label
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public TValue Value { get; set; } = default!;
+    [Parameter] public EventCallback<TValue> ValueChanged { get; set; }
+    [Parameter, EditorRequired] public IEnumerable<(TValue Value, string Label)> Options { get; set; } = Enumerable.Empty<(TValue, string)>();
+    [Parameter] public string? Placeholder { get; set; }
+
+    private string? SelectedLabel => Options.FirstOrDefault(o => EqualityComparer<TValue>.Default.Equals(o.Value, Value)).Label;
+
+    private async Task SelectAsync(TValue value)
+    {
+        Value = value;
+        await ValueChanged.InvokeAsync(value);
+        await JS.InvokeVoidAsync("uiHelpers.blurActiveElement");
+    }
+}

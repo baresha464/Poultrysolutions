@@ -1,0 +1,112 @@
+@{ var plotted = BuildPlotted(); }
+
+@if (Points is null || Points.Count == 0)
+{
+    <div class="empty-state">No data yet.</div>
+}
+else
+{
+    <div class="chart-line">
+        <svg viewBox="0 0 @(Width.ToString(Inv)) @(Height.ToString(Inv))" class="chart-line-svg">
+            <line x1="@(LeftPad.ToString(Inv))" y1="@(BaselineY.ToString(Inv))"
+                  x2="@((Width - RightPad).ToString(Inv))" y2="@(BaselineY.ToString(Inv))"
+                  class="chart-line-baseline" />
+
+            @if (ShowArea)
+            {
+                <path d="@BuildAreaPath(plotted)" class="chart-line-area @Variant"></path>
+            }
+
+            <polyline points="@BuildPolyline(plotted)" class="chart-line-stroke @Variant" fill="none" />
+
+            @foreach (var p in plotted)
+            {
+                <circle cx="@(p.X.ToString(Inv))" cy="@(p.Y.ToString(Inv))" r="4" class="chart-line-dot @Variant">
+                    <title>@p.Source.Label: @p.Source.Value.ToString("0.##", Inv)@ValueSuffix</title>
+                </circle>
+                @LabelMarkup(p)
+            }
+        </svg>
+        <div class="chart-line-captions">
+            <span>Low @MinVal.ToString("0.#", Inv)@ValueSuffix</span>
+            <span>High @MaxVal.ToString("0.#", Inv)@ValueSuffix</span>
+        </div>
+    </div>
+}
+
+@code {
+    private static readonly System.Globalization.CultureInfo Inv = System.Globalization.CultureInfo.InvariantCulture;
+
+    [Parameter, EditorRequired] public IReadOnlyList<LineChartPoint> Points { get; set; } = Array.Empty<LineChartPoint>();
+    [Parameter] public string Variant { get; set; } = "green";
+    [Parameter] public string? ValueSuffix { get; set; }
+    [Parameter] public bool ShowArea { get; set; } = true;
+    [Parameter] public double Height { get; set; } = 140;
+
+    private const double Width = 300;
+    private const double LeftPad = 10;
+    private const double RightPad = 10;
+    private const double TopPad = 18;
+    private const double BottomPad = 20;
+
+    private double PlotWidth => Width - LeftPad - RightPad;
+    private double PlotHeight => Height - TopPad - BottomPad;
+    private double BaselineY => TopPad + PlotHeight;
+
+    private double MinVal => Points.Count == 0 ? 0 : Points.Min(p => p.Value);
+    private double MaxVal => Points.Count == 0 ? 0 : Points.Max(p => p.Value);
+
+    private record Plotted(LineChartPoint Source, double X, double Y, bool Labeled, string Anchor);
+
+    private List<Plotted> BuildPlotted()
+    {
+        var list = new List<Plotted>();
+        if (Points is null || Points.Count == 0) return list;
+
+        var min = MinVal;
+        var max = MaxVal;
+        if (Math.Abs(max - min) < 0.0001) { max += 1; min -= 1; }
+
+        int maxIdx = 0;
+        for (int i = 1; i < Points.Count; i++)
+            if (Points[i].Value > Points[maxIdx].Value) maxIdx = i;
+
+        for (int i = 0; i < Points.Count; i++)
+        {
+            double x = Points.Count == 1
+                ? LeftPad + PlotWidth / 2
+                : LeftPad + PlotWidth * i / (Points.Count - 1);
+            double y = TopPad + PlotHeight * (1 - (Points[i].Value - min) / (max - min));
+
+            bool labeled = i == 0 || i == Points.Count - 1 || i == maxIdx;
+            string anchor = i == 0 ? "start" : (i == Points.Count - 1 ? "end" : "middle");
+
+            list.Add(new Plotted(Points[i], x, y, labeled, anchor));
+        }
+        return list;
+    }
+
+    private string BuildPolyline(List<Plotted> plotted)
+        => string.Join(" ", plotted.Select(p => $"{p.X.ToString(Inv)},{p.Y.ToString(Inv)}"));
+
+    private string BuildAreaPath(List<Plotted> plotted)
+    {
+        if (plotted.Count == 0) return "";
+        var sb = new System.Text.StringBuilder();
+        sb.Append($"M {plotted[0].X.ToString(Inv)},{BaselineY.ToString(Inv)} ");
+        foreach (var p in plotted) sb.Append($"L {p.X.ToString(Inv)},{p.Y.ToString(Inv)} ");
+        sb.Append($"L {plotted[^1].X.ToString(Inv)},{BaselineY.ToString(Inv)} Z");
+        return sb.ToString();
+    }
+
+    // SVG <text> can't be written as a normal Razor element here because Razor reserves the
+    // literal tag name "text" for its own markup-transition syntax; build it as raw markup instead.
+    private MarkupString LabelMarkup(Plotted p)
+    {
+        if (!p.Labeled) return new MarkupString(string.Empty);
+        var text = System.Net.WebUtility.HtmlEncode($"{p.Source.Value.ToString("0.#", Inv)}{ValueSuffix}");
+        var x = p.X.ToString(Inv);
+        var y = (p.Y - 8).ToString(Inv);
+        return new MarkupString($"<text x=\"{x}\" y=\"{y}\" text-anchor=\"{p.Anchor}\" class=\"chart-line-point-label\">{text}</text>");
+    }
+}

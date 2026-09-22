@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <circle cx="50" cy="50" r="46" fill="#1F6E43"/>
+  <!-- Stylized geometric farm / poultry crest in crisp white lines -->
+  <path d="M50 22 L72 38 L65 38 L65 72 L35 72 L35 38 L28 38 Z" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M50 36 C55 36 59 40 59 45 C59 52 50 62 50 62 C50 62 41 52 41 45 C41 40 45 36 50 36 Z" fill="#FFFFFF"/>
+  <circle cx="50" cy="44" r="3.5" fill="#1F6E43"/>
+  <path d="M35 72 L65 72" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+  <path d="M22 78 L78 78" stroke="#E4EFE7" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+</svg>

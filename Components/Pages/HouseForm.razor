@@ -1,0 +1,95 @@
+@page "/houses/new"
+@page "/houses/{Id:int}/edit"
+@inject FarmService FarmService
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<div class="page-title">@(Id.HasValue ? "Edit House" : "New House")</div>
+
+@if (!AuthService.HasPermission(Id.HasValue ? Permissions.Houses.Edit : Permissions.Houses.Add))
+{
+    <div class="card empty-state">You don't have permission to do this.</div>
+}
+else if (Id.HasValue && !loading && house.Id == 0)
+{
+    <div class="card empty-state">House not found, or you don't have access to it.</div>
+}
+else
+{
+<EditForm Model="house" OnValidSubmit="Save">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="card">
+        <div class="form-grid">
+            <div class="field">
+                <label>House Name *</label>
+                <InputText @bind-Value="house.Name" placeholder="House 4" />
+            </div>
+            <div class="field">
+                <label>Code</label>
+                <InputText @bind-Value="house.Code" placeholder="H4" />
+            </div>
+            <div class="field">
+                <label>Capacity (birds)</label>
+                <InputNumber @bind-Value="house.CapacityBirds" />
+            </div>
+            <div class="field">
+                <label>Order</label>
+                <InputNumber @bind-Value="house.SortOrder" />
+            </div>
+            <div class="field full">
+                <label>Notes</label>
+                <InputTextArea @bind-Value="house.Notes" />
+            </div>
+        </div>
+    </div>
+
+    @if (batchCount > 0)
+    {
+        <div class="card empty-state">@batchCount.ToString("N0") batch@(batchCount == 1 ? "" : "es") on record for this house — it can't be deleted while that history exists.</div>
+    }
+
+    <div class="action-row">
+        <button type="submit" class="btn btn-primary btn-block">Save House</button>
+    </div>
+    @if (Id.HasValue && batchCount == 0 && AuthService.HasPermission(Permissions.Houses.Delete))
+    {
+        <div class="action-row">
+            <button type="button" class="btn btn-danger btn-block" @onclick="Delete">Delete House</button>
+        </div>
+    }
+</EditForm>
+}
+
+@code {
+    [Parameter] public int? Id { get; set; }
+    private House house = new();
+    private int batchCount;
+    private bool loading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id.HasValue)
+        {
+            var existing = await FarmService.GetHouseAsync(Id.Value);
+            if (existing != null) house = existing;
+            var batches = await FarmService.GetBatchesAsync(houseId: Id.Value);
+            batchCount = batches.Count;
+        }
+        loading = false;
+    }
+
+    private async Task Save()
+    {
+        var id = await FarmService.SaveHouseAsync(house);
+        Nav.NavigateTo($"houses/{id}");
+    }
+
+    private async Task Delete()
+    {
+        if (!Id.HasValue) return;
+        var ok = await FarmService.DeleteHouseAsync(Id.Value);
+        if (ok) Nav.NavigateTo("houses");
+    }
+}

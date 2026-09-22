@@ -1,0 +1,52 @@
+@page "/settings/integrators"
+@inject FarmService FarmService
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<div class="page-title">Integrators / Companies</div>
+
+@if (!AuthService.HasPermission(Permissions.Integrators.View))
+{
+    <div class="card empty-state">You don't have permission to view integrators.</div>
+}
+else if (loading)
+{
+    <p class="empty-state">Loading…</p>
+}
+else if (!integrators.Any())
+{
+    <div class="card empty-state">No integrators yet. Tap + to add one.</div>
+}
+else
+{
+    <div class="card" style="padding:4px 10px;">
+        @foreach (var i in integrators)
+        {
+            <a class="list-row" href="@($"settings/integrators/{i.Id}/edit")">
+                <div>
+                    <div class="list-row-title">@i.Name</div>
+                    @if (!string.IsNullOrWhiteSpace(i.Notes))
+                    {
+                        <div class="list-row-sub">@i.Notes</div>
+                    }
+                </div>
+            </a>
+        }
+    </div>
+}
+
+@if (AuthService.HasPermission(Permissions.Integrators.Add))
+{
+    <button class="btn-fab" @onclick='() => Nav.NavigateTo("settings/integrators/new")' title="New integrator">+</button>
+}
+
+@code {
+    private bool loading = true;
+    private List<Integrator> integrators = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        integrators = await FarmService.GetIntegratorsAsync();
+        loading = false;
+    }
+}

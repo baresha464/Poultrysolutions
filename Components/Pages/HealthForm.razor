@@ -1,0 +1,107 @@
+@page "/batch/{BatchId:int}/health/new"
+@page "/batch/{BatchId:int}/health/{RecordId:int}"
+@inject FarmService FarmService
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<div class="page-title">Health Event</div>
+
+@if (!CanEdit || !batchAccessible)
+{
+    <div class="card empty-state">You don't have permission to do this.</div>
+}
+else
+{
+    <EditForm Model="evt" OnValidSubmit="Save">
+        <div class="card">
+            <div class="form-grid">
+                <div class="field">
+                    <label>Date</label>
+                    <InputDate @bind-Value="evt.Date" />
+                </div>
+                <div class="field">
+                    <label>Type</label>
+                    <Dropdown TValue="HealthEventType" @bind-Value="evt.Type" Options="_typeOptions" />
+                </div>
+                <div class="field">
+                    <label>Name</label>
+                    <InputText @bind-Value="evt.Name" placeholder="e.g. ND Lasota" />
+                </div>
+                <div class="field">
+                    <label>Dose</label>
+                    <InputText @bind-Value="evt.Dose" placeholder="e.g. 1 drop/bird" />
+                </div>
+                <div class="field">
+                    <label>Route</label>
+                    <Dropdown TValue="string" @bind-Value="evt.Route" Options="_routeOptions" />
+                </div>
+                <div class="field">
+                    <label>Cost (₹)</label>
+                    <InputNumber @bind-Value="evt.Cost" step="0.01" />
+                </div>
+                <div class="field full">
+                    <label>Remarks</label>
+                    <InputTextArea @bind-Value="evt.Remarks" />
+                </div>
+            </div>
+        </div>
+
+        <div class="action-row">
+            <button type="submit" class="btn btn-primary btn-block">Save</button>
+            @if (RecordId.HasValue && AuthService.HasPermission(Permissions.Health.Delete))
+            {
+                <button type="button" class="btn btn-danger" @onclick="Delete">Delete</button>
+            }
+        </div>
+    </EditForm>
+}
+
+@code {
+    [Parameter] public int BatchId { get; set; }
+    [Parameter] public int? RecordId { get; set; }
+    private HealthEvent evt = new();
+    private bool batchAccessible;
+
+    private bool CanEdit => AuthService.HasPermission(RecordId.HasValue ? Permissions.Health.Edit : Permissions.Health.Add);
+
+    private static readonly (HealthEventType Value, string Label)[] _typeOptions =
+    {
+        (HealthEventType.Vaccination, "Vaccination"),
+        (HealthEventType.Medication, "Medication"),
+        (HealthEventType.Supplement, "Supplement"),
+        (HealthEventType.Disinfection, "Disinfection"),
+    };
+
+    private static readonly (string Value, string Label)[] _routeOptions =
+    {
+        ("Drinking water", "Drinking water"),
+        ("Eye drop", "Eye drop"),
+        ("Spray", "Spray"),
+        ("Injection", "Injection"),
+        ("Feed mix", "Feed mix"),
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        evt.BatchId = BatchId;
+        batchAccessible = await FarmService.GetBatchAsync(BatchId) is not null;
+        if (RecordId.HasValue)
+        {
+            var list = await FarmService.GetHealthEventsAsync(BatchId);
+            var existing = list.FirstOrDefault(r => r.Id == RecordId.Value);
+            if (existing != null) evt = existing;
+        }
+    }
+
+    private async Task Save()
+    {
+        await FarmService.SaveHealthEventAsync(evt);
+        Nav.NavigateTo($"batch/{BatchId}");
+    }
+
+    private async Task Delete()
+    {
+        if (RecordId.HasValue) await FarmService.DeleteHealthEventAsync(RecordId.Value);
+        Nav.NavigateTo($"batch/{BatchId}");
+    }
+}

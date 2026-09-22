@@ -1,0 +1,136 @@
+@page "/houses/{Id:int}"
+@inject FarmService FarmService
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+@if (!AuthService.HasPermission(Permissions.Houses.View))
+{
+    <div class="card empty-state">You don't have permission to view houses.</div>
+}
+else if (house is null)
+{
+    <p class="empty-state">Loading…</p>
+}
+else
+{
+    <div class="page-title">
+        @house.Name
+        @if (!string.IsNullOrWhiteSpace(house.Code))
+        {
+            <span style="color:var(--ink-soft); font-weight:600; font-size:14px;">· @house.Code</span>
+        }
+    </div>
+
+    @if (AuthService.HasPermission(Permissions.Houses.Edit) || AuthService.HasPermission(Permissions.Batches.Add))
+    {
+        <div class="action-row" style="margin-top:-8px; margin-bottom:12px;">
+            @if (AuthService.HasPermission(Permissions.Houses.Edit))
+            {
+                <a class="btn btn-outline btn-block" href="@($"houses/{Id}/edit")">Edit House</a>
+            }
+            @if (AuthService.HasPermission(Permissions.Batches.Add))
+            {
+                <a class="btn btn-primary btn-block" href="@($"batch/new?HouseId={Id}")">+ New Batch</a>
+            }
+        </div>
+    }
+
+    @if (activeBatch is not null)
+    {
+        <div class="section-title mt-0">Active Batch</div>
+        <a class="card" href="@($"batch/{activeBatch.Id}")">
+            <div class="house-card-batch">
+                <span class="list-row-title">@activeBatch.BatchCode</span>
+                <span class="badge">Day @activeBatch.AgeDays</span>
+            </div>
+            <div class="list-row-sub">@activeBatch.Breed · @activeBatch.Integrator?.Name</div>
+            <div class="kpi-grid" style="margin-top:8px; margin-bottom:0;">
+                <div class="kpi amber"><div class="kpi-label">Live Birds</div><div class="kpi-value">@activePerf!.LiveBirds.ToString("N0")</div></div>
+                <div class="kpi"><div class="kpi-label">Livability</div><div class="kpi-value">@activePerf.LivabilityPct.ToString("0.0")%</div></div>
+                <div class="kpi clay"><div class="kpi-label">FCR</div><div class="kpi-value">@activePerf.Fcr.ToString("0.000")</div></div>
+                <div class="kpi danger"><div class="kpi-label">Expenses</div><div class="kpi-value">₹@activePerf.TotalExpenses.ToString("N0")</div></div>
+            </div>
+        </a>
+    }
+
+    <div class="section-title">Batch History</div>
+
+    <div class="tab-strip">
+        <button class="tab-btn @(yearFilter is null?"active":"")" @onclick='() => SetYear(null)'>All years</button>
+        @foreach (var y in years)
+        {
+            <button class="tab-btn @(yearFilter == y?"active":"")" @onclick='() => SetYear(y)'>@y</button>
+        }
+    </div>
+
+    <div class="field" style="margin-bottom:10px;">
+        <input type="search" placeholder="Search batch number or integrator…" value="@search" @oninput="OnSearchInput" />
+    </div>
+
+    @if (!filtered.Any())
+    {
+        <div class="card empty-state">No batches match here.</div>
+    }
+    else
+    {
+        <div class="card" style="padding:4px 10px;">
+            @foreach (var b in filtered)
+            {
+                <BatchRow Batch="b" />
+            }
+        </div>
+    }
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private House? house;
+    private List<Batch> all = new();
+    private List<Batch> filtered = new();
+    private List<int> years = new();
+    private int? yearFilter;
+    private string search = "";
+    private Batch? activeBatch;
+    private BatchPerformance? activePerf;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        house = await FarmService.GetHouseAsync(Id);
+        if (house is null) return;
+
+        all = await FarmService.GetBatchesAsync(houseId: Id);
+        years = all.Select(b => b.PlacementDate.Year).Distinct().OrderByDescending(y => y).ToList();
+        yearFilter = years.Contains(DateTime.Today.Year) ? DateTime.Today.Year : null;
+
+        activeBatch = all.FirstOrDefault(b => b.Status == BatchStatus.Active);
+        if (activeBatch is not null)
+            activePerf = await FarmService.GetPerformanceAsync(activeBatch.Id);
+
+        Apply();
+    }
+
+    private void SetYear(int? y)
+    {
+        yearFilter = y;
+        Apply();
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        search = e.Value?.ToString() ?? "";
+        Apply();
+    }
+
+    private void Apply()
+    {
+        var q = all.AsEnumerable();
+        if (yearFilter.HasValue) q = q.Where(b => b.PlacementDate.Year == yearFilter);
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var s = search.Trim();
+            q = q.Where(b => b.BatchCode.Contains(s, StringComparison.OrdinalIgnoreCase)
+                           || (b.Integrator != null && b.Integrator.Name.Contains(s, StringComparison.OrdinalIgnoreCase)));
+        }
+        filtered = q.OrderByDescending(b => b.PlacementDate).ToList();
+    }
+}

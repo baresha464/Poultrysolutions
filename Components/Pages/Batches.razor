@@ -1,0 +1,280 @@
+@page "/batches"
+@inject FarmService FarmService
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<PageTitle>Batches — AMR Poultry Farms</PageTitle>
+
+@if (!AuthService.HasPermission(Permissions.Batches.View))
+{
+    <div class="card empty-state">You don't have permission to view batches.</div>
+}
+else
+{
+    <div class="page-head">
+        <div>
+            <div class="page-eyebrow">Flock Operations</div>
+            <h1 class="page-title">Broiler Batches &amp; Lifecycle</h1>
+            <div class="page-head-sub">Breed standards, FCR metrics, and contractual harvest tracking across every house.</div>
+        </div>
+        @if (AuthService.HasPermission(Permissions.Batches.Add))
+        {
+            <div class="page-head-actions">
+                <button class="btn btn-primary" @onclick='() => Nav.NavigateTo("batch/new")'>
+                    <span class="material-symbols-outlined">add_circle</span> New Batch Placement
+                </button>
+            </div>
+        }
+    </div>
+
+    <div class="ops-hero compact">
+        <div class="ops-hero-top">
+            <span class="ops-hero-eyebrow"><span class="ops-hero-dot"></span> @filtered.Count batch@(filtered.Count == 1 ? "" : "es") matching filters</span>
+        </div>
+        <div class="stat-grid" style="margin-bottom:0;">
+            <div class="stat-card" style="background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.16);">
+                <div class="stat-label" style="color:rgba(255,255,255,.75);"><span>Active Batches</span></div>
+                <div class="stat-value" style="color:#fff;">@filtered.Count(b => b.Status == BatchStatus.Active)</div>
+            </div>
+            <div class="stat-card" style="background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.16);">
+                <div class="stat-label" style="color:rgba(255,255,255,.75);"><span>Live Birds</span></div>
+                <div class="stat-value" style="color:#fff;">@filteredLiveBirds.ToString("N0")</div>
+            </div>
+            <div class="stat-card" style="background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.16);">
+                <div class="stat-label" style="color:rgba(255,255,255,.75);"><span>Avg FCR (active)</span></div>
+                <div class="stat-value" style="color:#fff;">@filteredAvgFcr.ToString("0.000")</div>
+            </div>
+            <div class="stat-card" style="background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.16);">
+                <div class="stat-label" style="color:rgba(255,255,255,.75);"><span>Livability (active)</span></div>
+                <div class="stat-value" style="color:#fff;">@filteredAvgLivability.ToString("0.0")%</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-strip">
+        <button class="tab-btn @(status=="all"?"active":"")" @onclick='() => SetStatus("all")'>All</button>
+        <button class="tab-btn @(status=="active"?"active":"")" @onclick='() => SetStatus("active")'>Active</button>
+        <button class="tab-btn @(status=="closed"?"active":"")" @onclick='() => SetStatus("closed")'>Closed</button>
+    </div>
+
+    <div class="form-grid" style="margin-bottom:16px;">
+        <div class="field">
+            <label>House</label>
+            <Dropdown TValue="int?" Value="houseId" ValueChanged="OnHouseChanged"
+                      Options="houseOptions" Placeholder="All houses" />
+        </div>
+        <div class="field">
+            <label>Year</label>
+            <Dropdown TValue="int?" Value="year" ValueChanged="OnYearChanged"
+                      Options="yearOptions" Placeholder="All years" />
+        </div>
+        <div class="field full">
+            <input type="search" placeholder="Search batch number or integrator…" value="@search" @oninput="OnSearchInput" />
+        </div>
+    </div>
+
+    @if (loading)
+    {
+        <p class="empty-state">Loading…</p>
+    }
+    else if (!filtered.Any())
+    {
+        <div class="card empty-state">No batches match these filters.</div>
+    }
+    else
+    {
+        <div class="ops-layout">
+            <div>
+                @foreach (var b in filtered)
+                {
+                    var perf = perfByBatch.GetValueOrDefault(b.Id);
+                    var variant = VariantFor(b.HouseId);
+                    var closed = b.Status == BatchStatus.Closed;
+
+                    <div class="card op-card @(closed ? "muted" : variant)">
+                        <div class="op-card-bar"></div>
+                        <div class="op-card-body">
+                            <div class="op-card-head">
+                                <div class="op-chip @(closed ? "muted" : variant)">@Abbrev(b.House?.Name)</div>
+                                <div>
+                                    <div class="op-card-title-row">
+                                        <span class="op-card-name">Batch #@b.BatchCode</span>
+                                        <span class="status-chip @(closed ? "muted" : "")">@(closed ? "Closed" : $"Day {b.AgeDays}")</span>
+                                    </div>
+                                    <div class="op-card-sub">@b.House?.Name · @b.Integrator?.Name · @b.Breed</div>
+                                </div>
+                                <div class="op-card-meta">
+                                    Placed<br /><b style="color:var(--ink);">@b.PlacementDate.ToString("dd MMM yyyy")</b>
+                                </div>
+                            </div>
+
+                            @if (perf is not null)
+                            {
+                                @if (!closed)
+                                {
+                                    <div class="op-progress-label">
+                                        <span>Growth Cycle</span>
+                                        <span>Day @b.AgeDays / @TargetCycleDays</span>
+                                    </div>
+                                    <div class="op-progress-track">
+                                        <div class="op-progress-fill @(b.AgeDays >= TargetCycleDays ? "amber" : "")" style="width:@(Math.Min(100, b.AgeDays * 100 / TargetCycleDays))%"></div>
+                                    </div>
+
+                                    <div class="op-stat-grid">
+                                        <div class="op-stat"><div class="op-stat-label">Live Birds</div><div class="op-stat-value">@perf.LiveBirds.ToString("N0")</div></div>
+                                        <div class="op-stat"><div class="op-stat-label">Avg Weight</div><div class="op-stat-value">@perf.AvgBodyWeightKg.ToString("0.00") kg</div></div>
+                                        <div class="op-stat"><div class="op-stat-label">FCR</div><div class="op-stat-value">@perf.Fcr.ToString("0.000")</div></div>
+                                        <div class="op-stat"><div class="op-stat-label">Livability</div><div class="op-stat-value">@perf.LivabilityPct.ToString("0.0")%</div></div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="op-stat-grid">
+                                        <div class="op-stat"><div class="op-stat-label">Birds Lifted</div><div class="op-stat-value">@perf.BirdsLifted.ToString("N0")</div></div>
+                                        <div class="op-stat"><div class="op-stat-label">Final FCR</div><div class="op-stat-value">@perf.Fcr.ToString("0.000")</div></div>
+                                        <div class="op-stat"><div class="op-stat-label">Final Livability</div><div class="op-stat-value">@perf.LivabilityPct.ToString("0.0")%</div></div>
+                                        <div class="op-stat"><div class="op-stat-label">Expenses</div><div class="op-stat-value">₹@perf.TotalExpenses.ToString("N0")</div></div>
+                                    </div>
+                                }
+                            }
+
+                            <div class="op-card-footline">
+                                <span class="foot-note"><span class="material-symbols-outlined">groups</span> @b.ChicksPlaced.ToString("N0") DOCs placed</span>
+                                <a class="btn btn-outline" href="@($"batch/{b.Id}")">View Batch</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div>
+                <div class="panel-title"><h2><span class="material-symbols-outlined">summarize</span> Filtered Totals</h2></div>
+                <div class="card" style="padding:4px 10px;">
+                    <div class="list-row"><span>Chicks Placed</span><b>@filtered.Sum(b => b.ChicksPlaced).ToString("N0")</b></div>
+                    <div class="list-row"><span>Total Mortality</span><b>@perfByBatch.Values.Sum(p => p.TotalMortality).ToString("N0")</b></div>
+                    <div class="list-row"><span>Birds Lifted</span><b>@perfByBatch.Values.Sum(p => p.BirdsLifted).ToString("N0")</b></div>
+                    <div class="list-row"><span>Feed Consumed</span><b>@perfByBatch.Values.Sum(p => p.FeedConsumedKg).ToString("N0") kg</b></div>
+                    <div class="list-row"><span>Total Expenses</span><b>₹@perfByBatch.Values.Sum(p => p.TotalExpenses).ToString("N0")</b></div>
+                </div>
+
+                @if (AuthService.HasPermission(Permissions.Houses.View))
+                {
+                    <div class="panel-title"><h2><span class="material-symbols-outlined">home_work</span> Houses</h2><a class="panel-title-link" href="houses">All houses</a></div>
+                    <div class="card" style="padding:4px 10px;">
+                        @foreach (var h in houses)
+                        {
+                            var houseActive = activeByHouse.GetValueOrDefault(h.Id);
+                            <a class="list-row" href="@($"houses/{h.Id}")">
+                                <div>
+                                    <div class="list-row-title">@h.Name</div>
+                                    <div class="list-row-sub">@(houseActive is null ? "No active batch" : $"Batch #{houseActive.BatchCode}")</div>
+                                </div>
+                                @if (houseActive is not null)
+                                {
+                                    <span class="badge">Day @houseActive.AgeDays</span>
+                                }
+                                else
+                                {
+                                    <span class="badge closed">Empty</span>
+                                }
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+}
+
+@code {
+    private const int TargetCycleDays = 42;
+
+    private bool loading = true;
+    private List<Batch> filtered = new();
+    private Dictionary<int, BatchPerformance> perfByBatch = new();
+    private List<House> houses = new();
+    private Dictionary<int, Batch> activeByHouse = new();
+    private string status = "all";
+    private int? houseId;
+    private int? year;
+    private string search = "";
+    private List<(int? Value, string Label)> houseOptions = new();
+    private List<(int? Value, string Label)> yearOptions = new();
+
+    private int filteredLiveBirds => perfByBatch.Values.Sum(p => p.LiveBirds);
+    private decimal filteredAvgFcr => perfByBatch.Count == 0 ? 0 : Math.Round(perfByBatch.Values.Where(p => p.Fcr > 0).DefaultIfEmpty(new BatchPerformance()).Average(p => p.Fcr), 3);
+    private decimal filteredAvgLivability => perfByBatch.Count == 0 ? 0 : Math.Round(perfByBatch.Values.Average(p => p.LivabilityPct), 1);
+
+    private static readonly string[] Variants = { "green", "amber", "clay", "blue", "plum" };
+    private static string VariantFor(int houseId) => Variants[Math.Abs(houseId) % Variants.Length];
+
+    private static string Abbrev(string? houseName)
+    {
+        if (string.IsNullOrEmpty(houseName)) return "H";
+        var digits = new string(houseName.Where(char.IsDigit).ToArray());
+        return digits.Length > 0 ? $"H{digits}" : houseName.Length >= 2 ? houseName[..2].ToUpperInvariant() : houseName.ToUpperInvariant();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        houses = await FarmService.GetHousesAsync();
+        houseOptions = new List<(int?, string)> { (null, "All houses") }
+            .Concat(houses.Select(h => ((int?)h.Id, h.Name))).ToList();
+
+        foreach (var h in houses)
+        {
+            var houseBatches = await FarmService.GetBatchesAsync(houseId: h.Id, status: BatchStatus.Active);
+            var active = houseBatches.FirstOrDefault();
+            if (active is not null) activeByHouse[h.Id] = active;
+        }
+
+        var years = await FarmService.GetBatchYearsAsync();
+        yearOptions = new List<(int?, string)> { (null, "All years") }
+            .Concat(years.Select(y => ((int?)y, y.ToString()))).ToList();
+        year = years.Contains(DateTime.Today.Year) ? DateTime.Today.Year : null;
+
+        await Reload();
+    }
+
+    private async Task Reload()
+    {
+        loading = true;
+        BatchStatus? statusFilter = status switch
+        {
+            "active" => BatchStatus.Active,
+            "closed" => BatchStatus.Closed,
+            _ => null
+        };
+        filtered = await FarmService.GetBatchesAsync(houseId: houseId, year: year, status: statusFilter, search: search);
+
+        perfByBatch.Clear();
+        foreach (var b in filtered)
+            perfByBatch[b.Id] = await FarmService.GetPerformanceAsync(b.Id);
+
+        loading = false;
+    }
+
+    private async Task SetStatus(string s)
+    {
+        status = s;
+        await Reload();
+    }
+
+    private async Task OnHouseChanged(int? v)
+    {
+        houseId = v;
+        await Reload();
+    }
+
+    private async Task OnYearChanged(int? v)
+    {
+        year = v;
+        await Reload();
+    }
+
+    private async Task OnSearchInput(ChangeEventArgs e)
+    {
+        search = e.Value?.ToString() ?? "";
+        await Reload();
+    }
+}

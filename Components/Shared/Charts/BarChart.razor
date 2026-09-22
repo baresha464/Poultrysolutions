@@ -1,0 +1,36 @@
+@if (Items is null || Items.Count == 0)
+{
+    <div class="empty-state">No data yet.</div>
+}
+else
+{
+    <div class="chart-bar">
+        @foreach (var item in Items)
+        {
+            var pct = EffectiveMax <= 0 ? 0 : Math.Clamp(item.Value / EffectiveMax * 100, 0, 100);
+            <div class="chart-bar-row">
+                <div class="chart-bar-label" title="@item.Label">@item.Label</div>
+                <div class="chart-bar-track">
+                    <div class="chart-bar-fill @Variant" style="width:@(pct.ToString("0.##", Inv))%"></div>
+                </div>
+                <div class="chart-bar-value">@FormatValue(item.Value)</div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private static readonly System.Globalization.CultureInfo Inv = System.Globalization.CultureInfo.InvariantCulture;
+
+    [Parameter, EditorRequired] public IReadOnlyList<BarChartItem> Items { get; set; } = Array.Empty<BarChartItem>();
+    [Parameter] public string Variant { get; set; } = "green";
+    [Parameter] public string? ValueFormat { get; set; }
+    [Parameter] public string? ValuePrefix { get; set; }
+    [Parameter] public string? ValueSuffix { get; set; }
+    [Parameter] public double? MaxValue { get; set; }
+
+    private double EffectiveMax => MaxValue ?? (Items.Count > 0 ? Items.Max(i => i.Value) * 1.15 : 0);
+
+    private string FormatValue(double value)
+        => $"{ValuePrefix}{value.ToString(ValueFormat ?? "0.##", Inv)}{ValueSuffix}";
+}

@@ -1,0 +1,125 @@
+@page "/settings/roles/new"
+@page "/settings/roles/{Id:int}/edit"
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<div class="page-title">@(Id.HasValue ? "Edit Role" : "New Role")</div>
+
+<EditForm Model="role" OnValidSubmit="Save">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="card">
+        <div class="form-grid single">
+            <div class="field">
+                <label>Role Name *</label>
+                @if (role.IsSystemRole)
+                {
+                    <input value="@role.Name" disabled />
+                    <div class="list-row-sub">Built-in role — name can't be changed.</div>
+                }
+                else
+                {
+                    <InputText @bind-Value="role.Name" placeholder="e.g. Supervisor" />
+                }
+            </div>
+            <div class="field">
+                <label>Order</label>
+                <InputNumber @bind-Value="role.SortOrder" />
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title">Permissions</div>
+    @foreach (var group in PermissionCatalog.All)
+    {
+        <div class="card">
+            <div class="perm-group-head">
+                <span class="section-title mt-0" style="margin:0;">@group.Group</span>
+                <span>
+                    <a class="perm-link" @onclick="() => ToggleGroup(group.Items, true)">All</a>
+                    ·
+                    <a class="perm-link" @onclick="() => ToggleGroup(group.Items, false)">None</a>
+                </span>
+            </div>
+            <div class="perm-grid">
+                @foreach (var item in group.Items)
+                {
+                    <label class="perm-check">
+                        <input type="checkbox" checked="@checks.GetValueOrDefault(item.Code)"
+                               @onchange="e => OnCheckChanged(item.Code, e)" />
+                        @item.Label
+                    </label>
+                }
+            </div>
+        </div>
+    }
+
+    @if (role.IsSystemRole)
+    {
+        <div class="card empty-state">This is the built-in Admin role and always keeps every permission.</div>
+    }
+    else
+    {
+        <div class="action-row">
+            <button type="submit" class="btn btn-primary btn-block">Save Role</button>
+        </div>
+        @if (Id.HasValue)
+        {
+            <div class="action-row">
+                <button type="button" class="btn btn-danger btn-block" @onclick="Delete">Delete Role</button>
+            </div>
+            @if (!string.IsNullOrEmpty(deleteError))
+            {
+                <div class="validation-errors">@deleteError</div>
+            }
+        }
+    }
+</EditForm>
+
+@code {
+    [Parameter] public int? Id { get; set; }
+    private Role role = new();
+    private Dictionary<string, bool> checks = new();
+    private string? deleteError;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id.HasValue)
+        {
+            var existing = await AuthService.GetRoleAsync(Id.Value);
+            if (existing != null)
+            {
+                role = existing;
+                checks = existing.RolePermissions.ToDictionary(rp => rp.PermissionCode, _ => true);
+            }
+        }
+
+        if (role.IsSystemRole)
+        {
+            foreach (var code in PermissionCatalog.AllCodes) checks[code] = true;
+        }
+    }
+
+    private void OnCheckChanged(string code, ChangeEventArgs e) => checks[code] = (bool)(e.Value ?? false);
+
+    private void ToggleGroup(List<(string Code, string Label)> items, bool value)
+    {
+        foreach (var i in items) checks[i.Code] = value;
+    }
+
+    private async Task Save()
+    {
+        var codes = checks.Where(kv => kv.Value).Select(kv => kv.Key).ToList();
+        await AuthService.SaveRoleAsync(role, codes);
+        Nav.NavigateTo("settings/roles");
+    }
+
+    private async Task Delete()
+    {
+        if (!Id.HasValue) return;
+        var ok = await AuthService.DeleteRoleAsync(Id.Value);
+        if (ok) Nav.NavigateTo("settings/roles");
+        else deleteError = "This role can't be deleted while it's still assigned to a user.";
+    }
+}

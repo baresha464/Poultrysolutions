@@ -1,0 +1,89 @@
+@page "/Account/Login"
+@attribute [AllowAnonymous]
+@layout EmptyLayout
+
+<PageTitle>Sign in — AMR Poultry Farms</PageTitle>
+
+<div class="auth-screen">
+    <div class="auth-visual">
+        <div class="auth-visual-top">
+            <img src="images/logo-mark.png" alt="AMR Poultry Farms" />
+            <div>
+                <div class="auth-visual-top-name">AMR Poultry Farms</div>
+                <div class="auth-visual-top-sub">Broiler Operations</div>
+            </div>
+        </div>
+
+        <div class="auth-visual-body">
+            <span class="auth-visual-badge">
+                <span class="material-symbols-outlined">shield_lock</span> Internal Operations Portal
+            </span>
+            <h1 class="auth-visual-title">Precision Broiler Farm Operations Console</h1>
+            <p class="auth-visual-sub">
+                Track every house, batch and daily record in one place — from placement to
+                settlement — across all your sheds.
+            </p>
+            <ul class="auth-visual-points">
+                <li><span class="material-symbols-outlined">monitoring</span> Batch-wise growth, FCR &amp; livability at a glance</li>
+                <li><span class="material-symbols-outlined">home_work</span> One dashboard for every house and active flock</li>
+                <li><span class="material-symbols-outlined">group</span> Role-based access for supervisors and field staff</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="auth-panel">
+        <div class="auth-card">
+            <div class="auth-card-head">
+                <img src="images/logo-mark.png" alt="AMR Poultry Farms" />
+                <h1 class="auth-card-title">AMR Poultry Farms</h1>
+                <p class="auth-card-sub">Sign in to continue</p>
+            </div>
+
+            @if (HasError)
+            {
+                <div class="auth-alert">
+                    <span class="material-symbols-outlined">error</span>
+                    <span>Invalid username or password. Please contact your administrator.</span>
+                </div>
+            }
+
+            <form method="post" action="Account/LoginSubmit" class="auth-form">
+                <input type="hidden" name="returnUrl" value="@ReturnUrl" />
+
+                <div class="field">
+                    <label for="usernameInput">Username</label>
+                    <div class="auth-input-wrap">
+                        <span class="material-symbols-outlined auth-input-icon">badge</span>
+                        <input id="usernameInput" name="username" type="text" autocomplete="username"
+                               placeholder="e.g. supervisor_ramesh" required class="auth-input" />
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="passwordInput">Password</label>
+                    <div class="auth-input-wrap">
+                        <span class="material-symbols-outlined auth-input-icon">lock</span>
+                        <input id="passwordInput" name="password" type="password" autocomplete="current-password"
+                               placeholder="••••••••••••" required class="auth-input" />
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block auth-submit">
+                    Sign In <span class="material-symbols-outlined">login</span>
+                </button>
+            </form>
+
+            <div class="auth-footnote">
+                <p>Internal Operations Portal</p>
+                <p class="auth-footnote-sub">Authorized personnel only.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromQuery] public string? Error { get; set; }
+    [SupplyParameterFromQuery] public string? ReturnUrl { get; set; }
+
+    private bool HasError => Error == "1";
+}

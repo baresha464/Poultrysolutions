@@ -1,0 +1,192 @@
+@page "/batch/{BatchId:int}/daily/new"
+@page "/batch/{BatchId:int}/daily/{RecordId:int}"
+@inject FarmService FarmService
+@inject AuthService AuthService
+@inject NavigationManager Nav
+@using AmrPoultryFarmWeb.Components.Shared.Charts
+@using static AmrPoultryFarmWeb.Components.Shared.Charts.ChartTheme
+
+@if (!CanEdit || !batchAccessible)
+{
+    <div class="card empty-state">You don't have permission to do this.</div>
+}
+else
+{
+    <div class="page-head">
+        <div>
+            <a href="@($"batch/{BatchId}")" style="font-size:12px; font-weight:700; color:var(--ink-soft); text-decoration:none;">← @batch?.BatchCode</a>
+            <h1 class="page-title" style="margin-top:4px;">Daily Record</h1>
+            <div class="page-head-sub">@batch?.House?.Name · Day @perf.AgeDays · @record.Date.ToString("dd MMM yyyy")</div>
+        </div>
+    </div>
+
+    <div class="kpi-grid" style="grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); margin-bottom:14px;">
+        <div class="kpi amber"><div class="kpi-label">Live Birds</div><div class="kpi-value">@perf.LiveBirds.ToString("N0")</div></div>
+        <div class="kpi"><div class="kpi-label">Avg Body Wt</div><div class="kpi-value">@perf.AvgBodyWeightKg.ToString("0.00") kg</div></div>
+        <div class="kpi"><div class="kpi-label">Daily Gain</div><div class="kpi-value">@perf.DailyGainGm.ToString("0")g/day</div></div>
+        <div class="kpi clay"><div class="kpi-label">FCR</div><div class="kpi-value">@perf.Fcr.ToString("0.000")</div></div>
+        <div class="kpi danger"><div class="kpi-label">Mortality</div><div class="kpi-value">@perf.TotalMortality (@perf.MortalityPct.ToString("0.0")%)</div></div>
+    </div>
+
+    @if (fcrTrend.Count >= 2 || weightTrend.Count >= 2)
+    {
+        <div class="two-col">
+            @if (fcrTrend.Count >= 2)
+            {
+                <div class="chart-card">
+                    <div class="chart-card-sub" style="margin-bottom:6px;">FCR Trend</div>
+                    <ApexChart OptionsJson="@FcrChartJson" Height="190" />
+                </div>
+            }
+            @if (weightTrend.Count >= 2)
+            {
+                <div class="chart-card">
+                    <div class="chart-card-sub" style="margin-bottom:6px;">Avg Body Weight</div>
+                    <ApexChart OptionsJson="@WeightChartJson" Height="190" />
+                </div>
+            }
+        </div>
+    }
+
+    <EditForm Model="record" OnValidSubmit="Save">
+        <div class="card">
+            <div class="form-grid">
+                <div class="field">
+                    <label>Date</label>
+                    <InputDate @bind-Value="record.Date" />
+                </div>
+                <div class="field">
+                    <label>Mortality (birds)</label>
+                    <InputNumber @bind-Value="record.Mortality" />
+                </div>
+                <div class="field">
+                    <label>Culls</label>
+                    <InputNumber @bind-Value="record.Culls" />
+                </div>
+                <div class="field">
+                    <label>Feed Consumed (bags)</label>
+                    <InputNumber @bind-Value="record.FeedConsumedBags" step="0.1" />
+                    <div class="list-row-sub">= @((record.FeedConsumedBags * bagWeightKg).ToString("0.0")) kg (@bagWeightKg.ToString("0.#") kg/bag)</div>
+                </div>
+                <div class="field">
+                    <label>Avg Body Weight (gm)</label>
+                    <InputNumber @bind-Value="record.AvgBodyWeightGm" step="1" />
+                </div>
+                <div class="field">
+                    <label>Water Consumed (ltr)</label>
+                    <InputNumber @bind-Value="record.WaterConsumedLtr" step="0.1" />
+                </div>
+                <div class="field">
+                    <label>Min Temp (°C)</label>
+                    <InputNumber @bind-Value="record.MinTempC" step="0.1" />
+                </div>
+                <div class="field">
+                    <label>Max Temp (°C)</label>
+                    <InputNumber @bind-Value="record.MaxTempC" step="0.1" />
+                </div>
+                <div class="field">
+                    <label>Humidity (%)</label>
+                    <InputNumber @bind-Value="record.HumidityPct" step="0.1" />
+                </div>
+                <div class="field">
+                    <label>Weight Gain vs Yesterday</label>
+                    <div class="readonly-value @(WeightGainGm is > 0 ? "good" : WeightGainGm is < 0 ? "bad" : "")">
+                        @(PreviousWeightGm is null
+                            ? "No prior record"
+                            : record.AvgBodyWeightGm <= 0
+                                ? "Enter today's weight"
+                                : $"{WeightGainGm:+0;-0;0} g (was {PreviousWeightGm:0}g)")
+                    </div>
+                </div>
+                <div class="field full">
+                    <label>Remarks</label>
+                    <InputTextArea @bind-Value="record.Remarks" />
+                </div>
+            </div>
+        </div>
+
+        <div class="action-row">
+            <button type="submit" class="btn btn-primary btn-block">Save</button>
+            @if (RecordId.HasValue && AuthService.HasPermission(Permissions.DailyRecords.Delete))
+            {
+                <button type="button" class="btn btn-danger" @onclick="Delete">Delete</button>
+            }
+        </div>
+    </EditForm>
+}
+
+@code {
+    [Parameter] public int BatchId { get; set; }
+    [Parameter] public int? RecordId { get; set; }
+    private DailyRecord record = new();
+    private Batch? batch;
+    private BatchPerformance perf = new();
+    private decimal bagWeightKg = 50m;
+    private List<LineChartPoint> fcrTrend = new();
+    private List<DailyRecord> allRecords = new();
+    private bool batchAccessible;
+
+    private bool CanEdit => AuthService.HasPermission(RecordId.HasValue ? Permissions.DailyRecords.Edit : Permissions.DailyRecords.Add);
+
+    // Most recent prior day's weight sample, used to show today's gain/loss as the farmer types.
+    private decimal? PreviousWeightGm => allRecords
+        .Where(d => d.Id != record.Id && d.Date < record.Date && d.AvgBodyWeightGm > 0)
+        .OrderByDescending(d => d.Date)
+        .Select(d => (decimal?)d.AvgBodyWeightGm)
+        .FirstOrDefault();
+
+    private decimal? WeightGainGm => PreviousWeightGm.HasValue && record.AvgBodyWeightGm > 0
+        ? record.AvgBodyWeightGm - PreviousWeightGm.Value
+        : null;
+
+    private List<LineChartPoint> weightTrend => allRecords
+        .OrderBy(d => d.Date)
+        .Select(d => new LineChartPoint(d.Date.ToString("dd MMM"), (double)d.AvgBodyWeightGm))
+        .ToList();
+
+    private string FcrChartJson => BuildTrendJson(fcrTrend, Clay, "", area: true);
+    private string WeightChartJson => BuildTrendJson(weightTrend, Primary, "g", area: true);
+
+    protected override async Task OnInitializedAsync()
+    {
+        record.BatchId = BatchId;
+
+        batch = await FarmService.GetBatchAsync(BatchId);
+        batchAccessible = batch is not null;
+        if (batch?.Integrator is not null) bagWeightKg = batch.Integrator.BagWeightKg;
+
+        allRecords = await FarmService.GetDailyRecordsAsync(BatchId);
+        if (batch is not null)
+        {
+            fcrTrend = FcrTrend.Compute(batch, allRecords);
+            perf = await FarmService.GetPerformanceAsync(BatchId);
+        }
+
+        if (RecordId.HasValue)
+        {
+            var existing = allRecords.FirstOrDefault(r => r.Id == RecordId.Value);
+            if (existing != null)
+            {
+                record = existing;
+                // Records entered before bag-tracking existed have FeedConsumedKg but no bags
+                // value — back-fill an equivalent bags figure so re-saving doesn't zero out
+                // their historical kg (Save() always recomputes kg from bags * bag weight).
+                if (record.FeedConsumedBags == 0 && record.FeedConsumedKg > 0 && bagWeightKg > 0)
+                    record.FeedConsumedBags = Math.Round(record.FeedConsumedKg / bagWeightKg, 2);
+            }
+        }
+    }
+
+    private async Task Save()
+    {
+        record.FeedConsumedKg = record.FeedConsumedBags * bagWeightKg;
+        await FarmService.SaveDailyRecordAsync(record);
+        Nav.NavigateTo($"batch/{BatchId}");
+    }
+
+    private async Task Delete()
+    {
+        if (RecordId.HasValue) await FarmService.DeleteDailyRecordAsync(RecordId.Value);
+        Nav.NavigateTo($"batch/{BatchId}");
+    }
+}

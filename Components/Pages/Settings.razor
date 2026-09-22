@@ -1,0 +1,47 @@
+@page "/settings"
+@inject AuthService AuthService
+
+<div class="page-title">Settings</div>
+
+<div class="card" style="padding:4px 10px;">
+    @if (AuthService.HasPermission(Permissions.Houses.View))
+    {
+        <a class="list-row" href="houses">
+            <div>
+                <div class="list-row-title">Houses</div>
+                <div class="list-row-sub">Manage sheds and see each one's batch history</div>
+            </div>
+            <span class="dd-caret">▸</span>
+        </a>
+    }
+    @if (AuthService.HasPermission(Permissions.Integrators.View))
+    {
+        <a class="list-row" href="settings/integrators">
+            <div>
+                <div class="list-row-title">Integrators / Companies</div>
+                <div class="list-row-sub">Manage the list used when placing a batch</div>
+            </div>
+            <span class="dd-caret">▸</span>
+        </a>
+    }
+    @if (AuthService.HasPermission(Permissions.Users.View))
+    {
+        <a class="list-row" href="settings/users">
+            <div>
+                <div class="list-row-title">Users</div>
+                <div class="list-row-sub">Who can log in, and which roles they hold</div>
+            </div>
+            <span class="dd-caret">▸</span>
+        </a>
+    }
+    @if (AuthService.HasPermission(Permissions.Roles.View))
+    {
+        <a class="list-row" href="settings/roles">
+            <div>
+                <div class="list-row-title">Roles</div>
+                <div class="list-row-sub">Create roles and choose what each one can access</div>
+            </div>
+            <span class="dd-caret">▸</span>
+        </a>
+    }
+</div>

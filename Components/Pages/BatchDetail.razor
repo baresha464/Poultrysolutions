@@ -1,0 +1,602 @@
+@page "/batch/{Id:int}"
+@inject FarmService FarmService
+@inject AuthService AuthService
+@inject NavigationManager Nav
+@using AmrPoultryFarmWeb.Components.Shared.Charts
+@using static AmrPoultryFarmWeb.Components.Shared.Charts.ChartTheme
+
+@if (!AuthService.HasPermission(Permissions.Batches.View))
+{
+    <div class="card empty-state">You don't have permission to view batches.</div>
+}
+else if (batch is null)
+{
+    <p class="empty-state">Loading…</p>
+}
+else
+{
+    <PageTitle>@batch.BatchCode — AMR Poultry Farms</PageTitle>
+
+    <div class="page-head">
+        <div>
+            <a href="batches" style="font-size:12px; font-weight:700; color:var(--ink-soft); text-decoration:none;">← Batches</a>
+            <h1 class="page-title" style="margin-top:4px;">
+                Batch #@batch.BatchCode
+                <span class="status-chip @(batch.Status == BatchStatus.Closed ? "muted" : "")" style="vertical-align:middle; margin-left:8px;">
+                    @(batch.Status == BatchStatus.Closed ? "Closed" : $"Day {batch.AgeDays}")
+                </span>
+            </h1>
+            <div class="page-head-sub">@batch.House?.Name · @batch.Integrator?.Name · @batch.Breed</div>
+        </div>
+        @if (AuthService.HasPermission(Permissions.Batches.Edit))
+        {
+            <div class="page-head-actions">
+                <a class="btn btn-outline" href="@($"batch/{Id}/edit")">Edit Batch</a>
+                @if (batch.Status == BatchStatus.Active)
+                {
+                    <button class="btn btn-danger" @onclick="CloseBatch">Close Batch</button>
+                }
+            </div>
+        }
+    </div>
+
+    <div class="tab-strip">
+        <button class="tab-btn @(tab=="overview"?"active":"")" @onclick='() => tab="overview"'>Overview</button>
+        <button class="tab-btn @(tab=="daily"?"active":"")" @onclick='() => tab="daily"'>Daily Log</button>
+        <button class="tab-btn @(tab=="feed"?"active":"")" @onclick='() => tab="feed"'>Feed</button>
+        <button class="tab-btn @(tab=="health"?"active":"")" @onclick='() => tab="health"'>Health</button>
+        <button class="tab-btn @(tab=="lifting"?"active":"")" @onclick='() => tab="lifting"'>Lifting</button>
+        <button class="tab-btn @(tab=="settlement"?"active":"")" @onclick='() => tab="settlement"'>Settlement</button>
+        <button class="tab-btn @(tab=="advisor"?"active":"")" @onclick='() => tab="advisor"'>Advisor</button>
+        <button class="tab-btn @(tab=="revenue"?"active":"")" @onclick='() => tab="revenue"'>Revenue</button>
+    </div>
+
+    @if (tab == "overview")
+    {
+        <div class="kpi-grid" style="grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));">
+            <div class="kpi"><div class="kpi-label">Age</div><div class="kpi-value">Day @perf.AgeDays</div></div>
+            <div class="kpi amber"><div class="kpi-label">Live Birds</div><div class="kpi-value">@perf.LiveBirds.ToString("N0")</div></div>
+            <div class="kpi"><div class="kpi-label">Livability</div><div class="kpi-value">@perf.LivabilityPct.ToString("0.0")%</div></div>
+            <div class="kpi danger"><div class="kpi-label">Mortality</div><div class="kpi-value">@perf.TotalMortality (@perf.MortalityPct.ToString("0.0")%)</div></div>
+            <div class="kpi"><div class="kpi-label">Avg Body Wt</div><div class="kpi-value">@perf.AvgBodyWeightKg.ToString("0.00") kg</div></div>
+            <div class="kpi"><div class="kpi-label">Daily Gain</div><div class="kpi-value">@perf.DailyGainGm.ToString("0")g/day</div></div>
+            <div class="kpi clay"><div class="kpi-label">FCR</div><div class="kpi-value">@perf.Fcr.ToString("0.000")</div></div>
+            <div class="kpi clay"><div class="kpi-label">EEF Index</div><div class="kpi-value">@perf.Eef.ToString("0.0")</div></div>
+            <div class="kpi"><div class="kpi-label">Feed Stock</div><div class="kpi-value">@perf.FeedStockKg.ToString("N0") kg</div></div>
+            <div class="kpi danger"><div class="kpi-label">Expenses</div><div class="kpi-value">₹@perf.TotalExpenses.ToString("N0")</div></div>
+        </div>
+
+        <div class="ops-layout">
+            <div>
+                @if (FcrTrendPoints.Count >= 2)
+                {
+                    <div class="chart-card">
+                        <div class="chart-card-sub" style="margin-bottom:6px;">FCR Trend</div>
+                        <ApexChart OptionsJson="@FcrChartJson" Height="200" />
+                    </div>
+                }
+                @if (WeightTrend.Count >= 2)
+                {
+                    <div class="chart-card">
+                        <div class="chart-card-sub" style="margin-bottom:6px;">Avg Body Weight</div>
+                        <ApexChart OptionsJson="@WeightChartJson" Height="200" />
+                    </div>
+                }
+            </div>
+
+            <div>
+                <div class="card">
+                    <div class="section-title mt-0">Batch Info</div>
+                    <div class="list-row"><span>Integrator</span><b>@batch.Integrator?.Name</b></div>
+                    @if (!string.IsNullOrWhiteSpace(batch.BranchCode))
+                    {
+                        <div class="list-row"><span>Branch Code</span><b>@batch.BranchCode</b></div>
+                    }
+                    <div class="list-row"><span>Breed</span><b>@batch.Breed</b></div>
+                    <div class="list-row"><span>Placed</span><b>@batch.PlacementDate.ToString("dd MMM yyyy")</b></div>
+                    <div class="list-row"><span>Chicks Placed</span><b>@batch.ChicksPlaced.ToString("N0")</b></div>
+                    <div class="list-row"><span>Target Weight</span><b>@batch.TargetWeightKg.ToString("0.00") kg</b></div>
+                    @if (!string.IsNullOrWhiteSpace(batch.Notes))
+                    {
+                        <div class="list-row"><span>Notes</span><b>@batch.Notes</b></div>
+                    }
+                </div>
+
+                <div class="card">
+                    <div class="section-title mt-0">Quick Links</div>
+                    <a class="list-row" href="@($"batch/{Id}/daily/new")">
+                        <div><div class="list-row-title">Log Today's Record</div><div class="list-row-sub">Mortality, feed, weight, water</div></div>
+                        <span class="dd-caret">▸</span>
+                    </a>
+                    <a class="list-row" href="@($"batch/{Id}/feed/new")">
+                        <div><div class="list-row-title">Record Feed Delivery</div><div class="list-row-sub">Log an incoming feed DC</div></div>
+                        <span class="dd-caret">▸</span>
+                    </a>
+                    <a class="list-row" href="@($"batch/{Id}/health/new")">
+                        <div><div class="list-row-title">Log Health Event</div><div class="list-row-sub">Vaccination or medication</div></div>
+                        <span class="dd-caret">▸</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+    else if (tab == "daily")
+    {
+        @if (daily.Count >= 2)
+        {
+            <div class="two-col">
+                <div class="chart-card">
+                    <div class="chart-card-sub" style="margin-bottom:6px;">Avg Body Weight</div>
+                    <ApexChart OptionsJson="@WeightChartJson" Height="220" />
+                </div>
+                <div class="chart-card">
+                    <div class="chart-card-sub" style="margin-bottom:6px;">Daily Mortality</div>
+                    <ApexChart OptionsJson="@MortalityChartJson" Height="220" />
+                </div>
+            </div>
+        }
+        @if (AuthService.HasPermission(Permissions.DailyRecords.Add))
+        {
+            <a class="btn btn-primary" href="@($"batch/{Id}/daily/new")">+ Add Daily Record</a>
+        }
+        <div class="card" style="margin-top:10px; padding:4px 10px;">
+            @if (!daily.Any())
+            {
+                <div class="empty-state">No daily records yet.</div>
+            }
+            else
+            {
+                @foreach (var d in daily)
+                {
+                    <a class="list-row" href="@($"batch/{Id}/daily/{d.Id}")">
+                        <div>
+                            <div class="list-row-title">@d.Date.ToString("dd MMM yyyy")</div>
+                            <div class="list-row-sub">Mort: @d.Mortality · Feed: @(d.FeedConsumedBags > 0 ? $"{d.FeedConsumedBags:0.#} bags" : $"{d.FeedConsumedKg:0}kg") · Wt: @d.AvgBodyWeightGm.ToString("0")g</div>
+                        </div>
+                    </a>
+                }
+            }
+        </div>
+    }
+    else if (tab == "feed")
+    {
+        @if (AuthService.HasPermission(Permissions.Feed.Add))
+        {
+            <a class="btn btn-primary" href="@($"batch/{Id}/feed/new")">+ Add Feed Delivery</a>
+        }
+        <div class="card" style="margin-top:10px; padding:4px 10px;">
+            @if (!feeds.Any())
+            {
+                <div class="empty-state">No feed deliveries recorded.</div>
+            }
+            else
+            {
+                @foreach (var f in feeds)
+                {
+                    <a class="list-row" href="@($"batch/{Id}/feed/{f.Id}")">
+                        <div>
+                            <div class="list-row-title">@f.FeedType · @f.TotalKg.ToString("N0") kg</div>
+                            <div class="list-row-sub">@f.Date.ToString("dd MMM yyyy") · @f.Bags bags · DC# @f.DcNumber</div>
+                        </div>
+                    </a>
+                }
+            }
+        </div>
+    }
+    else if (tab == "health")
+    {
+        @if (AuthService.HasPermission(Permissions.Health.Add))
+        {
+            <a class="btn btn-primary" href="@($"batch/{Id}/health/new")">+ Add Health Event</a>
+        }
+        <div class="card" style="margin-top:10px; padding:4px 10px;">
+            @if (!healthEvents.Any())
+            {
+                <div class="empty-state">No vaccinations/medications recorded.</div>
+            }
+            else
+            {
+                @foreach (var h in healthEvents)
+                {
+                    <a class="list-row" href="@($"batch/{Id}/health/{h.Id}")">
+                        <div>
+                            <div class="list-row-title">@h.Name (@h.Type)</div>
+                            <div class="list-row-sub">@h.Date.ToString("dd MMM yyyy") · @h.Dose via @h.Route</div>
+                        </div>
+                    </a>
+                }
+            }
+        </div>
+    }
+    else if (tab == "lifting")
+    {
+        @if (AuthService.HasPermission(Permissions.Lifting.Add))
+        {
+            <a class="btn btn-primary" href="@($"batch/{Id}/lifting/new")">+ Add Lifting</a>
+        }
+        <div class="card" style="margin-top:10px; padding:4px 10px;">
+            @if (!liftings.Any())
+            {
+                <div class="empty-state">No liftings recorded.</div>
+            }
+            else
+            {
+                @foreach (var l in liftings)
+                {
+                    <a class="list-row" href="@($"batch/{Id}/lifting/{l.Id}")">
+                        <div>
+                            <div class="list-row-title">@l.BirdsLifted.ToString("N0") birds · @l.TotalWeightKg.ToString("N0") kg</div>
+                            <div class="list-row-sub">@l.Date.ToString("dd MMM yyyy") · Avg @l.AvgWeightKg.ToString("0.00")kg · @l.VehicleNumber</div>
+                        </div>
+                    </a>
+                }
+            }
+        </div>
+    }
+    else if (tab == "settlement")
+    {
+        @if (AuthService.HasPermission(settlement is null ? Permissions.Settlement.Add : Permissions.Settlement.Edit))
+        {
+            <a class="btn btn-primary" href="@($"batch/{Id}/settlement")">
+                @(settlement is null ? "+ Add Settlement" : "Edit Settlement")
+            </a>
+        }
+        @if (settlement is not null)
+        {
+            <div class="card" style="margin-top:10px;">
+                <div class="list-row"><span>Date</span><b>@settlement.Date.ToString("dd MMM yyyy")</b></div>
+                <div class="list-row"><span>Growing Charge/kg</span><b>₹@settlement.GrowingChargePerKg.ToString("0.00")</b></div>
+                <div class="list-row"><span>Performance Incentive</span><b>₹@settlement.PerformanceIncentive.ToString("N0")</b></div>
+                <div class="list-row"><span>Deductions</span><b>₹@settlement.Deductions.ToString("N0")</b></div>
+                <div class="divider"></div>
+                <div class="list-row"><span><b>Amount Received</b></span><b style="color:var(--green);">₹@settlement.AmountReceived.ToString("N0")</b></div>
+            </div>
+        }
+    }
+    else if (tab == "advisor")
+    {
+        <div class="kpi-grid" style="grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));">
+            <div class="kpi @ScoreKpiClass(advisor.OverallScore)">
+                <div class="kpi-label">Flock Health Score</div>
+                <div class="kpi-value">@advisor.OverallScore.ToString("0")<span style="font-size:14px; color:var(--ink-soft);">/100</span></div>
+            </div>
+            @foreach (var c in advisor.Components)
+            {
+                <div class="kpi @ScoreKpiClass(c.Score)">
+                    <div class="kpi-label">@c.Label</div>
+                    <div class="kpi-value">@c.Score.ToString("0")</div>
+                </div>
+            }
+        </div>
+
+        <div class="two-col">
+            <div class="chart-card">
+                <div class="chart-card-sub" style="margin-bottom:6px;">Overall Score</div>
+                <ApexChart OptionsJson="@AdvisorGaugeJson" Height="200" />
+            </div>
+            <div class="chart-card">
+                <div class="chart-card-sub" style="margin-bottom:6px;">Score Breakdown</div>
+                <ApexChart OptionsJson="@AdvisorBarJson" Height="200" />
+            </div>
+        </div>
+
+        <div class="panel-title"><h2><span class="material-symbols-outlined">tips_and_updates</span> Suggestions</h2></div>
+        @if (!advisor.Insights.Any())
+        {
+            <div class="card empty-state">Log a few daily records (weight, mortality, temperature) to get suggestions here.</div>
+        }
+        else
+        {
+            @foreach (var insight in advisor.Insights)
+            {
+                <div class="card insight-card @InsightClass(insight.Level)">
+                    <div class="insight-head">
+                        <span class="status-chip @InsightChipClass(insight.Level)">@insight.Level</span>
+                        <b>@insight.Title</b>
+                    </div>
+                    <div class="list-row-sub" style="margin-top:6px;">@insight.Message</div>
+                    @if (insight.Factors.Count > 0)
+                    {
+                        <details class="insight-factors">
+                            <summary>What affects this</summary>
+                            <ul>
+                                @foreach (var f in insight.Factors)
+                                {
+                                    <li>@f</li>
+                                }
+                            </ul>
+                        </details>
+                    }
+                </div>
+            }
+        }
+    }
+    else if (tab == "revenue")
+    {
+        <div class="card">
+            <div class="section-title mt-0">Revenue Calculator</div>
+            <div class="calc-note">Projects income for this batch from its current condition. Chicks and feed are supplied by @(batch.Integrator?.Name ?? "the integrator") free of cost, so they're not counted as your expense here — your cost is the shed running expenses logged on this batch. Adjust the assumptions below — figures recalculate instantly.</div>
+
+            <EditForm Model="revenueInput">
+                <div class="form-grid">
+                    <div class="field">
+                        <label>Projected Sale Age (days)</label>
+                        <InputNumber @bind-Value="revenueInput.ProjectedSaleAgeDays" @bind-Value:after="RecalcRevenue" />
+                    </div>
+                    <div class="field">
+                        <label>Projected Avg Weight at Sale (kg)</label>
+                        <InputNumber @bind-Value="revenueInput.ProjectedAvgWeightKg" step="0.01" @bind-Value:after="RecalcRevenue" />
+                    </div>
+                    <div class="field">
+                        <label>Expected FCR at Harvest</label>
+                        <InputNumber @bind-Value="revenueInput.ExpectedFcr" step="0.01" @bind-Value:after="RecalcRevenue" />
+                    </div>
+                    <div class="field">
+                        <label>Additional Mortality Expected (%)</label>
+                        <InputNumber @bind-Value="revenueInput.AdditionalMortalityPct" step="0.1" @bind-Value:after="RecalcRevenue" />
+                    </div>
+                    <div class="field">
+                        <label>Growing Charge (₹/kg live wt)</label>
+                        <InputNumber @bind-Value="revenueInput.GrowingChargePerKg" step="0.1" @bind-Value:after="RecalcRevenue" />
+                    </div>
+                    <div class="field">
+                        <label>Expected Incentive (₹)</label>
+                        <InputNumber @bind-Value="revenueInput.ExpectedIncentive" step="100" @bind-Value:after="RecalcRevenue" />
+                    </div>
+                    <div class="field">
+                        <label>Expected Deductions (₹)</label>
+                        <InputNumber @bind-Value="revenueInput.ExpectedDeductions" step="100" @bind-Value:after="RecalcRevenue" />
+                    </div>
+                    <div class="field">
+                        <label>Other Shed Expenses Still Expected (₹)</label>
+                        <InputNumber @bind-Value="revenueInput.AdditionalExpectedExpenses" step="100" @bind-Value:after="RecalcRevenue" />
+                    </div>
+                </div>
+            </EditForm>
+            <button class="btn btn-outline" @onclick="SellToday">Use Today's Numbers (Sell Now)</button>
+        </div>
+
+        <div class="card">
+            <div class="result-hero">
+                <div>
+                    <div class="result-hero-label">Projected Net Profit</div>
+                    <div class="result-hero-value @(revenueResult.NetProfit >= 0 ? "profit" : "loss")">₹@revenueResult.NetProfit.ToString("N0")</div>
+                </div>
+                <div>
+                    <div class="result-hero-label">Profit / Bird</div>
+                    <div class="result-hero-value @(revenueResult.ProfitPerBird >= 0 ? "profit" : "loss")" style="font-size:20px;">₹@revenueResult.ProfitPerBird.ToString("0.00")</div>
+                </div>
+                <div>
+                    <div class="result-hero-label">Margin</div>
+                    <div class="result-hero-value @(revenueResult.ProfitMarginPct >= 0 ? "profit" : "loss")" style="font-size:20px;">@revenueResult.ProfitMarginPct.ToString("0.0")%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="kpi-grid" style="grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));">
+            <div class="kpi"><div class="kpi-label">Projected Live Birds</div><div class="kpi-value">@revenueResult.ProjectedLiveBirds.ToString("N0")</div></div>
+            <div class="kpi"><div class="kpi-label">Projected Total Weight</div><div class="kpi-value">@revenueResult.ProjectedTotalWeightKg.ToString("N0") kg</div></div>
+            <div class="kpi amber"><div class="kpi-label">Feed Still Needed (from Integrator)</div><div class="kpi-value">@revenueResult.RemainingFeedKg.ToString("N0") kg</div></div>
+            <div class="kpi clay"><div class="kpi-label">Gross Revenue</div><div class="kpi-value">₹@revenueResult.GrossRevenue.ToString("N0")</div></div>
+            <div class="kpi danger"><div class="kpi-label">Your Shed Expenses</div><div class="kpi-value">₹@revenueResult.TotalCost.ToString("N0")</div></div>
+        </div>
+
+        <div class="two-col">
+            <div class="chart-card">
+                <div class="chart-card-sub" style="margin-bottom:6px;">Revenue vs Expenses vs Profit</div>
+                <ApexChart OptionsJson="@RevenueBarJson" Height="220" />
+            </div>
+            <div class="chart-card">
+                <div class="chart-card-sub" style="margin-bottom:6px;">Your Expenses, by Category</div>
+                @if (ExpenseCategoryBreakdown.Count == 0)
+                {
+                    <div class="empty-state">No shed expenses logged for this batch yet.</div>
+                }
+                else
+                {
+                    <ApexChart OptionsJson="@RevenueDonutJson" Height="220" />
+                }
+            </div>
+        </div>
+    }
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private Batch? batch;
+    private BatchPerformance perf = new();
+    private List<DailyRecord> daily = new();
+    private List<FeedDelivery> feeds = new();
+    private List<HealthEvent> healthEvents = new();
+    private List<Lifting> liftings = new();
+    private List<Expense> expenses = new();
+    private Settlement? settlement;
+    private string tab = "overview";
+
+    private AdvisorResult advisor = new();
+    private RevenueCalcInput revenueInput = new();
+    private RevenueCalcResult revenueResult = new();
+
+    private List<LineChartPoint> WeightTrend => daily
+        .OrderBy(d => d.Date)
+        .Select(d => new LineChartPoint(d.Date.ToString("dd MMM"), (double)d.AvgBodyWeightGm))
+        .ToList();
+
+    private List<LineChartPoint> MortalityTrend => daily
+        .OrderBy(d => d.Date)
+        .Select(d => new LineChartPoint(d.Date.ToString("dd MMM"), d.Mortality))
+        .ToList();
+
+    private List<LineChartPoint> FcrTrendPoints => batch is null ? new() : FcrTrend.Compute(batch, daily);
+
+    private string FcrChartJson => BuildTrendJson(FcrTrendPoints, Clay, "", area: true);
+    private string WeightChartJson => BuildTrendJson(WeightTrend, Primary, "g", area: true);
+    private string MortalityChartJson => BuildTrendJson(MortalityTrend, Danger, "", area: false);
+
+    // ---------------- Advisor ----------------
+    private static string ScoreColor(double score) => score >= 80 ? Primary : score >= 60 ? Amber : Danger;
+    private static string ScoreKpiClass(double score) => score >= 80 ? "" : score >= 60 ? "amber" : "danger";
+
+    private static string InsightClass(InsightLevel level) => level switch
+    {
+        InsightLevel.Good => "good",
+        InsightLevel.Info => "info",
+        InsightLevel.Warning => "warning",
+        _ => "critical",
+    };
+
+    private static string InsightChipClass(InsightLevel level) => level switch
+    {
+        InsightLevel.Good => "good",
+        InsightLevel.Info => "",
+        InsightLevel.Warning => "amber",
+        _ => "danger",
+    };
+
+    private string AdvisorGaugeJson
+    {
+        get
+        {
+            var valueStyle = Opt(("fontSize", "22px"), ("fontWeight", 700), ("color", Ink));
+            var nameStyle = Opt(("fontSize", "11px"), ("color", InkSoft));
+            var radialBar = Opt(("hollow", Opt(("size", "62%"))), ("dataLabels", Opt(("name", nameStyle), ("value", valueStyle))));
+
+            return Json(Opt(
+                ("chart", Opt(("type", "radialBar"), ("fontFamily", "IBM Plex Sans, sans-serif"), ("sparkline", Opt(("enabled", true))))),
+                ("series", new[] { advisor.OverallScore }),
+                ("labels", new[] { "Score" }),
+                ("colors", new[] { ScoreColor(advisor.OverallScore) }),
+                ("plotOptions", Opt(("radialBar", radialBar))),
+                ("stroke", Opt(("lineCap", "round")))
+            ));
+        }
+    }
+
+    private string AdvisorBarJson
+    {
+        get
+        {
+            var chart = Opt(("type", "bar"), ("toolbar", Opt(("show", false))), ("fontFamily", "IBM Plex Sans, sans-serif"));
+            var bar = Opt(("horizontal", true), ("borderRadius", 4), ("barHeight", "60%"));
+            var data = advisor.Components.Select(c => (object)Opt(("x", c.Label), ("y", c.Score), ("fillColor", ScoreColor(c.Score)))).ToArray();
+            var dataLabels = Opt(("enabled", true), ("formatter", Fn("function(v){ return v.toFixed(0); }")), ("style", Opt(("fontSize", "11px"), ("fontWeight", 700))));
+
+            return Json(Opt(
+                ("chart", chart),
+                ("plotOptions", Opt(("bar", bar))),
+                ("series", new object[] { Opt(("name", "Score"), ("data", data)) }),
+                ("dataLabels", dataLabels),
+                ("xaxis", Opt(("max", 100))),
+                ("grid", Opt(("borderColor", Line), ("strokeDashArray", 4))),
+                ("tooltip", Opt(("theme", "light")))
+            ));
+        }
+    }
+
+    // ---------------- Revenue calculator ----------------
+    private string RevenueBarJson
+    {
+        get
+        {
+            var chart = Opt(("type", "bar"), ("toolbar", Opt(("show", false))), ("fontFamily", "IBM Plex Sans, sans-serif"));
+            var bar = Opt(("borderRadius", 4), ("columnWidth", "45%"), ("distributed", true));
+            var data = new[]
+            {
+                (object)Opt(("x", "Revenue"), ("y", (double)revenueResult.GrossRevenue), ("fillColor", Primary)),
+                (object)Opt(("x", "Cost"), ("y", (double)revenueResult.TotalCost), ("fillColor", Danger)),
+                (object)Opt(("x", "Net Profit"), ("y", (double)revenueResult.NetProfit), ("fillColor", revenueResult.NetProfit >= 0 ? Amber : Danger)),
+            };
+            var yaxisLabels = Opt(("formatter", Fn("function(v){ return '₹' + Math.round(v).toLocaleString('en-IN'); }")));
+
+            return Json(Opt(
+                ("chart", chart),
+                ("plotOptions", Opt(("bar", bar))),
+                ("series", new object[] { Opt(("name", "Amount"), ("data", data)) }),
+                ("legend", Opt(("show", false))),
+                ("dataLabels", Opt(("enabled", true), ("formatter", Fn("function(v){ return '₹' + Math.round(v).toLocaleString('en-IN'); }")), ("style", Opt(("fontSize", "11px"), ("fontWeight", 700))))),
+                ("yaxis", Opt(("labels", yaxisLabels))),
+                ("grid", Opt(("borderColor", Line), ("strokeDashArray", 4))),
+                ("tooltip", Opt(("theme", "light")))
+            ));
+        }
+    }
+
+    private List<(string Category, double Total)> ExpenseCategoryBreakdown
+    {
+        get
+        {
+            var byCategory = expenses
+                .GroupBy(e => e.Category)
+                .Select(g => (g.Key, (double)g.Sum(e => e.Amount)))
+                .OrderByDescending(x => x.Item2)
+                .ToList();
+            if (revenueResult.AdditionalExpectedExpenses > 0)
+                byCategory.Add(("Additional Expected", (double)revenueResult.AdditionalExpectedExpenses));
+            return byCategory;
+        }
+    }
+
+    private string RevenueDonutJson
+    {
+        get
+        {
+            var breakdown = ExpenseCategoryBreakdown;
+            var tooltipY = Opt(("formatter", Fn("function(v){ return '₹' + Math.round(v).toLocaleString('en-IN'); }")));
+            var totalLabel = Opt(("show", true), ("label", "Total"), ("formatter", Fn("function(w){ return '₹' + w.globals.seriesTotals.reduce((a,b)=>a+b,0).toLocaleString('en-IN'); }")));
+            var donutLabels = Opt(("show", true), ("total", totalLabel));
+            var donut = Opt(("labels", donutLabels));
+            var plotOptions = Opt(("pie", Opt(("donut", donut))));
+
+            return Json(Opt(
+                ("chart", Opt(("type", "donut"), ("fontFamily", "IBM Plex Sans, sans-serif"))),
+                ("series", breakdown.Select(x => x.Total).ToArray()),
+                ("labels", breakdown.Select(x => x.Category).ToArray()),
+                ("colors", Series),
+                ("legend", Opt(("position", "bottom"), ("fontSize", "12px"))),
+                ("dataLabels", Opt(("formatter", Fn("function(v){ return v.toFixed(0) + '%'; }")))),
+                ("tooltip", Opt(("theme", "light"), ("y", tooltipY))),
+                ("plotOptions", plotOptions)
+            ));
+        }
+    }
+
+    private void RecalcRevenue()
+    {
+        if (batch is null) return;
+        revenueResult = RevenueCalculator.Calculate(perf, revenueInput);
+    }
+
+    private void SellToday()
+    {
+        if (batch is null) return;
+        revenueInput.ProjectedSaleAgeDays = perf.AgeDays;
+        revenueInput.ProjectedAvgWeightKg = perf.AvgBodyWeightKg;
+        revenueInput.ExpectedFcr = perf.Fcr > 0 ? perf.Fcr : revenueInput.ExpectedFcr;
+        revenueInput.AdditionalMortalityPct = 0;
+        RecalcRevenue();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        batch = await FarmService.GetBatchAsync(Id);
+        if (batch is null) return;
+
+        perf = await FarmService.GetPerformanceAsync(Id);
+        daily = await FarmService.GetDailyRecordsAsync(Id);
+        feeds = await FarmService.GetFeedDeliveriesAsync(Id);
+        healthEvents = await FarmService.GetHealthEventsAsync(Id);
+        liftings = await FarmService.GetLiftingsAsync(Id);
+        expenses = await FarmService.GetExpensesAsync(Id);
+        settlement = await FarmService.GetSettlementAsync(Id);
+
+        advisor = FlockAdvisor.Analyze(batch, perf, daily, healthEvents);
+        revenueInput = RevenueCalculator.DefaultInput(batch, perf, settlement);
+        revenueResult = RevenueCalculator.Calculate(perf, revenueInput);
+    }
+
+    private async Task CloseBatch()
+    {
+        await FarmService.CloseBatchAsync(Id);
+        batch = await FarmService.GetBatchAsync(Id);
+    }
+}
