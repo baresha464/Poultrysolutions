@@ -125,6 +125,40 @@ if (args.Contains("seed-demo"))
     return;
 }
 
+// `dotnet run -- reset-creds` sets known, easy-to-remember credentials for local testing:
+// sadmin/sadmin for the platform Super Admin, admin/admin for the seeded tenant admin. Dev
+// convenience only — never use these on anything reachable off your own machine.
+if (args.Contains("reset-creds"))
+{
+    using var scope = app.Services.CreateScope();
+    using var db = scope.ServiceProvider.GetRequiredService<IDbContextFactory<FarmDbContext>>().CreateDbContext();
+
+    var superAdmin = await db.Users.FirstOrDefaultAsync(u => u.IsSuperAdmin);
+    if (superAdmin is not null)
+    {
+        var (hash, salt) = PasswordHasher.Hash("sadmin");
+        superAdmin.Username = "sadmin";
+        superAdmin.PasswordHash = hash;
+        superAdmin.PasswordSalt = salt;
+    }
+
+    var tenantAdmin = await db.Users.FirstOrDefaultAsync(u => u.Username == "admin" && !u.IsSuperAdmin);
+    if (tenantAdmin is not null)
+    {
+        var (hash, salt) = PasswordHasher.Hash("admin");
+        tenantAdmin.PasswordHash = hash;
+        tenantAdmin.PasswordSalt = salt;
+    }
+
+    await db.SaveChangesAsync();
+
+    Console.WriteLine("============================================================");
+    Console.WriteLine($" Super Admin reset: {(superAdmin is not null ? "sadmin / sadmin" : "(none found)")}");
+    Console.WriteLine($" Tenant admin reset: {(tenantAdmin is not null ? "admin / admin" : "(none found — username 'admin' not present)")}");
+    Console.WriteLine("============================================================");
+    return;
+}
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
