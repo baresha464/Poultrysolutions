@@ -4,11 +4,11 @@
 @inject AuthService AuthService
 @inject NavigationManager Nav
 
-<div class="page-title">Lifting / Harvest</div>
+<div class="page-title">@L["Lifting / Harvest"]</div>
 
 @if (!CanEdit || !batchAccessible)
 {
-    <div class="card empty-state">You don't have permission to do this.</div>
+    <div class="card empty-state">@L["You don't have permission to do this."]</div>
 }
 else
 {
@@ -16,38 +16,38 @@ else
         <div class="card">
             <div class="form-grid">
                 <div class="field">
-                    <label>Date</label>
+                    <label>@L["Date"]</label>
                     <InputDate @bind-Value="lift.Date" />
                 </div>
                 <div class="field">
-                    <label>Birds Lifted</label>
+                    <label>@L["Birds Lifted"]</label>
                     <InputNumber @bind-Value="lift.BirdsLifted" />
                 </div>
                 <div class="field">
-                    <label>Total Weight (kg)</label>
+                    <label>@L["Total Weight (kg)"]</label>
                     <InputNumber @bind-Value="lift.TotalWeightKg" step="0.1" />
                 </div>
                 <div class="field">
-                    <label>Vehicle Number</label>
+                    <label>@L["Vehicle Number"]</label>
                     <InputText @bind-Value="lift.VehicleNumber" />
                 </div>
                 <div class="field">
-                    <label>DC Number</label>
+                    <label>@L["DC Number"]</label>
                     <InputText @bind-Value="lift.DcNumber" />
                 </div>
                 <div class="field full">
-                    <label>Remarks</label>
+                    <label>@L["Remarks"]</label>
                     <InputTextArea @bind-Value="lift.Remarks" />
                 </div>
             </div>
-            <div class="list-row"><span>Avg Weight / Bird</span><b>@lift.AvgWeightKg.ToString("0.000")kg</b></div>
+            <div class="list-row"><span>@L["Avg Weight / Bird"]</span><b>@lift.AvgWeightKg.ToString("0.000")kg</b></div>
         </div>
 
         <div class="action-row">
-            <button type="submit" class="btn btn-primary btn-block">Save</button>
+            <button type="submit" class="btn btn-primary btn-block">@L["Save"]</button>
             @if (RecordId.HasValue && AuthService.HasPermission(Permissions.Lifting.Delete))
             {
-                <button type="button" class="btn btn-danger" @onclick="Delete">Delete</button>
+                <button type="button" class="btn btn-danger" @onclick="Delete">@L["Delete"]</button>
             }
         </div>
     </EditForm>

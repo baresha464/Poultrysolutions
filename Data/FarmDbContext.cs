@@ -22,6 +22,7 @@ public class FarmDbContext : DbContext
     public DbSet<Tenant> Tenants => Set<Tenant>();
     public DbSet<House> Houses => Set<House>();
     public DbSet<Integrator> Integrators => Set<Integrator>();
+    public DbSet<TenantIntegrator> TenantIntegrators => Set<TenantIntegrator>();
     public DbSet<Batch> Batches => Set<Batch>();
     public DbSet<DailyRecord> DailyRecords => Set<DailyRecord>();
     public DbSet<FeedDelivery> FeedDeliveries => Set<FeedDelivery>();
@@ -34,6 +35,10 @@ public class FarmDbContext : DbContext
     public DbSet<UserRole> UserRoles => Set<UserRole>();
     public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
     public DbSet<UserHouse> UserHouses => Set<UserHouse>();
+    public DbSet<NotificationPreference> NotificationPreferences => Set<NotificationPreference>();
+    public DbSet<NotificationLog> NotificationLogs => Set<NotificationLog>();
+    public DbSet<TenantFeature> TenantFeatures => Set<TenantFeature>();
+    public DbSet<FeatureRequest> FeatureRequests => Set<FeatureRequest>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -43,7 +48,8 @@ public class FarmDbContext : DbContext
         // tenant is known (see User's doc comment) — the handful of AuthService methods that read
         // tenant users filter TenantId by hand instead.
         modelBuilder.Entity<House>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
-        modelBuilder.Entity<Integrator>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
+        // Integrator itself is platform-level (no filter); what a tenant may use is this join.
+        modelBuilder.Entity<TenantIntegrator>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
         modelBuilder.Entity<Batch>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
         modelBuilder.Entity<DailyRecord>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
         modelBuilder.Entity<FeedDelivery>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
@@ -64,8 +70,12 @@ public class FarmDbContext : DbContext
             .HasMany(i => i.Batches).WithOne(b => b.Integrator!)
             .HasForeignKey(b => b.IntegratorId).OnDelete(DeleteBehavior.Restrict);
 
+        modelBuilder.Entity<TenantIntegrator>()
+            .HasOne(ti => ti.Integrator).WithMany(i => i.Tenants)
+            .HasForeignKey(ti => ti.IntegratorId).OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<TenantIntegrator>().HasIndex(ti => new { ti.TenantId, ti.IntegratorId }).IsUnique();
+
         modelBuilder.Entity<House>().HasIndex(h => h.TenantId);
-        modelBuilder.Entity<Integrator>().HasIndex(i => i.TenantId);
         modelBuilder.Entity<Batch>().HasIndex(b => b.TenantId);
         modelBuilder.Entity<Role>().HasIndex(r => r.TenantId);
         modelBuilder.Entity<User>().HasIndex(u => u.TenantId);
@@ -106,6 +116,7 @@ public class FarmDbContext : DbContext
             .HasForeignKey(e => e.BatchId).OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
+        modelBuilder.Entity<User>().Property(u => u.PreferredLanguage).HasDefaultValue("en");
 
         modelBuilder.Entity<UserRole>()
             .HasOne(ur => ur.User).WithMany(u => u.UserRoles)
@@ -127,6 +138,30 @@ public class FarmDbContext : DbContext
             .HasOne(uh => uh.House).WithMany()
             .HasForeignKey(uh => uh.HouseId).OnDelete(DeleteBehavior.Cascade);
         modelBuilder.Entity<UserHouse>().HasIndex(uh => new { uh.UserId, uh.HouseId }).IsUnique();
+
+        // ---- WhatsApp notifications ----
+        modelBuilder.Entity<NotificationPreference>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
+        modelBuilder.Entity<NotificationLog>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
+        modelBuilder.Entity<NotificationPreference>()
+            .HasOne(p => p.User).WithMany()
+            .HasForeignKey(p => p.UserId).OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<NotificationPreference>().HasIndex(p => p.UserId).IsUnique();
+        modelBuilder.Entity<NotificationLog>()
+            .HasOne<User>().WithMany()
+            .HasForeignKey(l => l.UserId).OnDelete(DeleteBehavior.Cascade);
+        // One row per (user, alert) is what makes "never send the same alert twice" hold even if
+        // two worker ticks overlap.
+        modelBuilder.Entity<NotificationLog>().HasIndex(l => new { l.UserId, l.DedupKey }).IsUnique();
+        modelBuilder.Entity<NotificationLog>().HasIndex(l => new { l.TenantId, l.CreatedAtUtc });
+
+        // ---- Optional features (Super Admin-managed) ----
+        modelBuilder.Entity<TenantFeature>().Property(f => f.TenantId).ValueGeneratedNever();
+        modelBuilder.Entity<TenantFeature>()
+            .HasOne<Tenant>().WithOne()
+            .HasForeignKey<TenantFeature>(f => f.TenantId).OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<FeatureRequest>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
+        modelBuilder.Entity<FeatureRequest>().HasIndex(r => new { r.Status, r.CreatedAtUtc });
+        modelBuilder.Entity<FeatureRequest>().HasIndex(r => new { r.TenantId, r.Feature });
     }
 
     // Stamps TenantId onto every newly-added ITenantScoped entity from this context's own

@@ -10,7 +10,7 @@ public static class Permissions
     public static class Houses
     {
         public const string View = "Houses.View";
-        public const string Add = "Houses.Add";
+        // No "Add": houses are created by the Super Admin only (PlatformAdminService.AddHouseAsync).
         public const string Edit = "Houses.Edit";
         public const string Delete = "Houses.Delete";
     }
@@ -78,9 +78,7 @@ public static class Permissions
     public static class Integrators
     {
         public const string View = "Integrators.View";
-        public const string Add = "Integrators.Add";
-        public const string Edit = "Integrators.Edit";
-        public const string Delete = "Integrators.Delete";
+        // No Add/Edit/Delete: integrators and their terms are managed by the Super Admin only.
     }
 
     public static class Users
@@ -105,7 +103,7 @@ public static class PermissionCatalog
 {
     public static readonly List<(string Group, List<(string Code, string Label)> Items)> All = new()
     {
-        ("Houses", new() { ("Houses.View", "View"), ("Houses.Add", "Add"), ("Houses.Edit", "Edit"), ("Houses.Delete", "Delete") }),
+        ("Houses", new() { ("Houses.View", "View"), ("Houses.Edit", "Edit"), ("Houses.Delete", "Delete") }),
         ("Batches", new() { ("Batches.View", "View"), ("Batches.Add", "Add"), ("Batches.Edit", "Edit"), ("Batches.Delete", "Delete") }),
         ("Daily Records", new() { ("DailyRecords.View", "View"), ("DailyRecords.Add", "Add"), ("DailyRecords.Edit", "Edit"), ("DailyRecords.Delete", "Delete") }),
         ("Feed", new() { ("Feed.View", "View"), ("Feed.Add", "Add"), ("Feed.Edit", "Edit"), ("Feed.Delete", "Delete") }),
@@ -114,7 +112,7 @@ public static class PermissionCatalog
         ("Settlement", new() { ("Settlement.View", "View"), ("Settlement.Add", "Add"), ("Settlement.Edit", "Edit") }),
         ("Expenses", new() { ("Expenses.View", "View"), ("Expenses.Add", "Add"), ("Expenses.Edit", "Edit"), ("Expenses.Delete", "Delete") }),
         ("Reports", new() { ("Reports.View", "View") }),
-        ("Integrators", new() { ("Integrators.View", "View"), ("Integrators.Add", "Add"), ("Integrators.Edit", "Edit"), ("Integrators.Delete", "Delete") }),
+        ("Integrators", new() { ("Integrators.View", "View") }),
         ("Users", new() { ("Users.View", "View"), ("Users.Add", "Add"), ("Users.Edit", "Edit"), ("Users.Delete", "Delete") }),
         ("Roles", new() { ("Roles.View", "View"), ("Roles.Add", "Add"), ("Roles.Edit", "Edit"), ("Roles.Delete", "Delete") }),
     };

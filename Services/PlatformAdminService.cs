@@ -59,7 +59,7 @@ public class PlatformAdminService
         return await db.Tenants.FirstOrDefaultAsync(t => t.Id == id);
     }
 
-    /// <summary>Creates a new client: the Tenant row, its default 3-house layout, an Admin role
+    /// <summary>Creates a new client: the Tenant row, a single default house, an Admin role
     /// holding every permission, and that tenant's first admin user. Generates a password if
     /// <paramref name="initialPassword"/> isn't supplied. Mirrors what the old single-tenant
     /// FarmService.InitializeAsync used to seed once globally, now scoped to one new tenant.</summary>
@@ -75,10 +75,9 @@ public class PlatformAdminService
         // context's TenantId now means FarmDbContext's auto-stamp fills it in on each row below.
         db.TenantId = tenant.Id;
 
-        db.Houses.AddRange(
-            new House { Name = "House 1", SortOrder = 1 },
-            new House { Name = "House 2", SortOrder = 2 },
-            new House { Name = "House 3", SortOrder = 3 });
+        // One house to start; more are added by the Super Admin when the client asks for them
+        // (see AddHouseAsync) — tenants can't create houses themselves.
+        db.Houses.Add(new House { Name = "House 1", SortOrder = 1 });
 
         var adminRole = new Role { Name = "Admin", IsSystemRole = true, SortOrder = 1 };
         adminRole.RolePermissions = PermissionCatalog.AllCodes
@@ -104,6 +103,140 @@ public class PlatformAdminService
         await db.SaveChangesAsync();
 
         return new TenantProvisionResult(tenant, adminUsername, password);
+    }
+
+    // ---------------- Houses (Super Admin only) ----------------
+    // House count is a platform decision (it's what a client is provisioned/billed for), so creating
+    // houses lives here rather than in FarmService. Tenants can still rename/edit/delete their own.
+
+    public async Task<List<House>> GetTenantHousesAsync(int tenantId)
+    {
+        using var db = dbFactory.CreateDbContext();
+        db.TenantId = tenantId;
+        return await db.Houses.OrderBy(h => h.SortOrder).ThenBy(h => h.Name).ToListAsync();
+    }
+
+    public async Task<House> AddHouseAsync(int tenantId, string name, string? code, int capacityBirds)
+    {
+        using var db = dbFactory.CreateDbContext();
+        if (!await db.Tenants.AnyAsync(t => t.Id == tenantId))
+            throw new InvalidOperationException($"Tenant {tenantId} not found.");
+
+        db.TenantId = tenantId;
+        var nextOrder = (await db.Houses.MaxAsync(h => (int?)h.SortOrder) ?? 0) + 1;
+        var house = new House
+        {
+            Name = string.IsNullOrWhiteSpace(name) ? $"House {nextOrder}" : name.Trim(),
+            Code = string.IsNullOrWhiteSpace(code) ? null : code.Trim(),
+            CapacityBirds = Math.Max(0, capacityBirds),
+            SortOrder = nextOrder,
+        };
+        db.Houses.Add(house);
+        await db.SaveChangesAsync();
+        return house;
+    }
+
+    // ---------------- Integrators (Super Admin only) ----------------
+    // Integrators and their contract terms (chick cost, bag weight, growing charge, FCR/mortality
+    // rules...) are platform data. Clients only see the ones enabled for them (TenantIntegrators).
+
+    public async Task<List<Integrator>> GetIntegratorsAsync()
+    {
+        using var db = dbFactory.CreateDbContext();
+        return await db.Integrators.OrderBy(i => i.SortOrder).ThenBy(i => i.Name).ToListAsync();
+    }
+
+    public async Task<Integrator?> GetIntegratorAsync(int id)
+    {
+        using var db = dbFactory.CreateDbContext();
+        return await db.Integrators.FirstOrDefaultAsync(i => i.Id == id);
+    }
+
+    /// <summary>Tenant ids an integrator is enabled for. Reads the join across tenants on purpose.</summary>
+    public async Task<List<int>> GetIntegratorTenantIdsAsync(int integratorId)
+    {
+        using var db = dbFactory.CreateDbContext();
+        return await db.TenantIntegrators.IgnoreQueryFilters()
+            .Where(t => t.IntegratorId == integratorId).Select(t => t.TenantId).ToListAsync();
+    }
+
+    public async Task<int> SaveIntegratorAsync(Integrator integrator)
+    {
+        using var db = dbFactory.CreateDbContext();
+        integrator.Name = integrator.Name.Trim();
+        if (await db.Integrators.AnyAsync(i => i.Id != integrator.Id && i.Name == integrator.Name))
+            throw new InvalidOperationException($"An integrator named \"{integrator.Name}\" already exists.");
+        integrator.Batches = new();
+        integrator.Tenants = new();
+        if (integrator.Id == 0)
+        {
+            integrator.SortOrder = (await db.Integrators.MaxAsync(i => (int?)i.SortOrder) ?? 0) + 1;
+            db.Integrators.Add(integrator);
+        }
+        else db.Integrators.Update(integrator);
+        await db.SaveChangesAsync();
+        return integrator.Id;
+    }
+
+    /// <summary>Number of batches (across all clients) that use this integrator — a count only.</summary>
+    public async Task<int> CountBatchesForIntegratorAsync(int integratorId)
+    {
+        using var db = dbFactory.CreateDbContext();
+        return await db.Batches.IgnoreQueryFilters().CountAsync(b => b.IntegratorId == integratorId);
+    }
+
+    /// <summary>Returns false (and does not delete) if any client has batches with this integrator —
+    /// deactivate it instead.</summary>
+    public async Task<bool> DeleteIntegratorAsync(int integratorId)
+    {
+        using var db = dbFactory.CreateDbContext();
+        if (await db.Batches.IgnoreQueryFilters().AnyAsync(b => b.IntegratorId == integratorId)) return false;
+        var integrator = await db.Integrators.FindAsync(integratorId);
+        if (integrator is null) return false;
+        db.TenantIntegrators.RemoveRange(await db.TenantIntegrators.IgnoreQueryFilters()
+            .Where(t => t.IntegratorId == integratorId).ToListAsync());
+        db.Integrators.Remove(integrator);
+        await db.SaveChangesAsync();
+        return true;
+    }
+
+    /// <summary>Integrator ids enabled for one client.</summary>
+    public async Task<List<int>> GetTenantIntegratorIdsAsync(int tenantId)
+    {
+        using var db = dbFactory.CreateDbContext();
+        db.TenantId = tenantId;
+        return await db.TenantIntegrators.Select(t => t.IntegratorId).ToListAsync();
+    }
+
+    /// <summary>Replaces the set of integrators a client may use. Removing one only hides it from
+    /// new batches — existing batches keep their integrator and history.</summary>
+    public async Task SetTenantIntegratorsAsync(int tenantId, IEnumerable<int> integratorIds)
+    {
+        using var db = dbFactory.CreateDbContext();
+        if (!await db.Tenants.AnyAsync(t => t.Id == tenantId))
+            throw new InvalidOperationException($"Tenant {tenantId} not found.");
+        db.TenantId = tenantId;
+
+        var wanted = integratorIds.Distinct().ToHashSet();
+        var valid = await db.Integrators.Where(i => wanted.Contains(i.Id)).Select(i => i.Id).ToListAsync();
+        var current = await db.TenantIntegrators.ToListAsync();
+        db.TenantIntegrators.RemoveRange(current.Where(c => !wanted.Contains(c.IntegratorId)));
+        foreach (var id in valid.Where(id => current.All(c => c.IntegratorId != id)))
+            db.TenantIntegrators.Add(new TenantIntegrator { IntegratorId = id });
+        await db.SaveChangesAsync();
+    }
+
+    /// <summary>Enables one integrator for many clients at once (from the integrator's own page).</summary>
+    public async Task SetIntegratorTenantsAsync(int integratorId, IEnumerable<int> tenantIds)
+    {
+        using var db = dbFactory.CreateDbContext();
+        var wanted = tenantIds.Distinct().ToHashSet();
+        var current = await db.TenantIntegrators.IgnoreQueryFilters().Where(t => t.IntegratorId == integratorId).ToListAsync();
+        db.TenantIntegrators.RemoveRange(current.Where(c => !wanted.Contains(c.TenantId)));
+        var validTenants = await db.Tenants.Where(t => wanted.Contains(t.Id)).Select(t => t.Id).ToListAsync();
+        foreach (var tid in validTenants.Where(tid => current.All(c => c.TenantId != tid)))
+            db.TenantIntegrators.Add(new TenantIntegrator { TenantId = tid, IntegratorId = integratorId });
+        await db.SaveChangesAsync();
     }
 
     public async Task SetTenantActiveAsync(int tenantId, bool isActive)

@@ -1,6 +1,7 @@
 @page "/superadmin"
 @layout SuperAdminLayout
 @inject PlatformAdminService PlatformAdminService
+@inject TenantFeatureService FeatureService
 @inject NavigationManager Nav
 
 <PageTitle>Clients — Platform Admin</PageTitle>
@@ -17,14 +18,43 @@ else if (!tenants.Any())
 }
 else
 {
+    @if (requests.Count > 0)
+    {
+        <div class="section-title">Feature requests (@requests.Count)</div>
+        <div class="card feature-requests">
+            @foreach (var (r, tenantName) in requests)
+            {
+                <a class="feature-request-row" href="@($"superadmin/tenants/{r.TenantId}")">
+                    <span class="material-symbols-outlined">notifications_active</span>
+                    <div style="flex:1; min-width:0;">
+                        <b>@tenantName</b> wants <b>@Features.Label(r.Feature)</b>
+                        <div class="list-row-sub" style="white-space:normal;">
+                            @r.RequestedByName · @r.CreatedAtUtc.ToLocalTime().ToString("dd MMM yyyy")@(string.IsNullOrWhiteSpace(r.Message) ? "" : $" · “{r.Message}”")
+                        </div>
+                    </div>
+                    <span class="dd-caret">▸</span>
+                </a>
+            }
+        </div>
+    }
+
     <div class="card" style="padding:4px 10px;">
         @foreach (var t in tenants)
         {
+            var f = featuresByTenant.GetValueOrDefault(t.Id);
             <a class="list-row" href="@($"superadmin/tenants/{t.Id}")">
                 <div>
                     <div class="list-row-title">@t.Name</div>
                     <div class="list-row-sub">@(t.IsActive ? "Active" : "Deactivated") · created @t.CreatedAtUtc.ToLocalTime().ToString("d MMM yyyy")</div>
                 </div>
+                <span class="feature-chips">
+                    <span class="feature-chip @(f is { AiEnabled: true } ? (f.AiApiKeyHint is null ? "setup" : "on") : "")" title="AI Assistant">
+                        <span class="material-symbols-outlined">smart_toy</span>AI
+                    </span>
+                    <span class="feature-chip @(f is { WhatsAppEnabled: true } ? (f.WhatsAppAccessTokenHint is null || string.IsNullOrWhiteSpace(f.WhatsAppPhoneNumberId) ? "setup" : "on") : "")" title="WhatsApp Alerts">
+                        <span class="material-symbols-outlined">chat</span>WA
+                    </span>
+                </span>
                 <span class="dd-caret">▸</span>
             </a>
         }
@@ -36,10 +66,14 @@ else
 @code {
     private bool loading = true;
     private List<Tenant> tenants = new();
+    private List<(FeatureRequest Request, string TenantName)> requests = new();
+    private Dictionary<int, TenantFeature> featuresByTenant = new();
 
     protected override async Task OnInitializedAsync()
     {
         tenants = await PlatformAdminService.GetTenantsAsync();
+        requests = await FeatureService.GetPendingRequestsAsync();
+        featuresByTenant = await FeatureService.GetAllAsync();
         loading = false;
     }
 }

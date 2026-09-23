@@ -1,4 +1,4 @@
-# AMR Poultry Farms — Web
+# BroilIQ — Poultry Intelligence (Web)
 
 ASP.NET Core Blazor Web App (.NET 8, Interactive Server render mode) for tracking broiler
 batches, daily logs, feed, health events, lifting/harvest, settlement and expenses across
@@ -88,7 +88,7 @@ Username: superadmin
 Password: <randomly generated>
 ```
 Sign in with it, then create your first client from **Clients → +** — that's what seeds a
-tenant's default 3 houses, its Admin role, and its first admin login. See
+tenant's single default house, its Admin role, and its first admin login. See
 [Multi-tenancy](#multi-tenancy) below.
 
 ## Multi-tenancy
@@ -96,9 +96,11 @@ tenant's default 3 houses, its Admin role, and its first admin login. See
 This install is shared by multiple clients ("tenants"), isolated from each other in one database:
 
 - **Super Admin** (`/superadmin`, the account seeded on first run above) creates/deactivates
-  clients and can reset a client's admin password — nothing else. It deliberately never sees any
-  tenant's houses, batches, or other farm data (`Services/PlatformAdminService.cs`).
-- **Tenant Admin** (the user created when a client is provisioned) manages their own houses,
+  clients, resets a client's admin password, and adds houses when a client asks for more (each
+  client starts with one). It sees only a client's house names/capacities — never batches or other
+  farm data (`Services/PlatformAdminService.cs`).
+- **Tenant Admin** (the user created when a client is provisioned) manages their own houses
+  (edit/delete — but can't create new ones),
   batches, users, roles — the same feature set this app always had — plus **Settings →
   Branding**, where they can rename the app, upload a logo and pick brand colors for their own
   tenant only.

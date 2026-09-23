@@ -1,0 +1,19 @@
+@inject NavigationManager Nav
+
+@* EN | తె switch. A full reload is required: the Blazor circuit's culture is fixed when it
+   connects, so the cookie set by /culture/set only takes effect on a fresh page load. *@
+<div class="lang-toggle" role="group" aria-label="Language">
+    <button type="button" class="@(current == AppLanguages.English ? "on" : "")" @onclick='() => Switch(AppLanguages.English)' title="English">EN</button>
+    <button type="button" class="@(current == AppLanguages.Telugu ? "on" : "")" @onclick='() => Switch(AppLanguages.Telugu)' title="తెలుగు">తె</button>
+</div>
+
+@code {
+    private readonly string current = AppLanguages.Current;
+
+    private void Switch(string lang)
+    {
+        if (lang == current) return;
+        var returnUrl = "/" + Nav.ToBaseRelativePath(Nav.Uri);
+        Nav.NavigateTo($"/culture/set?lang={lang}&returnUrl={Uri.EscapeDataString(returnUrl)}", forceLoad: true);
+    }
+}

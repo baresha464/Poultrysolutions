@@ -5,11 +5,11 @@
 
 @if (!AuthService.HasPermission(Permissions.Houses.View))
 {
-    <div class="card empty-state">You don't have permission to view houses.</div>
+    <div class="card empty-state">@L["You don't have permission to view houses."]</div>
 }
 else if (house is null)
 {
-    <p class="empty-state">@(loaded ? "House not found." : "Loading…")</p>
+    <p class="empty-state">@(loaded ? L["House not found."] : L["Loading…"])</p>
 }
 else
 {
@@ -26,37 +26,37 @@ else
         <div class="action-row" style="margin-top:-8px; margin-bottom:12px;">
             @if (AuthService.HasPermission(Permissions.Houses.Edit))
             {
-                <a class="btn btn-outline btn-block" href="@($"houses/{Id}/edit")">Edit House</a>
+                <a class="btn btn-outline btn-block" href="@($"houses/{Id}/edit")">@L["Edit House"]</a>
             }
             @if (AuthService.HasPermission(Permissions.Batches.Add))
             {
-                <a class="btn btn-primary btn-block" href="@($"batch/new?HouseId={Id}")">+ New Batch</a>
+                <a class="btn btn-primary btn-block" href="@($"batch/new?HouseId={Id}")">+ @L["New Batch"]</a>
             }
         </div>
     }
 
     @if (activeBatch is not null)
     {
-        <div class="section-title mt-0">Active Batch</div>
+        <div class="section-title mt-0">@L["Active Batch"]</div>
         <a class="card" href="@($"batch/{activeBatch.Id}")">
             <div class="house-card-batch">
                 <span class="list-row-title">@activeBatch.BatchCode</span>
-                <span class="badge">Day @activeBatch.AgeDays</span>
+                <span class="badge">@L["Day {0}", activeBatch.AgeDays]</span>
             </div>
             <div class="list-row-sub">@activeBatch.Breed · @activeBatch.Integrator?.Name</div>
             <div class="kpi-grid" style="margin-top:8px; margin-bottom:0;">
-                <div class="kpi amber"><div class="kpi-label">Live Birds</div><div class="kpi-value">@activePerf!.LiveBirds.ToString("N0")</div></div>
-                <div class="kpi"><div class="kpi-label">Livability</div><div class="kpi-value">@activePerf.LivabilityPct.ToString("0.0")%</div></div>
+                <div class="kpi amber"><div class="kpi-label">@L["Live Birds"]</div><div class="kpi-value">@activePerf!.LiveBirds.ToString("N0")</div></div>
+                <div class="kpi"><div class="kpi-label">@L["Livability"]</div><div class="kpi-value">@activePerf.LivabilityPct.ToString("0.0")%</div></div>
                 <div class="kpi clay"><div class="kpi-label">FCR</div><div class="kpi-value">@activePerf.Fcr.ToString("0.000")</div></div>
-                <div class="kpi danger"><div class="kpi-label">Expenses</div><div class="kpi-value">₹@activePerf.TotalExpenses.ToString("N0")</div></div>
+                <div class="kpi danger"><div class="kpi-label">@L["Expenses"]</div><div class="kpi-value">₹@activePerf.TotalExpenses.ToString("N0")</div></div>
             </div>
         </a>
     }
 
-    <div class="section-title">Batch History</div>
+    <div class="section-title">@L["Batch History"]</div>
 
     <div class="tab-strip">
-        <button class="tab-btn @(yearFilter is null?"active":"")" @onclick='() => SetYear(null)'>All years</button>
+        <button class="tab-btn @(yearFilter is null?"active":"")" @onclick='() => SetYear(null)'>@L["All years"]</button>
         @foreach (var y in years)
         {
             <button class="tab-btn @(yearFilter == y?"active":"")" @onclick='() => SetYear(y)'>@y</button>
@@ -64,12 +64,12 @@ else
     </div>
 
     <div class="field" style="margin-bottom:10px;">
-        <input type="search" placeholder="Search batch number or integrator…" value="@search" @oninput="OnSearchInput" />
+        <input type="search" placeholder="@L["Search batch number or integrator…"]" value="@search" @oninput="OnSearchInput" />
     </div>
 
     @if (!filtered.Any())
     {
-        <div class="card empty-state">No batches match here.</div>
+        <div class="card empty-state">@L["No batches match here."]</div>
     }
     else
     {

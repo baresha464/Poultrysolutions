@@ -1,0 +1,184 @@
+@page "/superadmin/integrators/new"
+@page "/superadmin/integrators/{Id:int}"
+@layout SuperAdminLayout
+@inject PlatformAdminService PlatformAdminService
+@inject NavigationManager Nav
+
+<PageTitle>@(Id.HasValue ? "Edit Integrator" : "New Integrator") — Platform Admin</PageTitle>
+
+<div class="page-title">@(Id.HasValue ? "Edit Integrator" : "New Integrator")</div>
+
+@if (loading)
+{
+    <p class="empty-state">Loading…</p>
+}
+else if (Id.HasValue && integrator.Id == 0)
+{
+    <div class="card empty-state">Integrator not found.</div>
+}
+else
+{
+<EditForm Model="integrator" OnValidSubmit="Save">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="card">
+        <div class="form-grid">
+            <div class="field">
+                <label>Name *</label>
+                <InputText @bind-Value="integrator.Name" placeholder="e.g. Sneha Farms" />
+            </div>
+            <div class="field">
+                <label>Status</label>
+                <label class="check-row" style="border:none; padding:6px 0;">
+                    <InputCheckbox @bind-Value="integrator.IsActive" /> <span>Active (can be chosen for new batches)</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title">Supplies</div>
+    <div class="card">
+        <div class="form-grid">
+            <div class="field">
+                <label>Chick Cost / Bird (₹)</label>
+                <InputNumber @bind-Value="integrator.ChickCostPerBird" step="0.01" />
+                <div class="field-hint">Copied onto each new batch when it's placed.</div>
+            </div>
+            <div class="field">
+                <label>Feed Bag Weight (kg)</label>
+                <InputNumber @bind-Value="integrator.BagWeightKg" step="0.5" />
+                <div class="field-hint">Used to turn bags into kg in daily records and feed deliveries.</div>
+            </div>
+            <div class="field">
+                <label>Default Breed</label>
+                <InputText @bind-Value="integrator.DefaultBreed" />
+            </div>
+            <div class="field">
+                <label>Target Weight (kg)</label>
+                <InputNumber @bind-Value="integrator.TargetWeightKg" step="0.01" />
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title">Contract Terms</div>
+    <div class="card">
+        <div class="form-grid">
+            <div class="field">
+                <label>Growing Charge (₹ / kg)</label>
+                <InputNumber @bind-Value="integrator.GrowingChargePerKg" step="0.01" />
+            </div>
+            <div class="field">
+                <label>Payment Due (days after lifting)</label>
+                <InputNumber @bind-Value="integrator.PaymentDays" />
+            </div>
+            <div class="field">
+                <label>Standard FCR</label>
+                <InputNumber @bind-Value="integrator.StandardFcr" step="0.01" />
+                <div class="field-hint">Incentive is paid when the batch FCR is below this.</div>
+            </div>
+            <div class="field">
+                <label>FCR Incentive (₹ / kg per 0.01 FCR)</label>
+                <InputNumber @bind-Value="integrator.FcrIncentivePerKg" step="0.01" />
+                <div class="field-hint">e.g. 0.04 → FCR 1.65 vs 1.72 standard = ₹0.28/kg extra.</div>
+            </div>
+            <div class="field">
+                <label>Mortality Allowed (%)</label>
+                <InputNumber @bind-Value="integrator.MortalityAllowancePct" step="0.1" />
+            </div>
+            <div class="field">
+                <label>Deduction per Bird Above Allowance (₹)</label>
+                <InputNumber @bind-Value="integrator.MortalityDeductionPerBird" step="0.5" />
+            </div>
+            <div class="field full">
+                <label>Notes</label>
+                <InputTextArea @bind-Value="integrator.Notes" />
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title">Enabled for Clients (@selectedTenants.Count)</div>
+    <div class="card" style="padding:4px 16px;">
+        @if (tenants.Count == 0)
+        {
+            <div class="empty-state">No clients yet.</div>
+        }
+        @foreach (var t in tenants)
+        {
+            <label class="check-row">
+                <input type="checkbox" checked="@selectedTenants.Contains(t.Id)" @onchange="e => ToggleTenant(t.Id, (bool)e.Value!)" />
+                <span>@t.Name @(t.IsActive ? "" : "(deactivated)")</span>
+            </label>
+        }
+    </div>
+
+    @if (batchCount > 0)
+    {
+        <div class="card empty-state">@batchCount.ToString("N0") batch@(batchCount == 1 ? "" : "es") use this integrator. Changed rates apply to new batches and new settlements; batches already placed keep their chick cost. To retire it, untick Active instead of deleting.</div>
+    }
+    @if (!string.IsNullOrEmpty(error))
+    {
+        <div class="validation-errors">@error</div>
+    }
+
+    <div class="action-row">
+        <button type="submit" class="btn btn-primary btn-block">Save Integrator</button>
+    </div>
+    @if (Id.HasValue && batchCount == 0)
+    {
+        <div class="action-row">
+            <button type="button" class="btn btn-danger btn-block" @onclick="Delete">Delete Integrator</button>
+        </div>
+    }
+</EditForm>
+}
+
+@code {
+    [Parameter] public int? Id { get; set; }
+    private Integrator integrator = new();
+    private List<Tenant> tenants = new();
+    private HashSet<int> selectedTenants = new();
+    private int batchCount;
+    private string? error;
+    private bool loading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        tenants = await PlatformAdminService.GetTenantsAsync();
+        if (Id.HasValue)
+        {
+            var existing = await PlatformAdminService.GetIntegratorAsync(Id.Value);
+            if (existing != null) integrator = existing;
+            selectedTenants = (await PlatformAdminService.GetIntegratorTenantIdsAsync(Id.Value)).ToHashSet();
+            batchCount = await PlatformAdminService.CountBatchesForIntegratorAsync(Id.Value);
+        }
+        loading = false;
+    }
+
+    private void ToggleTenant(int id, bool on)
+    {
+        if (on) selectedTenants.Add(id); else selectedTenants.Remove(id);
+    }
+
+    private async Task Save()
+    {
+        error = null;
+        try
+        {
+            var id = await PlatformAdminService.SaveIntegratorAsync(integrator);
+            await PlatformAdminService.SetIntegratorTenantsAsync(id, selectedTenants);
+            Nav.NavigateTo("superadmin/integrators");
+        }
+        catch (InvalidOperationException ex)
+        {
+            error = ex.Message;
+        }
+    }
+
+    private async Task Delete()
+    {
+        if (!Id.HasValue) return;
+        if (await PlatformAdminService.DeleteIntegratorAsync(Id.Value)) Nav.NavigateTo("superadmin/integrators");
+        else error = "This integrator has batches, so it can't be deleted. Untick Active instead.";
+    }
+}

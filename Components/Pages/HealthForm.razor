@@ -4,11 +4,11 @@
 @inject AuthService AuthService
 @inject NavigationManager Nav
 
-<div class="page-title">Health Event</div>
+<div class="page-title">@L["Health Event"]</div>
 
 @if (!CanEdit || !batchAccessible)
 {
-    <div class="card empty-state">You don't have permission to do this.</div>
+    <div class="card empty-state">@L["You don't have permission to do this."]</div>
 }
 else
 {
@@ -16,41 +16,41 @@ else
         <div class="card">
             <div class="form-grid">
                 <div class="field">
-                    <label>Date</label>
+                    <label>@L["Date"]</label>
                     <InputDate @bind-Value="evt.Date" />
                 </div>
                 <div class="field">
-                    <label>Type</label>
-                    <Dropdown TValue="HealthEventType" @bind-Value="evt.Type" Options="_typeOptions" />
+                    <label>@L["Type"]</label>
+                    <Dropdown TValue="HealthEventType" @bind-Value="evt.Type" Options="TypeOptions" />
                 </div>
                 <div class="field">
-                    <label>Name</label>
-                    <InputText @bind-Value="evt.Name" placeholder="e.g. ND Lasota" />
+                    <label>@L["Name"]</label>
+                    <InputText @bind-Value="evt.Name" placeholder="@L["e.g. ND Lasota"]" />
                 </div>
                 <div class="field">
-                    <label>Dose</label>
-                    <InputText @bind-Value="evt.Dose" placeholder="e.g. 1 drop/bird" />
+                    <label>@L["Dose"]</label>
+                    <InputText @bind-Value="evt.Dose" placeholder="@L["e.g. 1 drop/bird"]" />
                 </div>
                 <div class="field">
-                    <label>Route</label>
-                    <Dropdown TValue="string" @bind-Value="evt.Route" Options="_routeOptions" />
+                    <label>@L["Route"]</label>
+                    <Dropdown TValue="string" @bind-Value="evt.Route" Options="RouteOptions" />
                 </div>
                 <div class="field">
-                    <label>Cost (₹)</label>
+                    <label>@L["Cost (₹)"]</label>
                     <InputNumber @bind-Value="evt.Cost" step="0.01" />
                 </div>
                 <div class="field full">
-                    <label>Remarks</label>
+                    <label>@L["Remarks"]</label>
                     <InputTextArea @bind-Value="evt.Remarks" />
                 </div>
             </div>
         </div>
 
         <div class="action-row">
-            <button type="submit" class="btn btn-primary btn-block">Save</button>
+            <button type="submit" class="btn btn-primary btn-block">@L["Save"]</button>
             @if (RecordId.HasValue && AuthService.HasPermission(Permissions.Health.Delete))
             {
-                <button type="button" class="btn btn-danger" @onclick="Delete">Delete</button>
+                <button type="button" class="btn btn-danger" @onclick="Delete">@L["Delete"]</button>
             }
         </div>
     </EditForm>
@@ -64,22 +64,12 @@ else
 
     private bool CanEdit => AuthService.HasPermission(RecordId.HasValue ? Permissions.Health.Edit : Permissions.Health.Add);
 
-    private static readonly (HealthEventType Value, string Label)[] _typeOptions =
-    {
-        (HealthEventType.Vaccination, "Vaccination"),
-        (HealthEventType.Medication, "Medication"),
-        (HealthEventType.Supplement, "Supplement"),
-        (HealthEventType.Disinfection, "Disinfection"),
-    };
+    // Stored values stay English; only the labels are translated.
+    private (HealthEventType Value, string Label)[] TypeOptions => Enum.GetValues<HealthEventType>()
+        .Select(t => (t, L[t.ToString()].Value)).ToArray();
 
-    private static readonly (string Value, string Label)[] _routeOptions =
-    {
-        ("Drinking water", "Drinking water"),
-        ("Eye drop", "Eye drop"),
-        ("Spray", "Spray"),
-        ("Injection", "Injection"),
-        ("Feed mix", "Feed mix"),
-    };
+    private (string Value, string Label)[] RouteOptions => new[] { "Drinking water", "Eye drop", "Spray", "Injection", "Feed mix" }
+        .Select(r => (r, L[r].Value)).ToArray();
 
     protected override async Task OnInitializedAsync()
     {

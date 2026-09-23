@@ -1,118 +1,188 @@
 @page "/batch/{BatchId:int}/daily/new"
 @page "/batch/{BatchId:int}/daily/{RecordId:int}"
+@using AmrPoultryFarmWeb.Components.Shared.Charts
+@using static AmrPoultryFarmWeb.Components.Shared.Charts.ChartTheme
 @inject FarmService FarmService
 @inject AuthService AuthService
 @inject NavigationManager Nav
-@using AmrPoultryFarmWeb.Components.Shared.Charts
-@using static AmrPoultryFarmWeb.Components.Shared.Charts.ChartTheme
 
 @if (!CanEdit || !batchAccessible)
 {
-    <div class="card empty-state">You don't have permission to do this.</div>
+    <div class="card empty-state">@L["You don't have permission to do this."]</div>
 }
 else
 {
     <div class="page-head">
         <div>
             <a href="@($"batch/{BatchId}")" style="font-size:12px; font-weight:700; color:var(--ink-soft); text-decoration:none;">← @batch?.BatchCode</a>
-            <h1 class="page-title" style="margin-top:4px;">Daily Record</h1>
-            <div class="page-head-sub">@batch?.House?.Name · Day @perf.AgeDays · @record.Date.ToString("dd MMM yyyy")</div>
+            <h1 class="page-title" style="margin-top:4px;">@L["Daily Record"]</h1>
+            <div class="page-head-sub">@batch?.House?.Name · @L["Day {0}", AgeOnRecordDate] · @record.Date.ToString("dd MMM yyyy")</div>
         </div>
     </div>
 
-    <div class="kpi-grid" style="grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); margin-bottom:14px;">
-        <div class="kpi amber"><div class="kpi-label">Live Birds</div><div class="kpi-value">@perf.LiveBirds.ToString("N0")</div></div>
-        <div class="kpi"><div class="kpi-label">Avg Body Wt</div><div class="kpi-value">@perf.AvgBodyWeightKg.ToString("0.00") kg</div></div>
-        <div class="kpi"><div class="kpi-label">Daily Gain</div><div class="kpi-value">@perf.DailyGainGm.ToString("0")g/day</div></div>
-        <div class="kpi clay"><div class="kpi-label">FCR</div><div class="kpi-value">@perf.Fcr.ToString("0.000")</div></div>
-        <div class="kpi danger"><div class="kpi-label">Mortality</div><div class="kpi-value">@perf.TotalMortality (@perf.MortalityPct.ToString("0.0")%)</div></div>
-    </div>
-
-    @if (fcrTrend.Count >= 2 || weightTrend.Count >= 2)
+    @if (DuplicateForDate is { } dup)
     {
-        <div class="two-col">
-            @if (fcrTrend.Count >= 2)
-            {
-                <div class="chart-card">
-                    <div class="chart-card-sub" style="margin-bottom:6px;">FCR Trend</div>
-                    <ApexChart OptionsJson="@FcrChartJson" Height="190" />
-                </div>
-            }
-            @if (weightTrend.Count >= 2)
-            {
-                <div class="chart-card">
-                    <div class="chart-card-sub" style="margin-bottom:6px;">Avg Body Weight</div>
-                    <ApexChart OptionsJson="@WeightChartJson" Height="190" />
-                </div>
-            }
+        <div class="daily-warning">
+            <span class="material-symbols-outlined">event_busy</span>
+            <span>
+                @L["A record for {0} already exists.", record.Date.ToString("dd MMM yyyy")]
+                <a href="@($"batch/{BatchId}/daily/{dup.Id}")" @onclick="() => OpenExisting(dup.Id)" @onclick:preventDefault>@L["Open it to edit"]</a>
+            </span>
         </div>
     }
 
     <EditForm Model="record" OnValidSubmit="Save">
-        <div class="card">
+        @* ---------------- Birds ---------------- *@
+        <div class="card daily-section">
+            <div class="daily-section-title"><span class="material-symbols-outlined">egg_alt</span> @L["Birds"]</div>
             <div class="form-grid">
                 <div class="field">
-                    <label>Date</label>
+                    <label>@L["Date"]</label>
                     <InputDate @bind-Value="record.Date" />
                 </div>
                 <div class="field">
-                    <label>Mortality (birds)</label>
-                    <InputNumber @bind-Value="record.Mortality" />
+                    <label>@L["Mortality (birds)"]</label>
+                    <NumberStepper Value="record.Mortality" ValueChanged="v => record.Mortality = (int)v"
+                                   Format="0" Label="@L["Mortality (birds)"]" />
                 </div>
                 <div class="field">
-                    <label>Culls</label>
-                    <InputNumber @bind-Value="record.Culls" />
+                    <label>@L["Culls"]</label>
+                    <NumberStepper Value="record.Culls" ValueChanged="v => record.Culls = (int)v"
+                                   Format="0" Label="@L["Culls"]" />
+                </div>
+            </div>
+            <div class="list-row-sub">@L["Live birds before this record: {0:N0}", LiveBirdsBefore]</div>
+        </div>
+
+        @* ---------------- Feed & water ---------------- *@
+        <div class="card daily-section">
+            <div class="daily-section-title"><span class="material-symbols-outlined">grain</span> @L["Feed & water"]</div>
+            <div class="form-grid">
+                <div class="field">
+                    <label>@L["Feed Consumed (bags)"]</label>
+                    <NumberStepper Value="record.FeedConsumedBags" ValueChanged="v => record.FeedConsumedBags = v"
+                                   Step="0.5m" Label="@L["Feed Consumed (bags)"]" />
+                    <div class="list-row-sub">= @((record.FeedConsumedBags * bagWeightKg).ToString("0.0")) kg (@bagWeightKg.ToString("0.#") @L["kg/bag"])</div>
+                    @if (Previous is { FeedConsumedBags: > 0 } prevFeed && record.FeedConsumedBags != prevFeed.FeedConsumedBags)
+                    {
+                        <button type="button" class="btn-link" @onclick="() => record.FeedConsumedBags = prevFeed.FeedConsumedBags">
+                            @L["Same as yesterday ({0:0.#} bags)", prevFeed.FeedConsumedBags]
+                        </button>
+                    }
                 </div>
                 <div class="field">
-                    <label>Feed Consumed (bags)</label>
-                    <InputNumber @bind-Value="record.FeedConsumedBags" step="0.1" />
-                    <div class="list-row-sub">= @((record.FeedConsumedBags * bagWeightKg).ToString("0.0")) kg (@bagWeightKg.ToString("0.#") kg/bag)</div>
-                </div>
-                <div class="field">
-                    <label>Avg Body Weight (gm)</label>
-                    <InputNumber @bind-Value="record.AvgBodyWeightGm" step="1" />
-                </div>
-                <div class="field">
-                    <label>Water Consumed (ltr)</label>
-                    <InputNumber @bind-Value="record.WaterConsumedLtr" step="0.1" />
-                </div>
-                <div class="field">
-                    <label>Min Temp (°C)</label>
-                    <InputNumber @bind-Value="record.MinTempC" step="0.1" />
-                </div>
-                <div class="field">
-                    <label>Max Temp (°C)</label>
-                    <InputNumber @bind-Value="record.MaxTempC" step="0.1" />
-                </div>
-                <div class="field">
-                    <label>Humidity (%)</label>
-                    <InputNumber @bind-Value="record.HumidityPct" step="0.1" />
-                </div>
-                <div class="field">
-                    <label>Weight Gain vs Yesterday</label>
-                    <div class="readonly-value @(WeightGainGm is > 0 ? "good" : WeightGainGm is < 0 ? "bad" : "")">
-                        @(PreviousWeightGm is null
-                            ? "No prior record"
-                            : record.AvgBodyWeightGm <= 0
-                                ? "Enter today's weight"
-                                : $"{WeightGainGm:+0;-0;0} g (was {PreviousWeightGm:0}g)")
-                    </div>
-                </div>
-                <div class="field full">
-                    <label>Remarks</label>
-                    <InputTextArea @bind-Value="record.Remarks" />
+                    <label>@L["Water Consumed (ltr)"]</label>
+                    <InputNumber @bind-Value="record.WaterConsumedLtr" step="10" />
                 </div>
             </div>
         </div>
 
-        <div class="action-row">
-            <button type="submit" class="btn btn-primary btn-block">Save</button>
+        @* ---------------- Weight ---------------- *@
+        <div class="card daily-section">
+            <div class="daily-section-title"><span class="material-symbols-outlined">monitor_weight</span> @L["Weight"]</div>
+            <div class="form-grid">
+                <div class="field">
+                    <label>@L["Avg Body Weight (gm)"]</label>
+                    <InputNumber @bind-Value="record.AvgBodyWeightGm" step="1" />
+                    <div class="list-row-sub">@L["Standard for day {0}: about {1:0} g", AgeOnRecordDate, FlockAdvisor.TargetWeightGmAt(AgeOnRecordDate)]</div>
+                </div>
+                <div class="field">
+                    <label>@L["Weight Gain vs Yesterday"]</label>
+                    <div class="readonly-value @(WeightGainGm is > 0 ? "good" : WeightGainGm is < 0 ? "bad" : "")">
+                        @(PreviousWeightGm is null
+                            ? L["No prior record"].Value
+                            : record.AvgBodyWeightGm <= 0
+                                ? L["Enter today's weight"].Value
+                                : L["{0:+0;-0;0} g (was {1:0}g)", WeightGainGm!, PreviousWeightGm!].Value)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* ---------------- Shed conditions ---------------- *@
+        <div class="card daily-section">
+            <div class="daily-section-title">
+                <span class="material-symbols-outlined">device_thermostat</span> @L["Shed conditions"]
+                @if (Previous is { } prevShed && (prevShed.MinTempC != 0 || prevShed.MaxTempC != 0))
+                {
+                    <button type="button" class="btn-link" style="margin-left:auto;" @onclick="() => CopyShed(prevShed)">@L["Same as yesterday"]</button>
+                }
+            </div>
+            <div class="form-grid">
+                <div class="field">
+                    <label>@L["Min Temp (°C)"]</label>
+                    <InputNumber @bind-Value="record.MinTempC" step="0.5" />
+                </div>
+                <div class="field">
+                    <label>@L["Max Temp (°C)"]</label>
+                    <InputNumber @bind-Value="record.MaxTempC" step="0.5" />
+                </div>
+                <div class="field">
+                    <label>@L["Humidity (%)"]</label>
+                    <InputNumber @bind-Value="record.HumidityPct" step="1" />
+                </div>
+            </div>
+            <div class="list-row-sub">@L["Target for day {0}: about {1:0} °C", AgeOnRecordDate, AmrPoultryFarmWeb.Services.Reports.BatchAnalytics.TargetTempC(AgeOnRecordDate)]</div>
+        </div>
+
+        <div class="card daily-section">
+            <div class="field full">
+                <label>@L["Remarks"]</label>
+                <InputTextArea @bind-Value="record.Remarks" rows="2"
+                               placeholder="@L["Anything unusual: symptoms, power cut, feed quality…"]" />
+            </div>
+        </div>
+
+        @foreach (var w in Warnings)
+        {
+            <div class="daily-warning soft"><span class="material-symbols-outlined">warning</span><span>@w</span></div>
+        }
+        @if (saveError is not null)
+        {
+            <div class="ai-error">@saveError</div>
+        }
+
+        <div class="daily-savebar">
+            <button type="submit" class="btn btn-primary btn-block" disabled="@(saving || DuplicateForDate is not null)">
+                <span class="material-symbols-outlined" style="font-size:20px;">check_circle</span>&nbsp;@L["Save"]
+            </button>
             @if (RecordId.HasValue && AuthService.HasPermission(Permissions.DailyRecords.Delete))
             {
-                <button type="button" class="btn btn-danger" @onclick="Delete">Delete</button>
+                <button type="button" class="btn btn-danger" @onclick="Delete">@L["Delete"]</button>
             }
         </div>
     </EditForm>
+
+    @* ---------------- Batch so far (below the form — entry comes first) ---------------- *@
+    <details class="daily-trends">
+        <summary>@L["Batch so far"]</summary>
+        <div class="kpi-grid" style="grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); margin:12px 0;">
+            <div class="kpi amber"><div class="kpi-label">@L["Live Birds"]</div><div class="kpi-value">@perf.LiveBirds.ToString("N0")</div></div>
+            <div class="kpi"><div class="kpi-label">@L["Avg Body Wt"]</div><div class="kpi-value">@perf.AvgBodyWeightKg.ToString("0.00") kg</div></div>
+            <div class="kpi"><div class="kpi-label">@L["Daily Gain"]</div><div class="kpi-value">@L["{0:0}g/day", perf.DailyGainGm]</div></div>
+            <div class="kpi clay"><div class="kpi-label">FCR</div><div class="kpi-value">@perf.Fcr.ToString("0.000")</div></div>
+            <div class="kpi danger"><div class="kpi-label">@L["Mortality"]</div><div class="kpi-value">@perf.TotalMortality (@perf.MortalityPct.ToString("0.0")%)</div></div>
+        </div>
+        @if (fcrTrend.Count >= 2 || weightTrend.Count >= 2)
+        {
+            <div class="two-col">
+                @if (fcrTrend.Count >= 2)
+                {
+                    <div class="chart-card">
+                        <div class="chart-card-sub" style="margin-bottom:6px;">@L["FCR Trend"]</div>
+                        <ApexChart OptionsJson="@FcrChartJson" Height="190" />
+                    </div>
+                }
+                @if (weightTrend.Count >= 2)
+                {
+                    <div class="chart-card">
+                        <div class="chart-card-sub" style="margin-bottom:6px;">@L["Avg Body Weight"]</div>
+                        <ApexChart OptionsJson="@WeightChartJson" Height="190" />
+                    </div>
+                }
+            </div>
+        }
+    </details>
 }
 
 @code {
@@ -125,8 +195,21 @@ else
     private List<LineChartPoint> fcrTrend = new();
     private List<DailyRecord> allRecords = new();
     private bool batchAccessible;
+    private int originalLoss;          // deaths+culls already counted in perf when editing an existing record
+    private bool saving;
+    private string? saveError;
+
 
     private bool CanEdit => AuthService.HasPermission(RecordId.HasValue ? Permissions.DailyRecords.Edit : Permissions.DailyRecords.Add);
+
+    private int AgeOnRecordDate => batch is null ? 0 : AmrPoultryFarmWeb.Services.Reports.BatchAnalytics.AgeOn(batch, record.Date);
+
+    private DailyRecord? Previous => allRecords
+        .Where(d => d.Id != record.Id && d.Date.Date < record.Date.Date)
+        .OrderByDescending(d => d.Date).FirstOrDefault();
+
+    private DailyRecord? DuplicateForDate => allRecords
+        .FirstOrDefault(d => d.Id != record.Id && d.Date.Date == record.Date.Date);
 
     // Most recent prior day's weight sample, used to show today's gain/loss as the farmer types.
     private decimal? PreviousWeightGm => allRecords
@@ -139,6 +222,33 @@ else
         ? record.AvgBodyWeightGm - PreviousWeightGm.Value
         : null;
 
+    private int LiveBirdsBefore => perf.LiveBirds + originalLoss;
+
+    /// <summary>Soft checks — shown above Save, never blocking (the farmer may know better).</summary>
+    private List<string> Warnings
+    {
+        get
+        {
+            var list = new List<string>();
+            if (record.Mortality + record.Culls > LiveBirdsBefore)
+                list.Add(L["Deaths + culls ({0}) are more than the live birds ({1:N0}). Please check.", record.Mortality + record.Culls, LiveBirdsBefore]);
+            else if (LiveBirdsBefore > 0 && record.Mortality + record.Culls > LiveBirdsBefore * 0.02m)
+                list.Add(L["{0} birds lost in one day is unusually high — check the number, and call your vet if it is right.", record.Mortality + record.Culls]);
+            if (PreviousWeightGm is { } prev && record.AvgBodyWeightGm > 0)
+            {
+                if (record.AvgBodyWeightGm < prev * 0.9m)
+                    list.Add(L["Weight is lower than the last sample ({0:0} g). Check the weighing.", prev]);
+                else if (record.AvgBodyWeightGm > prev * 1.5m && record.Date.Date - (Previous?.Date.Date ?? record.Date.Date) <= TimeSpan.FromDays(2))
+                    list.Add(L["Weight jumped more than 50% since the last sample ({0:0} g). Check the number.", prev]);
+            }
+            if (Previous is { FeedConsumedBags: > 0 } p && record.FeedConsumedBags > p.FeedConsumedBags * 2 && record.FeedConsumedBags > 2)
+                list.Add(L["Feed is more than double yesterday's ({0:0.#} bags). Check the number.", p.FeedConsumedBags]);
+            if (record.MinTempC > 0 && record.MaxTempC > 0 && record.MinTempC > record.MaxTempC)
+                list.Add(L["Min temperature is higher than max temperature."]);
+            return list;
+        }
+    }
+
     private List<LineChartPoint> weightTrend => allRecords
         .OrderBy(d => d.Date)
         .Select(d => new LineChartPoint(d.Date.ToString("dd MMM"), (double)d.AvgBodyWeightGm))
@@ -146,6 +256,7 @@ else
 
     private string FcrChartJson => BuildTrendJson(fcrTrend, Clay, "", area: true);
     private string WeightChartJson => BuildTrendJson(weightTrend, Primary, "g", area: true);
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -168,6 +279,7 @@ else
             if (existing != null)
             {
                 record = existing;
+                originalLoss = record.Mortality + record.Culls;
                 // Records entered before bag-tracking existed have FeedConsumedKg but no bags
                 // value — back-fill an equivalent bags figure so re-saving doesn't zero out
                 // their historical kg (Save() always recomputes kg from bags * bag weight).
@@ -177,11 +289,32 @@ else
         }
     }
 
+    // ---------------- Helpers ----------------
+    private void CopyShed(DailyRecord prev)
+    {
+        record.MinTempC = prev.MinTempC;
+        record.MaxTempC = prev.MaxTempC;
+        record.HumidityPct = prev.HumidityPct;
+    }
+
+    private void OpenExisting(int id) => Nav.NavigateTo($"batch/{BatchId}/daily/{id}", forceLoad: true);
+
     private async Task Save()
     {
-        record.FeedConsumedKg = record.FeedConsumedBags * bagWeightKg;
-        await FarmService.SaveDailyRecordAsync(record);
-        Nav.NavigateTo($"batch/{BatchId}");
+        if (DuplicateForDate is not null) return;
+        saving = true;
+        saveError = null;
+        try
+        {
+            record.FeedConsumedKg = record.FeedConsumedBags * bagWeightKg;
+            await FarmService.SaveDailyRecordAsync(record);
+            Nav.NavigateTo($"batch/{BatchId}");
+        }
+        catch (Exception)
+        {
+            saveError = L["Couldn't save. Check your connection and try again."];
+            saving = false;
+        }
     }
 
     private async Task Delete()
@@ -189,4 +322,5 @@ else
         if (RecordId.HasValue) await FarmService.DeleteDailyRecordAsync(RecordId.Value);
         Nav.NavigateTo($"batch/{BatchId}");
     }
+
 }

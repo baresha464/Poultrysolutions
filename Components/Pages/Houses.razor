@@ -3,19 +3,19 @@
 @inject AuthService AuthService
 @inject NavigationManager Nav
 
-<div class="page-title">Houses</div>
+<div class="page-title">@L["Houses"]</div>
 
 @if (!AuthService.HasPermission(Permissions.Houses.View))
 {
-    <div class="card empty-state">You don't have permission to view houses.</div>
+    <div class="card empty-state">@L["You don't have permission to view houses."]</div>
 }
 else if (loading)
 {
-    <p class="empty-state">Loading…</p>
+    <p class="empty-state">@L["Loading…"]</p>
 }
 else if (!houses.Any())
 {
-    <div class="card empty-state">No houses set up yet. Tap + to add one.</div>
+    <div class="card empty-state">@L["No houses set up yet."]</div>
 }
 else
 {
@@ -31,15 +31,15 @@ else
             </div>
             <div class="house-card-head">
                 <div>
-                    <div class="list-row-sub">@batchCount.ToString("N0") batch@(batchCount == 1 ? "" : "es") this year@(h.CapacityBirds > 0 ? $" · Capacity {h.CapacityBirds:N0}" : "")</div>
+                    <div class="list-row-sub">@L["{0:N0} batch(es) this year", batchCount]@(h.CapacityBirds > 0 ? $" · {L["Capacity"]} {h.CapacityBirds:N0}" : "")</div>
                 </div>
                 @if (active is not null)
                 {
-                    <span class="badge">Day @active.AgeDays</span>
+                    <span class="badge">@L["Day {0}", active.AgeDays]</span>
                 }
                 else
                 {
-                    <span class="badge closed">Empty</span>
+                    <span class="badge closed">@L["Empty"]</span>
                 }
             </div>
 
@@ -51,24 +51,26 @@ else
                     <span class="list-row-sub">@active.Breed · @active.Integrator?.Name</span>
                 </div>
                 <div class="kpi-grid" style="margin-top:8px; margin-bottom:0;">
-                    <div class="kpi amber"><div class="kpi-label">Live Birds</div><div class="kpi-value">@perf.LiveBirds.ToString("N0")</div></div>
-                    <div class="kpi"><div class="kpi-label">Livability</div><div class="kpi-value">@perf.LivabilityPct.ToString("0.0")%</div></div>
+                    <div class="kpi amber"><div class="kpi-label">@L["Live Birds"]</div><div class="kpi-value">@perf.LiveBirds.ToString("N0")</div></div>
+                    <div class="kpi"><div class="kpi-label">@L["Livability"]</div><div class="kpi-value">@perf.LivabilityPct.ToString("0.0")%</div></div>
                     <div class="kpi clay"><div class="kpi-label">FCR</div><div class="kpi-value">@perf.Fcr.ToString("0.000")</div></div>
-                    <div class="kpi"><div class="kpi-label">Avg Wt</div><div class="kpi-value">@perf.AvgBodyWeightKg.ToString("0.00")kg</div></div>
+                    <div class="kpi"><div class="kpi-label">@L["Avg Wt"]</div><div class="kpi-value">@perf.AvgBodyWeightKg.ToString("0.00")kg</div></div>
                 </div>
             }
             else
             {
                 <div class="divider" style="margin:10px 0;"></div>
-                <div class="empty-state" style="padding:6px 0;">Ready for a new batch</div>
+                <div class="empty-state" style="padding:6px 0;">@L["Ready for a new batch"]</div>
             }
         </a>
     }
 }
 
-@if (AuthService.HasPermission(Permissions.Houses.Add))
+@if (AuthService.HasPermission(Permissions.Houses.View) && !loading)
 {
-    <button class="btn-fab" @onclick='() => Nav.NavigateTo("houses/new")' title="New house">+</button>
+    <div class="empty-state" style="padding:10px 0; font-size:12.5px;">
+        @L["Need another house? Contact your platform administrator to have it added to your account."]
+    </div>
 }
 
 @code {

@@ -143,6 +143,18 @@ public class AuthService
 
     public bool HasPermission(string code) => CurrentPermissions.Contains(code);
 
+    /// <summary>Saves the signed-in user's UI/AI language ("en" or "te").</summary>
+    public async Task SetPreferredLanguageAsync(string language)
+    {
+        if (CurrentUser is null) return;
+        using var db = dbFactory.CreateDbContext();
+        var user = await db.Users.FirstOrDefaultAsync(u => u.Id == CurrentUser.Id);
+        if (user is null) return;
+        user.PreferredLanguage = AppLanguages.Normalize(language);
+        await db.SaveChangesAsync();
+        CurrentUser.PreferredLanguage = user.PreferredLanguage;
+    }
+
     private void ApplySession(User user, Tenant tenant)
     {
         CurrentUser = user;

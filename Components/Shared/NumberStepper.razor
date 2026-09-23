@@ -1,0 +1,25 @@
+@* Big − / + control for counts entered every day in the shed (deaths, culls, bags): easy to hit with a
+   thumb, and the number can still be typed directly. *@
+<div class="stepper">
+    <button type="button" class="stepper-btn" @onclick="() => Change(-Step)" disabled="@(Value <= Min)" aria-label="−">−</button>
+    <input class="stepper-input" type="number" inputmode="decimal" step="@Step" min="@Min"
+           value="@Value.ToString(Format, System.Globalization.CultureInfo.InvariantCulture)"
+           @onchange="OnTyped" aria-label="@Label" />
+    <button type="button" class="stepper-btn" @onclick="() => Change(Step)" aria-label="+">+</button>
+</div>
+
+@code {
+    [Parameter] public decimal Value { get; set; }
+    [Parameter] public EventCallback<decimal> ValueChanged { get; set; }
+    [Parameter] public decimal Step { get; set; } = 1;
+    [Parameter] public decimal Min { get; set; } = 0;
+    [Parameter] public string Format { get; set; } = "0.##";
+    [Parameter] public string? Label { get; set; }
+
+    private Task Change(decimal delta) => ValueChanged.InvokeAsync(Math.Max(Min, Value + delta));
+
+    private Task OnTyped(ChangeEventArgs e) =>
+        decimal.TryParse(e.Value?.ToString(), System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out var v)
+            ? ValueChanged.InvokeAsync(Math.Max(Min, v))
+            : Task.CompletedTask;
+}

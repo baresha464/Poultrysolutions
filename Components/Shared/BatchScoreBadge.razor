@@ -1,0 +1,124 @@
+﻿@* Batch score ring for a shed tile. Hover (or tap/focus on touch screens) opens a popover with the
+   score breakdown, key numbers vs the breed target for today's age, and the top issues — the same
+   FlockAdvisor result the batch's Advisor tab shows, so the two never disagree. *@
+@using AmrPoultryFarmWeb.Services
+
+<div class="score-badge @Tone(Advisor.OverallScore)" tabindex="0" role="button"
+     aria-label="@L["Batch score {0:0} of 100", Advisor.OverallScore]">
+    <svg class="score-ring" viewBox="0 0 44 44" aria-hidden="true">
+        <circle class="score-ring-track" cx="22" cy="22" r="18" />
+        <circle class="score-ring-fill" cx="22" cy="22" r="18"
+                stroke-dasharray="@Dash(Advisor.OverallScore, 113.1)" transform="rotate(-90 22 22)" />
+    </svg>
+    <span class="score-badge-value">@Advisor.OverallScore.ToString("0")</span>
+    <span class="score-badge-label">@L["Score"]</span>
+
+    <div class="score-pop" role="tooltip">
+        <div class="score-pop-head">
+            <div class="score-pop-big @Tone(Advisor.OverallScore)">
+                <svg viewBox="0 0 64 64" aria-hidden="true">
+                    <circle class="score-ring-track" cx="32" cy="32" r="27" />
+                    <circle class="score-ring-fill" cx="32" cy="32" r="27"
+                            stroke-dasharray="@Dash(Advisor.OverallScore, 169.6)" transform="rotate(-90 32 32)" />
+                </svg>
+                <span>@Advisor.OverallScore.ToString("0")</span>
+            </div>
+            <div>
+                <div class="score-pop-grade">@L[Grade(Advisor.OverallScore)]</div>
+                <div class="score-pop-sub">@L["Batch"] #@Batch.BatchCode · @L["Day {0}", Perf.AgeDays]</div>
+            </div>
+        </div>
+
+        <div class="score-pop-section">@L["Score Breakdown"]</div>
+        @foreach (var c in Advisor.Components)
+        {
+            <div class="score-factor">
+                <span class="score-factor-name">@L[c.Label]</span>
+                <span class="score-factor-track"><span class="score-factor-fill @Tone(c.Score)" style="width:@c.Score.ToString("0", System.Globalization.CultureInfo.InvariantCulture)%"></span></span>
+                <span class="score-factor-val">@c.Score.ToString("0")</span>
+            </div>
+        }
+
+        <div class="score-pop-section">@L["Today vs target"]</div>
+        <div class="score-metrics">
+            <div>
+                <span>@L["Avg Weight"]</span>
+                <b>@((Perf.AvgBodyWeightKg * 1000).ToString("N0")) g</b>
+                <small class="@(WeightGap >= -5 ? "ok" : "bad")">@L["target {0:N0} g", TargetWeightGm]</small>
+            </div>
+            <div>
+                <span>FCR</span>
+                <b>@Perf.Fcr.ToString("0.000")</b>
+                <small class="@(Perf.Fcr <= (decimal)TargetFcr + 0.03m ? "ok" : "bad")">@L["target {0:0.000}", TargetFcr]</small>
+            </div>
+            <div>
+                <span>@L["Livability"]</span>
+                <b>@Perf.LivabilityPct.ToString("0.0")%</b>
+                <small class="@(Perf.MortalityPct <= MortalityAllowed ? "ok" : "bad")">@L["Mort"] @Perf.MortalityPct.ToString("0.0")% / @MortalityAllowed.ToString("0.#")%</small>
+            </div>
+            <div>
+                <span>@L["Feed In Stock"]</span>
+                <b>@Math.Max(0, Perf.FeedStockKg).ToString("N0") kg</b>
+                <small class="@(DaysOfFeed is null or >= 3 ? "ok" : "bad")">@(DaysOfFeed is { } d ? L["~{0:0.#} day(s)", d].Value : "—")</small>
+            </div>
+        </div>
+
+        @{ var issues = Advisor.Insights.Where(i => i.Level >= InsightLevel.Warning).Take(2).ToList(); }
+        <div class="score-pop-section">@L["Needs attention"]</div>
+        @if (issues.Count == 0)
+        {
+            <div class="score-issue good"><span class="material-symbols-outlined">check_circle</span> @L["All factors on track — keep the routine going."]</div>
+        }
+        @foreach (var i in issues)
+        {
+            <div class="score-issue @(i.Level == InsightLevel.Critical ? "critical" : "warning")">
+                <span class="material-symbols-outlined">@(i.Level == InsightLevel.Critical ? "error" : "warning")</span>
+                <span><b>@i.Category:</b> @i.Title</span>
+            </div>
+        }
+
+        <a class="score-pop-link" href="@($"batch/{Batch.Id}")">@L["Open batch for full advice"] <span class="material-symbols-outlined">arrow_forward</span></a>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public Batch Batch { get; set; } = default!;
+    [Parameter, EditorRequired] public BatchPerformance Perf { get; set; } = default!;
+    [Parameter, EditorRequired] public AdvisorResult Advisor { get; set; } = default!;
+
+    private double TargetWeightGm => FlockAdvisor.TargetWeightGmAt(Math.Max(1, Perf.AgeDays));
+    private double TargetFcr => FlockAdvisor.TargetFcrAt(Math.Max(1, Perf.AgeDays));
+    private double WeightGap => TargetWeightGm > 0 ? ((double)Perf.AvgBodyWeightKg * 1000 - TargetWeightGm) / TargetWeightGm * 100 : 0;
+    // Judge mortality against the integrator's own allowance (Super Admin-set); 5% if none.
+    private decimal MortalityAllowed => Batch.Integrator is { MortalityAllowancePct: > 0m } i ? i.MortalityAllowancePct : 5m;
+    private decimal? DaysOfFeed
+    {
+        get
+        {
+            var perDay = Perf.AgeDays > 0 ? Perf.FeedConsumedKg / Perf.AgeDays : 0;
+            return perDay > 0 ? Math.Max(0, Perf.FeedStockKg) / perDay : null;
+        }
+    }
+
+    private static string Dash(double score, double circumference)
+    {
+        var filled = Math.Clamp(score, 0, 100) / 100 * circumference;
+        return FormattableString.Invariant($"{filled:0.0} {circumference:0.0}");
+    }
+
+    private static string Tone(double score) => score switch
+    {
+        >= 85 => "good",
+        >= 65 => "ok",
+        >= 45 => "warn",
+        _ => "bad",
+    };
+
+    private static string Grade(double score) => score switch
+    {
+        >= 85 => "Excellent",
+        >= 65 => "Good",
+        >= 45 => "Needs attention",
+        _ => "Critical",
+    };
+}

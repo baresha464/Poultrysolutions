@@ -6,7 +6,7 @@
 @if (!authReady)
 {
     <div class="boot-loading">
-        <img src="images/logo-mark.png" alt="Platform Admin" />
+        <img src="@AppBrand.MarkUrl" alt="@AppBrand.Name" />
         <span>Loading…</span>
     </div>
 }
@@ -21,10 +21,10 @@ else
     <div class="shell">
         <aside class="sidebar open">
             <div class="sidebar-brand">
-                <img src="images/logo-mark.png" alt="Platform Admin" />
+                <img src="@AppBrand.MarkUrl" alt="@AppBrand.Name" />
                 <div class="sidebar-brand-text">
-                    <div class="sidebar-brand-name">Platform Admin</div>
-                    <div class="sidebar-brand-sub">Client Management</div>
+                    <div class="sidebar-brand-name">@AppBrand.Name</div>
+                    <div class="sidebar-brand-sub">@AppBrand.Tagline</div>
                 </div>
             </div>
 
@@ -32,6 +32,9 @@ else
             <nav class="sidebar-nav">
                 <NavLink href="superadmin" Match="NavLinkMatch.All" class="sidebar-link" title="Clients">
                     <span class="material-symbols-outlined">apartment</span><span>Clients</span>
+                </NavLink>
+                <NavLink href="superadmin/integrators" class="sidebar-link" title="Integrators">
+                    <span class="material-symbols-outlined">handshake</span><span>Integrators</span>
                 </NavLink>
             </nav>
 
@@ -52,9 +55,9 @@ else
         <div class="main-col">
             <header class="topbar">
                 <div class="topbar-org">
-                    <img src="images/logo-mark.png" alt="Platform Admin" class="topbar-org-mark" />
+                    <img src="@AppBrand.MarkUrl" alt="@AppBrand.Name" class="topbar-org-mark" />
                     <span class="topbar-org-text">
-                        <span class="topbar-title">Platform Admin</span>
+                        <span class="topbar-title">@AppBrand.Name · Platform Admin</span>
                         <span class="topbar-subtitle">Client Management</span>
                     </span>
                 </div>

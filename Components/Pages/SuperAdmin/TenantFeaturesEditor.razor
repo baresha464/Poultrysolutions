@@ -1,0 +1,206 @@
+@* Super Admin: switch the optional features on/off for one client and enter that client's own
+   credentials. Saved secrets are never shown again — only "ends in …abcd"; paste a new value to
+   replace one. Switching a feature on approves the client's pending request for it. *@
+@inject TenantFeatureService FeatureService
+
+@if (settings is null)
+{
+    <p class="empty-state">Loading…</p>
+    return;
+}
+
+@if (pending.Count > 0)
+{
+    <div class="card feature-requests">
+        @foreach (var r in pending)
+        {
+            <div class="feature-request-row">
+                <span class="material-symbols-outlined">notifications_active</span>
+                <div style="flex:1; min-width:0;">
+                    <b>@Features.Label(r.Feature)</b> requested by @r.RequestedByName on @r.CreatedAtUtc.ToLocalTime().ToString("dd MMM yyyy")
+                    @if (!string.IsNullOrWhiteSpace(r.Message)) { <div class="list-row-sub" style="white-space:normal;">“@r.Message”</div> }
+                    @if (decliningId == r.Id)
+                    {
+                        <input @bind="declineNote" placeholder="Reason shown to the client (optional)" maxlength="500" style="margin-top:6px;" />
+                        <div style="display:flex; gap:8px; margin-top:6px;">
+                            <button class="btn btn-danger" @onclick="() => Decline(r.Id)">Decline request</button>
+                            <button class="btn btn-outline" @onclick="() => decliningId = null">Cancel</button>
+                        </div>
+                    }
+                </div>
+                @if (decliningId != r.Id)
+                {
+                    <button class="btn btn-outline" @onclick="() => { decliningId = r.Id; declineNote = string.Empty; }">Decline</button>
+                }
+            </div>
+        }
+        <div class="field-hint">To approve, switch the feature on below, add the client's credentials and save.</div>
+    </div>
+}
+
+<div class="feature-admin-grid">
+    @* ---------------- AI Assistant ---------------- *@
+    <div class="card feature-admin">
+        <div class="feature-admin-head">
+            <span class="material-symbols-outlined">smart_toy</span>
+            <div style="flex:1;">
+                <div class="list-row-title">AI Assistant</div>
+                <div class="list-row-sub">Photo health check and farm chat on each batch.</div>
+            </div>
+            <span class="status-chip @(StatusClass(settings.AiEnabled, settings.AiApiKeyHint is not null))">@StatusText(settings.AiEnabled, settings.AiApiKeyHint is not null)</span>
+        </div>
+
+        <label class="switch-row">
+            <input type="checkbox" @bind="aiEnabled" /> <span>Enabled for this client</span>
+        </label>
+        <div class="field">
+            <label>Anthropic API key (this client's own)</label>
+            <div class="secret-state">
+                @if (settings.AiApiKeyHint is { } hint)
+                {
+                    <span class="material-symbols-outlined">key</span> <span>Saved key ending in <b>…@hint</b></span>
+                    <label class="secret-remove"><input type="checkbox" @bind="aiRemoveKey" /> Remove</label>
+                }
+                else
+                {
+                    <span class="material-symbols-outlined">key_off</span> <span>No key saved</span>
+                }
+            </div>
+            <input type="password" @bind="aiNewKey" autocomplete="new-password" spellcheck="false"
+                   placeholder="@(settings.AiApiKeyHint is null ? "Paste the key (sk-ant-…)" : "Paste a new key to replace it")" />
+            <div class="field-hint">Create a separate key per client in the Claude Console (console.anthropic.com → API keys), ideally in its own workspace with a spend limit, so usage and cost stay separate.</div>
+        </div>
+        @if (aiMessage is not null) { <div class="@(aiError ? "ai-error" : "wa-ok")">@aiMessage</div> }
+        <button class="btn btn-primary" @onclick="SaveAi" disabled="@busy">Save AI settings</button>
+    </div>
+
+    @* ---------------- WhatsApp alerts ---------------- *@
+    <div class="card feature-admin">
+        <div class="feature-admin-head">
+            <span class="material-symbols-outlined">chat</span>
+            <div style="flex:1;">
+                <div class="list-row-title">WhatsApp Alerts</div>
+                <div class="list-row-sub">Alerts and evening summary from the client's own WhatsApp Business number.</div>
+            </div>
+            <span class="status-chip @(StatusClass(settings.WhatsAppEnabled, WaComplete))">@StatusText(settings.WhatsAppEnabled, WaComplete)</span>
+        </div>
+
+        <label class="switch-row">
+            <input type="checkbox" @bind="waEnabled" /> <span>Enabled for this client</span>
+        </label>
+        <div class="form-grid">
+            <div class="field">
+                <label>Phone number ID</label>
+                <input @bind="waPhoneNumberId" placeholder="e.g. 106540352242922" inputmode="numeric" maxlength="40" />
+            </div>
+            <div class="field">
+                <label>Business number (shown to farmers)</label>
+                <input @bind="waDisplayNumber" placeholder="+91 98765 43210" maxlength="20" />
+            </div>
+        </div>
+        <div class="field">
+            <label>Permanent access token</label>
+            <div class="secret-state">
+                @if (settings.WhatsAppAccessTokenHint is { } tokenHint)
+                {
+                    <span class="material-symbols-outlined">key</span> <span>Saved token ending in <b>…@tokenHint</b></span>
+                    <label class="secret-remove"><input type="checkbox" @bind="waRemoveToken" /> Remove</label>
+                }
+                else
+                {
+                    <span class="material-symbols-outlined">key_off</span> <span>No token saved</span>
+                }
+            </div>
+            <input type="password" @bind="waNewToken" autocomplete="new-password" spellcheck="false"
+                   placeholder="@(settings.WhatsAppAccessTokenHint is null ? "Paste the system-user token" : "Paste a new token to replace it")" />
+            <div class="field-hint">From the client's Meta Business account (WhatsApp Manager → API setup, system-user token). The message templates broiliq_alert and broiliq_daily_summary must be approved in that account (see docs/whatsapp-alerts.md). Until the ID and token are saved, the client's messages are recorded as test messages only.</div>
+        </div>
+        @if (waMessage is not null) { <div class="@(waError ? "ai-error" : "wa-ok")">@waMessage</div> }
+        <button class="btn btn-primary" @onclick="SaveWhatsApp" disabled="@busy">Save WhatsApp settings</button>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public int TenantId { get; set; }
+    [Parameter] public EventCallback OnChanged { get; set; }
+
+    private TenantFeature? settings;
+    private List<FeatureRequest> pending = new();
+    private bool busy;
+
+    private bool aiEnabled, aiRemoveKey;
+    private string aiNewKey = "";
+    private string? aiMessage;
+    private bool aiError;
+
+    private bool waEnabled, waRemoveToken;
+    private string waPhoneNumberId = "", waDisplayNumber = "", waNewToken = "";
+    private string? waMessage;
+    private bool waError;
+
+    private int? decliningId;
+    private string declineNote = "";
+
+    private bool WaComplete => settings!.WhatsAppAccessTokenHint is not null && !string.IsNullOrWhiteSpace(settings.WhatsAppPhoneNumberId);
+
+    protected override async Task OnParametersSetAsync() => await LoadAsync();
+
+    private async Task LoadAsync()
+    {
+        settings = await FeatureService.GetAsync(TenantId);
+        pending = (await FeatureService.GetRequestsAsync(TenantId)).Where(r => r.Status == FeatureRequestStatus.Pending).ToList();
+        aiEnabled = settings.AiEnabled;
+        waEnabled = settings.WhatsAppEnabled;
+        waPhoneNumberId = settings.WhatsAppPhoneNumberId ?? "";
+        waDisplayNumber = settings.WhatsAppDisplayNumber ?? "";
+        aiNewKey = waNewToken = "";
+        aiRemoveKey = waRemoveToken = false;
+    }
+
+    private async Task SaveAi()
+    {
+        aiError = false;
+        var key = aiNewKey.Trim();
+        if (key.Length > 0 && (key.Length < 20 || key.Any(char.IsWhiteSpace)))
+        {
+            aiError = true; aiMessage = "That doesn't look like an API key — paste the whole key (it starts with sk-ant-)."; return;
+        }
+        busy = true;
+        await FeatureService.SaveAiAsync(TenantId, aiEnabled, key, aiRemoveKey);
+        await LoadAsync();
+        aiMessage = !aiEnabled ? "Saved. The AI Assistant is off for this client."
+            : settings!.AiApiKeyHint is null ? "Saved. Enabled, but no key yet — the client will see \"being set up\" until you add one."
+            : "Saved. The AI Assistant is live for this client.";
+        busy = false;
+        await OnChanged.InvokeAsync();
+    }
+
+    private async Task SaveWhatsApp()
+    {
+        waError = false;
+        var id = waPhoneNumberId.Trim();
+        if (id.Length > 0 && !id.All(char.IsDigit))
+        {
+            waError = true; waMessage = "The phone number ID is the numeric ID from WhatsApp Manager, not the phone number itself."; return;
+        }
+        busy = true;
+        await FeatureService.SaveWhatsAppAsync(TenantId, waEnabled, id, waDisplayNumber, waNewToken.Trim(), waRemoveToken);
+        await LoadAsync();
+        waMessage = !waEnabled ? "Saved. WhatsApp alerts are off for this client."
+            : !WaComplete ? "Saved. Enabled in test mode — messages are recorded but not delivered until the phone number ID and token are saved."
+            : "Saved. WhatsApp alerts are live for this client. Ask them to send a test message from Settings → WhatsApp Alerts.";
+        busy = false;
+        await OnChanged.InvokeAsync();
+    }
+
+    private async Task Decline(int requestId)
+    {
+        await FeatureService.DeclineAsync(requestId, declineNote);
+        decliningId = null;
+        await LoadAsync();
+        await OnChanged.InvokeAsync();
+    }
+
+    private static string StatusText(bool enabled, bool complete) => !enabled ? "Off" : complete ? "Live" : "Setup needed";
+    private static string StatusClass(bool enabled, bool complete) => !enabled ? "muted" : complete ? "" : "amber";
+}

@@ -4,7 +4,7 @@
 @using AmrPoultryFarmWeb.Components.Shared.Charts
 @using static AmrPoultryFarmWeb.Components.Shared.Charts.ChartTheme
 
-<PageTitle>Reports — @(AuthService.CurrentTenant?.Name ?? "AMR Poultry Farms")</PageTitle>
+<PageTitle>Reports — @(AuthService.CurrentTenant?.Name ?? AppBrand.Name)</PageTitle>
 
 @if (!AuthService.HasPermission(Permissions.Reports.View))
 {
@@ -50,6 +50,37 @@ else
     }
     else
     {
+        <div class="panel-title"><h2><span class="material-symbols-outlined">picture_as_pdf</span> Download PDF Reports</h2></div>
+        <div class="report-dl-grid">
+            <div class="card report-dl">
+                <div class="report-dl-title"><span class="material-symbols-outlined">compare_arrows</span> Batch Comparison &amp; Next-Batch Plan</div>
+                <div class="report-dl-sub">Fair ranking by corrected FCR and EEF, best vs weakest batch side by side, house/season/integrator gaps, what drives results on your farm, and targets plus an action plan for the next placement.</div>
+                <a class="btn btn-primary" href="@PdfUrl("comparison")" download data-enhance-nav="false"><span class="material-symbols-outlined">download</span> Download</a>
+            </div>
+            @if (AuthService.HasPermission(Permissions.Expenses.View))
+            {
+                <div class="card report-dl">
+                    <div class="report-dl-title"><span class="material-symbols-outlined">account_balance</span> Financial &amp; Cost Analysis</div>
+                    <div class="report-dl-sub">Profit and loss per batch, cost per bird and per kg, a category-by-batch cost matrix that flags overspending, incentives vs deductions, and farm overheads.</div>
+                    <a class="btn btn-primary" href="@PdfUrl("financial")" download data-enhance-nav="false"><span class="material-symbols-outlined">download</span> Download</a>
+                </div>
+            }
+            <div class="card report-dl">
+                <div class="report-dl-title"><span class="material-symbols-outlined">assignment</span> Batch Closeout Report</div>
+                <div class="report-dl-sub">A full report for one batch: weekly performance against the breed standard, mortality spikes, feed, health log, lifting, economics and lessons learned.</div>
+                <Dropdown TValue="int?" Value="reportBatchId" ValueChanged="v => reportBatchId = v"
+                          Options="BatchReportOptions" Placeholder="Choose a batch" />
+                @if (reportBatchId is { } rb)
+                {
+                    <a class="btn btn-primary" href="@($"reports/pdf/batch/{rb}")" download data-enhance-nav="false"><span class="material-symbols-outlined">download</span> Download</a>
+                }
+                else
+                {
+                    <button class="btn btn-primary" disabled><span class="material-symbols-outlined">download</span> Download</button>
+                }
+            </div>
+        </div>
+
         <div class="stat-grid">
             <div class="stat-card">
                 <div class="stat-label"><span>Chicks Placed</span><span class="material-symbols-outlined">egg</span></div>
@@ -188,6 +219,22 @@ else
 
     private string sortColumn = "placement";
     private bool sortAsc = false;
+
+    private int? reportBatchId;
+
+    // Newest first, labelled so closed and in-progress batches are easy to tell apart.
+    private List<(int? Value, string Label)> BatchReportOptions => batches
+        .OrderByDescending(b => b.PlacementDate)
+        .Select(b => ((int?)b.Id, $"{b.BatchCode} · {b.House?.Name} · {(b.Status == BatchStatus.Closed ? "Closed" : $"Day {b.AgeDays}")}"))
+        .ToList();
+
+    private string PdfUrl(string report)
+    {
+        var query = new List<string>();
+        if (houseId is { } h) query.Add($"houseId={h}");
+        if (year is { } y) query.Add($"year={y}");
+        return $"reports/pdf/{report}" + (query.Count > 0 ? "?" + string.Join("&", query) : "");
+    }
 
     // ---------------- Sorting ----------------
     private IEnumerable<Batch> SortedBatches
@@ -374,6 +421,9 @@ else
         growthSeries.Clear();
 
         batches = await FarmService.GetBatchesAsync(houseId: houseId, year: year);
+        if (reportBatchId is null || batches.All(b => b.Id != reportBatchId))
+            reportBatchId = (batches.Where(b => b.Status == BatchStatus.Closed).MaxBy(b => b.PlacementDate)
+                             ?? batches.MaxBy(b => b.PlacementDate))?.Id;
         foreach (var b in batches)
             perf[b.Id] = await FarmService.GetPerformanceAsync(b.Id);
 

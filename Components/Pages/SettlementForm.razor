@@ -41,6 +41,29 @@ else
             </div>
         </div>
 
+        @if (expected is { } ex && integrator is not null)
+        {
+            <div class="section-title">As per @integrator.Name terms</div>
+            <div class="card">
+                <div class="terms-grid">
+                    <div>Growing charge<b>₹@ex.GrowingCharge.ToString("N0")</b></div>
+                    <div>FCR incentive<b>₹@ex.Incentive.ToString("N0")</b></div>
+                    <div>Mortality deduction<b>₹@ex.MortalityDeduction.ToString("N0")</b></div>
+                    <div>Expected total<b>₹@ex.Total.ToString("N0")</b></div>
+                </div>
+                <div class="field-hint">
+                    From your records: @perf.TotalLiveWeightKg.ToString("N0") kg, FCR @perf.Fcr.ToString("0.000"),
+                    mortality @perf.MortalityPct.ToString("0.0")% (allowed @integrator.MortalityAllowancePct.ToString("0.#")%).
+                    Payment due by @dueDate.ToString("dd MMM yyyy").
+                    @if (settlement.AmountReceived > 0 && Math.Abs(settlement.AmountReceived - ex.Total) >= 1)
+                    {
+                        var diff = settlement.AmountReceived - ex.Total;
+                        <b> Received is ₹@Math.Abs(diff).ToString("N0") @(diff < 0 ? "less" : "more") than expected@(diff < 0 ? " — check the integrator's statement." : ".")</b>
+                    }
+                </div>
+            </div>
+        }
+
         <div class="action-row">
             <button type="submit" class="btn btn-primary btn-block">Save Settlement</button>
         </div>
@@ -58,14 +81,30 @@ else
     protected override async Task OnInitializedAsync()
     {
         settlement.BatchId = BatchId;
-        batchAccessible = await FarmService.GetBatchAsync(BatchId) is not null;
+        var batch = await FarmService.GetBatchAsync(BatchId);
+        batchAccessible = batch is not null;
         var existing = await FarmService.GetSettlementAsync(BatchId);
         if (existing != null)
         {
             settlement = existing;
             isNew = false;
         }
+
+        integrator = batch?.Integrator;
+        if (batch is not null && integrator is not null)
+        {
+            perf = await FarmService.GetPerformanceAsync(BatchId);
+            expected = IntegratorTerms.Expected(integrator, perf.TotalLiveWeightKg, perf.Fcr, perf.MortalityPct, perf.ChicksPlaced);
+            var lastLift = (await FarmService.GetLiftingsAsync(BatchId)).Select(l => l.Date).DefaultIfEmpty(batch.ClosedDate ?? DateTime.Today).Max();
+            dueDate = lastLift.AddDays(integrator.PaymentDays);
+            if (isNew) settlement.GrowingChargePerKg = integrator.GrowingChargePerKg;
+        }
     }
+
+    private Integrator? integrator;
+    private BatchPerformance perf = new();
+    private IntegratorTerms.Result? expected;
+    private DateTime dueDate;
 
     private async Task Save()
     {

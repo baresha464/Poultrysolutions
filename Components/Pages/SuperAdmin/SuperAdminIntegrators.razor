@@ -1,0 +1,52 @@
+@page "/superadmin/integrators"
+@layout SuperAdminLayout
+@inject PlatformAdminService PlatformAdminService
+@inject NavigationManager Nav
+
+<PageTitle>Integrators — Platform Admin</PageTitle>
+
+<div class="page-title">Integrators</div>
+<p class="field-hint" style="margin:0 4px 10px;">Integrators and their terms are set here and apply to every client they're enabled for. Clients can see them but not change them.</p>
+
+@if (loading)
+{
+    <p class="empty-state">Loading…</p>
+}
+else if (integrators.Count == 0)
+{
+    <div class="card empty-state">No integrators yet. Tap + to add one.</div>
+}
+else
+{
+    <div class="card" style="padding:4px 10px;">
+        @foreach (var i in integrators)
+        {
+            <a class="list-row" href="@($"superadmin/integrators/{i.Id}")">
+                <div>
+                    <div class="list-row-title">@i.Name @if (!i.IsActive) { <span class="status-chip muted">Inactive</span> }</div>
+                    <div class="list-row-sub">
+                        Chick ₹@i.ChickCostPerBird.ToString("0.00") · bag @i.BagWeightKg.ToString("0.##") kg ·
+                        ₹@i.GrowingChargePerKg.ToString("0.00")/kg · FCR @i.StandardFcr.ToString("0.00") ·
+                        @(clientCounts.GetValueOrDefault(i.Id)) client(s)
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+}
+
+<button class="btn-fab" @onclick='() => Nav.NavigateTo("superadmin/integrators/new")' title="New integrator">+</button>
+
+@code {
+    private bool loading = true;
+    private List<Integrator> integrators = new();
+    private Dictionary<int, int> clientCounts = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        integrators = await PlatformAdminService.GetIntegratorsAsync();
+        foreach (var i in integrators)
+            clientCounts[i.Id] = (await PlatformAdminService.GetIntegratorTenantIdsAsync(i.Id)).Count;
+        loading = false;
+    }
+}

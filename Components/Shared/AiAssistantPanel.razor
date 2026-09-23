@@ -1,0 +1,367 @@
+@using AmrPoultryFarmWeb.Services.Ai
+@using Microsoft.AspNetCore.Components.Forms
+@inject FarmAiService Ai
+@inject ILogger<AiAssistantPanel> Log
+@implements IDisposable
+
+@if (status is null)
+{
+    <p class="empty-state">@L["Loading…"]</p>
+    return;
+}
+@if (!status.AiReady)
+{
+    <FeatureRequestCard Feature="@Features.AiAssistant" Icon="smart_toy" Enabled="status.AiEnabled"
+                        Description="@L["Upload photos of sick birds for an instant health check, and ask questions about your batch in English or Telugu. The assistant reads your own daily records, weights, feed and health log."]" />
+    return;
+}
+
+@* ---------------- Photo health check ---------------- *@
+<div class="card">
+    <div class="section-title mt-0"><span class="material-symbols-outlined" style="vertical-align:-4px;">photo_camera</span> @L["Photo Health Check"]</div>
+    <div class="calc-note">
+        @L["Upload up to {0} clear photos — sick birds up close (head, eyes, comb, legs), fresh droppings, litter, or post-mortem findings. The assistant reads them together with this batch's records and suggests what it could be and what to do now.", MaxPhotos]
+    </div>
+
+    <div class="ai-thumbs">
+        @for (int i = 0; i < photos.Count; i++)
+        {
+            var idx = i;
+            <div class="ai-thumb">
+                <img src="@photos[idx].Preview" alt="@L["Photo {0}", idx + 1]" />
+                <button type="button" class="ai-thumb-remove" title="@L["Remove"]" @onclick="() => RemovePhoto(idx)">×</button>
+            </div>
+        }
+        @if (photos.Count < MaxPhotos)
+        {
+            <label class="ai-thumb ai-thumb-add">
+                <span class="material-symbols-outlined">add_a_photo</span>
+                <span>@L["Add photo"]</span>
+                <InputFile OnChange="OnPhotosSelected" accept="image/*" capture="environment" multiple style="display:none;" />
+            </label>
+        }
+    </div>
+
+    <div class="field" style="margin-top:10px;">
+        <label>@L["What are you seeing? (tap any that apply, or type)"]</label>
+        <div class="ai-chips">
+            @foreach (var symptom in Symptoms)
+            {
+                var on = selectedSymptoms.Contains(symptom);
+                <button type="button" class="ai-chip @(on ? "on" : "")" @onclick="() => ToggleSymptom(symptom)">@L[symptom]</button>
+            }
+        </div>
+        <textarea @bind="notes" rows="2" placeholder="@L["e.g. 15 birds dead since morning, some sitting with closed eyes, droppings greenish"]"></textarea>
+    </div>
+
+    @if (photoError is not null)
+    {
+        <div class="ai-error">@photoError</div>
+    }
+
+    <button class="btn btn-primary" @onclick="Analyze" disabled="@(analyzing || photos.Count == 0)">
+        @if (analyzing)
+        {
+            <span class="ai-spinner"></span>
+            <span>&nbsp;@L["Analysing photos… usually 20-60 seconds"]</span>
+        }
+        else
+        {
+            <span class="material-symbols-outlined" style="font-size:18px;">health_and_safety</span>
+            <span>&nbsp;@L["Check Bird Health"]</span>
+        }
+    </button>
+</div>
+
+@if (assessment is { } a)
+{
+    <div class="card ai-result urgency-@a.Urgency">
+        <div class="ai-result-head">
+            <span class="ai-urgency">@UrgencyLabel(a.Urgency)</span>
+            @if (a.CallVet)
+            {
+                <span class="ai-urgency vet"><span class="material-symbols-outlined" style="font-size:15px;">call</span> @L["Call your vet"]</span>
+            }
+        </div>
+
+        @if (a.NotifiableDiseaseSuspected)
+        {
+            <div class="ai-alert">
+                <b>@L["Possible notifiable disease."]</b> @L["Stop all bird, vehicle and people movement in and out of the shed and report to your local veterinary officer / animal husbandry department today. Do not sell or move birds until advised."]
+            </div>
+        }
+
+        <p class="ai-summary">@a.Summary</p>
+
+        @if (a.PhotoQuality != "good" && !string.IsNullOrWhiteSpace(a.PhotoQualityNote))
+        {
+            <div class="ai-note"><span class="material-symbols-outlined" style="font-size:16px; vertical-align:-3px;">info</span> @a.PhotoQualityNote</div>
+        }
+
+        @if (a.PossibleConditions.Count > 0)
+        {
+            <div class="ai-subtitle">@L["Possible conditions"]</div>
+            @foreach (var c in a.PossibleConditions)
+            {
+                <div class="ai-condition">
+                    <div class="ai-condition-head"><b>@c.Name</b><span class="ai-likelihood @c.Likelihood">@L[c.Likelihood + " likelihood"]</span></div>
+                    <div class="ai-condition-evidence">@c.Evidence</div>
+                </div>
+            }
+        }
+
+        <div class="two-col" style="margin-top:6px;">
+            <div>
+                <div class="ai-subtitle">@L["Do now"]</div>
+                <ul class="ai-list">@foreach (var s in a.ImmediateActions) { <li>@s</li> }</ul>
+            </div>
+            <div>
+                <div class="ai-subtitle">@L["Check to confirm"]</div>
+                <ul class="ai-list">@foreach (var s in a.ChecksToConfirm) { <li>@s</li> }</ul>
+            </div>
+        </div>
+
+        @if (a.Observations.Count > 0)
+        {
+            <details class="ai-details">
+                <summary>@L["What the assistant saw in the photos"]</summary>
+                <ul class="ai-list">@foreach (var s in a.Observations) { <li>@s</li> }</ul>
+            </details>
+        }
+        @if (!string.IsNullOrWhiteSpace(a.VetNote))
+        {
+            <div class="ai-note"><b>@L["For your vet:"]</b> @a.VetNote</div>
+        }
+        <div class="ai-disclaimer">@L["AI suggestion based on photos and farm records — not a diagnosis. Always confirm with a veterinarian before treating."]</div>
+        <button class="btn btn-outline" @onclick="AskAboutAssessment" style="margin-top:8px;">@L["Ask follow-up questions about this"]</button>
+    </div>
+}
+
+@* ---------------- Farm assistant chat ---------------- *@
+<div class="card">
+    <div class="section-title mt-0" style="display:flex; justify-content:space-between; align-items:center;">
+        <span><span class="material-symbols-outlined" style="vertical-align:-4px;">forum</span> @L["Ask the Farm Assistant"]</span>
+        @if (conversation.Count > 0 && !streaming)
+        {
+            <button class="btn btn-outline" style="padding:4px 10px; font-size:12px;" @onclick="ClearChat">@L["New chat"]</button>
+        }
+    </div>
+    <div class="calc-note">@L["Ask anything about this batch — it answers from your own daily records, weights, feed and health log."]</div>
+
+    <div class="ai-chat-log">
+        @if (conversation.Count == 0)
+        {
+            <div class="ai-chips">
+                @foreach (var q in SuggestedQuestions)
+                {
+                    <button type="button" class="ai-chip" @onclick="() => Send(L[q])" disabled="@streaming">@L[q]</button>
+                }
+            </div>
+        }
+        @foreach (var turn in conversation)
+        {
+            <div class="ai-bubble @(turn.FromUser ? "user" : "bot")">@turn.Text</div>
+        }
+        @if (streaming)
+        {
+            <div class="ai-bubble bot">
+                @if (string.IsNullOrEmpty(streamingText))
+                {
+                    <span class="ai-typing"><span></span><span></span><span></span></span>
+                }
+                else
+                {
+                    @streamingText
+                }
+            </div>
+        }
+        @if (chatError is not null)
+        {
+            <div class="ai-error">@chatError</div>
+        }
+    </div>
+
+    <form class="ai-chat-input" @onsubmit="() => Send(question)" @onsubmit:preventDefault>
+        <input @bind="question" @bind:event="oninput" placeholder="@L["e.g. Why did mortality go up this week?"]" disabled="@streaming" maxlength="1000" />
+        @if (streaming)
+        {
+            <button type="button" class="btn btn-outline" @onclick="StopStreaming">@L["Stop"]</button>
+        }
+        else
+        {
+            <button type="submit" class="btn btn-primary" disabled="@string.IsNullOrWhiteSpace(question)">@L["Send"]</button>
+        }
+    </form>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public int BatchId { get; set; }
+
+    private const int MaxPhotos = 4;
+    private const long MaxUploadBytes = 15 * 1024 * 1024;
+
+    private static readonly string[] Symptoms =
+    {
+        "Sudden deaths", "Huddling / dull", "Gasping / rattling breath", "Watery or white droppings",
+        "Bloody droppings", "Green droppings", "Swollen head / eyes", "Lame / leg problems",
+        "Eating less", "Drinking more", "Panting / heat",
+    };
+
+    private static readonly string[] SuggestedQuestions =
+    {
+        "How is this batch doing compared to the standard?",
+        "Is the mortality this week normal?",
+        "What should I check in the shed today?",
+        "How can I improve FCR in the remaining days?",
+        "When is the best time to lift this batch?",
+    };
+
+    private record UploadedPhoto(BirdPhoto Photo, string Preview);
+
+    private readonly List<UploadedPhoto> photos = new();
+    private readonly HashSet<string> selectedSymptoms = new();
+    private string notes = "";
+    private bool analyzing;
+    private string? photoError;
+    private HealthAssessment? assessment;
+
+    private readonly List<ChatTurn> conversation = new();
+    private string question = "";
+    private bool streaming;
+    private string streamingText = "";
+    private string? chatError;
+    private CancellationTokenSource? cts;
+    private FeatureStatus? status;
+
+    protected override async Task OnInitializedAsync() => status = await Ai.GetStatusAsync();
+
+    // ---------------- Photos ----------------
+    private async Task OnPhotosSelected(InputFileChangeEventArgs e)
+    {
+        photoError = null;
+        foreach (var file in e.GetMultipleFiles(MaxPhotos))
+        {
+            if (photos.Count >= MaxPhotos) break;
+            try
+            {
+                // Downscale in the browser: keeps uploads small on farm mobile data and matches the
+                // resolution the model actually uses (~1.5 MP).
+                var resized = await file.RequestImageFileAsync("image/jpeg", 1568, 1568);
+                using var stream = resized.OpenReadStream(MaxUploadBytes);
+                using var ms = new MemoryStream();
+                await stream.CopyToAsync(ms);
+                var bytes = ms.ToArray();
+                photos.Add(new UploadedPhoto(new BirdPhoto(bytes, "image/jpeg"), $"data:image/jpeg;base64,{Convert.ToBase64String(bytes)}"));
+            }
+            catch (Exception ex)
+            {
+                Log.LogWarning(ex, "Photo upload failed for {File}", file.Name);
+                photoError = L["Couldn't read \"{0}\". Use a JPG or PNG photo (on iPhone, set Camera → Formats → Most Compatible).", file.Name];
+            }
+        }
+    }
+
+    private void RemovePhoto(int index) => photos.RemoveAt(index);
+
+    private void ToggleSymptom(string s)
+    {
+        if (!selectedSymptoms.Remove(s)) selectedSymptoms.Add(s);
+    }
+
+    private async Task Analyze()
+    {
+        if (photos.Count == 0 || analyzing) return;
+        analyzing = true;
+        photoError = null;
+        assessment = null;
+        try
+        {
+            var farmerNotes = string.Join("; ", selectedSymptoms.Select(s => L[s].Value).Append(notes).Where(s => !string.IsNullOrWhiteSpace(s)));
+            assessment = await Ai.AssessPhotosAsync(BatchId, photos.Select(p => p.Photo).ToList(), farmerNotes, AppLanguages.Current);
+        }
+        catch (Anthropic.Exceptions.AnthropicRateLimitException)
+        {
+            photoError = L["The assistant is busy right now. Please try again in a minute."];
+        }
+        catch (Exception ex)
+        {
+            Log.LogError(ex, "Photo health check failed for batch {BatchId}", BatchId);
+            photoError = L["The health check couldn't be completed. Please try again; if birds are dying fast, call your vet now."];
+        }
+        finally
+        {
+            analyzing = false;
+        }
+    }
+
+    private string UrgencyLabel(string u) => L[u switch
+    {
+        "emergency" => "Emergency — act now",
+        "act_today" => "Act today",
+        "monitor" => "Monitor 24-48 h",
+        _ => "Routine",
+    }];
+
+    private async Task AskAboutAssessment()
+    {
+        if (assessment is not { } a) return;
+        var conditions = string.Join(", ", a.PossibleConditions.Select(c => $"{c.Name} ({c.Likelihood})"));
+        await Send(L["The photo health check said: \"{0}\" Possible conditions: {1}. What exactly should I do in the next 24 hours, and what signs mean it is getting worse?", a.Summary, conditions]);
+    }
+
+    // ---------------- Chat ----------------
+    private async Task Send(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text) || streaming) return;
+        chatError = null;
+        conversation.Add(new ChatTurn(true, text.Trim()));
+        question = "";
+        streaming = true;
+        streamingText = "";
+        cts = new CancellationTokenSource();
+        StateHasChanged();
+
+        try
+        {
+            await foreach (var chunk in Ai.ChatAsync(BatchId, conversation, AppLanguages.Current, cts.Token))
+            {
+                streamingText += chunk;
+                StateHasChanged();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Farmer pressed Stop — keep whatever arrived.
+        }
+        catch (Anthropic.Exceptions.AnthropicRateLimitException)
+        {
+            chatError = L["The assistant is busy right now. Please try again in a minute."];
+        }
+        catch (Exception ex)
+        {
+            Log.LogError(ex, "Farm assistant chat failed for batch {BatchId}", BatchId);
+            chatError = L["Sorry, the assistant couldn't answer. Please try again."];
+        }
+        finally
+        {
+            if (!string.IsNullOrWhiteSpace(streamingText))
+                conversation.Add(new ChatTurn(false, streamingText.Trim()));
+            else if (conversation.Count > 0 && conversation[^1].FromUser)
+                conversation.RemoveAt(conversation.Count - 1);   // keep turns alternating for the next request
+            streaming = false;
+            streamingText = "";
+            cts?.Dispose();
+            cts = null;
+        }
+    }
+
+    private void StopStreaming() => cts?.Cancel();
+
+    private void ClearChat()
+    {
+        conversation.Clear();
+        chatError = null;
+    }
+
+    public void Dispose() => cts?.Cancel();
+}

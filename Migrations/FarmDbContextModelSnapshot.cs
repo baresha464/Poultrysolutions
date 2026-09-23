@@ -187,6 +187,58 @@ namespace AmrPoultryFarmWeb.Migrations
                     b.ToTable("Expenses");
                 });
 
+            modelBuilder.Entity("AmrPoultryFarmWeb.Models.FeatureRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AdminNote")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Feature")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("RequestedByName")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.Property<int>("RequestedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ResolvedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Status", "CreatedAtUtc");
+
+                    b.HasIndex("TenantId", "Feature");
+
+                    b.ToTable("FeatureRequests");
+                });
+
             modelBuilder.Entity("AmrPoultryFarmWeb.Models.FeedDelivery", b =>
                 {
                     b.Property<int>("Id")
@@ -331,6 +383,29 @@ namespace AmrPoultryFarmWeb.Migrations
                     b.Property<decimal>("BagWeightKg")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<decimal>("ChickCostPerBird")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("DefaultBreed")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<decimal>("FcrIncentivePerKg")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("GrowingChargePerKg")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("MortalityAllowancePct")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("MortalityDeductionPerBird")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(80)
@@ -341,15 +416,19 @@ namespace AmrPoultryFarmWeb.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
+                    b.Property<int>("PaymentDays")
+                        .HasColumnType("int");
+
                     b.Property<int>("SortOrder")
                         .HasColumnType("int");
 
-                    b.Property<int>("TenantId")
-                        .HasColumnType("int");
+                    b.Property<decimal>("StandardFcr")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TargetWeightKg")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TenantId");
 
                     b.ToTable("Integrators");
                 });
@@ -397,6 +476,123 @@ namespace AmrPoultryFarmWeb.Migrations
                     b.HasIndex("BatchId");
 
                     b.ToTable("Liftings");
+                });
+
+            modelBuilder.Entity("AmrPoultryFarmWeb.Models.NotificationLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BatchId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DedupKey")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
+
+                    b.Property<string>("Error")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Kind")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("ProviderMessageId")
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Summary")
+                        .IsRequired()
+                        .HasMaxLength(600)
+                        .HasColumnType("nvarchar(600)");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ToNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "CreatedAtUtc");
+
+                    b.HasIndex("UserId", "DedupKey")
+                        .IsUnique();
+
+                    b.ToTable("NotificationLogs");
+                });
+
+            modelBuilder.Entity("AmrPoultryFarmWeb.Models.NotificationPreference", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("DailySummary")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FeedAlerts")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HeatAlerts")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("MissingEntryAlerts")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("MortalityAlerts")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("OptInAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SummaryHour")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("VaccinationAlerts")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("WhatsAppNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<bool>("WhatsAppOptIn")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("NotificationPreferences");
                 });
 
             modelBuilder.Entity("AmrPoultryFarmWeb.Models.Role", b =>
@@ -538,6 +734,71 @@ namespace AmrPoultryFarmWeb.Migrations
                     b.ToTable("Tenants");
                 });
 
+            modelBuilder.Entity("AmrPoultryFarmWeb.Models.TenantFeature", b =>
+                {
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AiApiKeyHint")
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
+                    b.Property<string>("AiApiKeyProtected")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("AiEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("UpdatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("WhatsAppAccessTokenHint")
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
+                    b.Property<string>("WhatsAppAccessTokenProtected")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WhatsAppDisplayNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<bool>("WhatsAppEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("WhatsAppPhoneNumberId")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.HasKey("TenantId");
+
+                    b.ToTable("TenantFeatures");
+                });
+
+            modelBuilder.Entity("AmrPoultryFarmWeb.Models.TenantIntegrator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("IntegratorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IntegratorId");
+
+                    b.HasIndex("TenantId", "IntegratorId")
+                        .IsUnique();
+
+                    b.ToTable("TenantIntegrators");
+                });
+
             modelBuilder.Entity("AmrPoultryFarmWeb.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -564,6 +825,13 @@ namespace AmrPoultryFarmWeb.Migrations
                     b.Property<string>("PasswordSalt")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PreferredLanguage")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)")
+                        .HasDefaultValue("en");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -710,6 +978,26 @@ namespace AmrPoultryFarmWeb.Migrations
                     b.Navigation("Batch");
                 });
 
+            modelBuilder.Entity("AmrPoultryFarmWeb.Models.NotificationLog", b =>
+                {
+                    b.HasOne("AmrPoultryFarmWeb.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AmrPoultryFarmWeb.Models.NotificationPreference", b =>
+                {
+                    b.HasOne("AmrPoultryFarmWeb.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("AmrPoultryFarmWeb.Models.RolePermission", b =>
                 {
                     b.HasOne("AmrPoultryFarmWeb.Models.Role", "Role")
@@ -730,6 +1018,26 @@ namespace AmrPoultryFarmWeb.Migrations
                         .IsRequired();
 
                     b.Navigation("Batch");
+                });
+
+            modelBuilder.Entity("AmrPoultryFarmWeb.Models.TenantFeature", b =>
+                {
+                    b.HasOne("AmrPoultryFarmWeb.Models.Tenant", null)
+                        .WithOne()
+                        .HasForeignKey("AmrPoultryFarmWeb.Models.TenantFeature", "TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AmrPoultryFarmWeb.Models.TenantIntegrator", b =>
+                {
+                    b.HasOne("AmrPoultryFarmWeb.Models.Integrator", "Integrator")
+                        .WithMany("Tenants")
+                        .HasForeignKey("IntegratorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Integrator");
                 });
 
             modelBuilder.Entity("AmrPoultryFarmWeb.Models.UserHouse", b =>
@@ -793,6 +1101,8 @@ namespace AmrPoultryFarmWeb.Migrations
             modelBuilder.Entity("AmrPoultryFarmWeb.Models.Integrator", b =>
                 {
                     b.Navigation("Batches");
+
+                    b.Navigation("Tenants");
                 });
 
             modelBuilder.Entity("AmrPoultryFarmWeb.Models.Role", b =>

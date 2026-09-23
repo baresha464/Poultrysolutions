@@ -52,6 +52,21 @@ else
             </div>
         </div>
 
+        <div class="section-title">Allowed Integrators</div>
+        <div class="card" style="padding:4px 16px;">
+            @if (integrators.Count == 0)
+            {
+                <div class="empty-state">No integrators yet. <a href="superadmin/integrators/new">Add one</a> — the client can't place batches without one.</div>
+            }
+            @foreach (var i in integrators)
+            {
+                <label class="check-row">
+                    <input type="checkbox" checked="@selectedIntegrators.Contains(i.Id)" @onchange="e => Toggle(i.Id, (bool)e.Value!)" />
+                    <span>@i.Name @(i.IsActive ? "" : "(inactive)")</span>
+                </label>
+            }
+        </div>
+
         @if (!string.IsNullOrEmpty(error))
         {
             <div class="validation-errors">@error</div>
@@ -69,6 +84,16 @@ else
     private string initialPassword = "";
     private string? error;
     private TenantProvisionResult? result;
+    private List<Integrator> integrators = new();
+    private HashSet<int> selectedIntegrators = new();
+
+    protected override async Task OnInitializedAsync() =>
+        integrators = await PlatformAdminService.GetIntegratorsAsync();
+
+    private void Toggle(int id, bool on)
+    {
+        if (on) selectedIntegrators.Add(id); else selectedIntegrators.Remove(id);
+    }
 
     private async Task Create()
     {
@@ -82,6 +107,8 @@ else
         try
         {
             result = await PlatformAdminService.CreateTenantAsync(tenantName, adminUsername.Trim(), initialPassword);
+            if (selectedIntegrators.Count > 0)
+                await PlatformAdminService.SetTenantIntegratorsAsync(result.Tenant.Id, selectedIntegrators);
         }
         catch (DbUpdateException)
         {

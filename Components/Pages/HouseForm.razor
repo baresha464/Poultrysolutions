@@ -6,7 +6,11 @@
 
 <div class="page-title">@(Id.HasValue ? "Edit House" : "New House")</div>
 
-@if (!AuthService.HasPermission(Id.HasValue ? Permissions.Houses.Edit : Permissions.Houses.Add))
+@if (!Id.HasValue)
+{
+    <div class="card empty-state">New houses are added by your platform administrator. Contact them to add a house to your account.</div>
+}
+else if (!AuthService.HasPermission(Permissions.Houses.Edit))
 {
     <div class="card empty-state">You don't have permission to do this.</div>
 }

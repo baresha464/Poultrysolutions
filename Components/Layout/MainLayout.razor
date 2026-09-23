@@ -7,8 +7,8 @@
 @if (!authReady)
 {
     <div class="boot-loading">
-        <img src="images/logo-mark.png" alt="Loading" />
-        <span>Loading…</span>
+        <img src="@AppBrand.MarkUrl" alt="@AppBrand.Name" />
+        <span>@L["Loading…"]</span>
     </div>
 }
 else
@@ -24,52 +24,53 @@ else
         <div class="sidebar-scrim @(sidebarOpen ? "open" : "")" @onclick="CloseSidebar"></div>
 
         <aside class="sidebar @(sidebarOpen ? "open" : "") @(sidebarCollapsed ? "collapsed" : "")">
-            <button class="sidebar-collapse-handle" @onclick="ToggleCollapse" title="@(sidebarCollapsed ? "Expand menu" : "Collapse menu")">
+            <button class="sidebar-collapse-handle" @onclick="ToggleCollapse" title="@(sidebarCollapsed ? L["Expand menu"] : L["Collapse menu"])">
                 <span class="material-symbols-outlined">chevron_left</span>
             </button>
 
             <div class="sidebar-brand">
-                <img src="@LogoUrl" alt="@TenantName" />
+                @* Platform identity: the same BroilIQ mark for every client. Client branding lives in the top strip. *@
+                <img src="@AppBrand.MarkUrl" alt="@AppBrand.Name" />
                 <div class="sidebar-brand-text">
-                    <div class="sidebar-brand-name">@TenantName</div>
-                    <div class="sidebar-brand-sub">Broiler Operations</div>
+                    <div class="sidebar-brand-name">@AppBrand.Name</div>
+                    <div class="sidebar-brand-sub">@AppBrand.Tagline</div>
                 </div>
-                <button class="sidebar-close-btn" @onclick="CloseSidebar" title="Close menu">
+                <button class="sidebar-close-btn" @onclick="CloseSidebar" title="@L["Close menu"]">
                     <span class="material-symbols-outlined">close</span>
                 </button>
             </div>
 
-            <div class="sidebar-eyebrow">Navigation</div>
+            <div class="sidebar-eyebrow">@L["Navigation"]</div>
             <nav class="sidebar-nav" @onclick="CloseSidebar">
-                <NavLink href="" Match="NavLinkMatch.All" class="sidebar-link" title="Dashboard">
-                    <span class="material-symbols-outlined">grid_view</span><span>Dashboard</span>
+                <NavLink href="" Match="NavLinkMatch.All" class="sidebar-link" title="@L["Dashboard"]">
+                    <span class="material-symbols-outlined">grid_view</span><span>@L["Dashboard"]</span>
                 </NavLink>
                 @if (AuthService.HasPermission(Permissions.Houses.View))
                 {
-                    <NavLink href="houses" class="sidebar-link" title="Houses &amp; Sheds">
-                        <span class="material-symbols-outlined">home_work</span><span>Houses &amp; Sheds</span>
+                    <NavLink href="houses" class="sidebar-link" title="@L["Houses & Sheds"]">
+                        <span class="material-symbols-outlined">home_work</span><span>@L["Houses & Sheds"]</span>
                     </NavLink>
                 }
                 @if (AuthService.HasPermission(Permissions.Batches.View))
                 {
-                    <NavLink href="batches" class="sidebar-link" title="Batches">
-                        <span class="material-symbols-outlined">layers</span><span>Batches</span>
+                    <NavLink href="batches" class="sidebar-link" title="@L["Batches"]">
+                        <span class="material-symbols-outlined">layers</span><span>@L["Batches"]</span>
                     </NavLink>
                 }
                 @if (AuthService.HasPermission(Permissions.Expenses.View))
                 {
-                    <NavLink href="expenses" class="sidebar-link" title="Financials &amp; Expenses">
-                        <span class="material-symbols-outlined">payments</span><span>Financials &amp; Expenses</span>
+                    <NavLink href="expenses" class="sidebar-link" title="@L["Financials & Expenses"]">
+                        <span class="material-symbols-outlined">payments</span><span>@L["Financials & Expenses"]</span>
                     </NavLink>
                 }
                 @if (AuthService.HasPermission(Permissions.Reports.View))
                 {
-                    <NavLink href="reports" class="sidebar-link" title="Analytics &amp; Reports">
-                        <span class="material-symbols-outlined">monitoring</span><span>Analytics &amp; Reports</span>
+                    <NavLink href="reports" class="sidebar-link" title="@L["Analytics & Reports"]">
+                        <span class="material-symbols-outlined">monitoring</span><span>@L["Analytics & Reports"]</span>
                     </NavLink>
                 }
-                <NavLink href="settings" class="sidebar-link" title="Settings">
-                    <span class="material-symbols-outlined">settings</span><span>Settings</span>
+                <NavLink href="settings" class="sidebar-link" title="@L["Settings"]">
+                    <span class="material-symbols-outlined">settings</span><span>@L["Settings"]</span>
                 </NavLink>
             </nav>
 
@@ -77,10 +78,10 @@ else
                 <div class="sidebar-user-avatar">@Initials</div>
                 <div class="sidebar-user-text">
                     <div class="sidebar-user-name">@(AuthService.CurrentUser?.DisplayName is { Length: > 0 } dn ? dn : AuthService.CurrentUser?.Username)</div>
-                    <div class="sidebar-user-role">@(AuthService.IsSystemAdmin ? "Administrator" : "Operations")</div>
+                    <div class="sidebar-user-role">@(AuthService.IsSystemAdmin ? L["Administrator"] : L["Operations"])</div>
                 </div>
                 <form method="post" action="Account/Logout">
-                    <button type="submit" class="sidebar-icon-btn" title="Log out">
+                    <button type="submit" class="sidebar-icon-btn" title="@L["Log out"]">
                         <span class="material-symbols-outlined">logout</span>
                     </button>
                 </form>
@@ -89,7 +90,7 @@ else
 
         <div class="main-col @(sidebarCollapsed ? "collapsed" : "")">
             <header class="topbar">
-                <button class="topbar-menu-btn" @onclick="ToggleSidebar" title="Menu">
+                <button class="topbar-menu-btn" @onclick="ToggleSidebar" title="@L["Menu"]">
                     <span class="material-symbols-outlined">menu</span>
                 </button>
 
@@ -97,20 +98,22 @@ else
                     <img src="@LogoUrl" alt="@TenantName" class="topbar-org-mark" />
                     <span class="topbar-org-text">
                         <span class="topbar-title">@TenantName</span>
-                        <span class="topbar-subtitle">Broiler Operations</span>
+                        <span class="topbar-subtitle">@L["Broiler Operations"]</span>
                     </span>
-                    <span class="topbar-live-pill"><span class="topbar-live-dot"></span>Live</span>
+                    <span class="topbar-live-pill"><span class="topbar-live-dot"></span>@L["Live"]</span>
                 </div>
 
                 <div class="topbar-spacer"></div>
 
                 <div class="topbar-toolbar">
-                    <a class="topbar-action" href="settings" title="Settings">
+                    <LanguageToggle />
+                    <span class="topbar-toolbar-divider"></span>
+                    <a class="topbar-action" href="settings" title="@L["Settings"]">
                         <span class="material-symbols-outlined">settings</span>
                     </a>
                     <span class="topbar-toolbar-divider"></span>
                     <form method="post" action="Account/Logout">
-                        <button type="submit" class="topbar-action danger" title="Log out">
+                        <button type="submit" class="topbar-action danger" title="@L["Log out"]">
                             <span class="material-symbols-outlined">logout</span>
                         </button>
                     </form>
@@ -133,8 +136,8 @@ else
     private bool authReady;
     private const string CollapseStorageKey = "amr-sidebar-collapsed";
 
-    private string TenantName => AuthService.CurrentTenant?.Name ?? "AMR Poultry Farms";
-    private string LogoUrl => AuthService.CurrentTenant is { } t ? $"/tenant-logo/{t.Id}" : "images/logo-mark.png";
+    private string TenantName => AuthService.CurrentTenant?.Name ?? AppBrand.Name;
+    private string LogoUrl => AuthService.CurrentTenant is { } t ? $"/tenant-logo/{t.Id}" : AppBrand.MarkUrl;
 
     private string Initials
     {

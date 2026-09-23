@@ -41,6 +41,75 @@ else
         }
     </div>
 
+    <div class="section-title">Features</div>
+    <TenantFeaturesEditor TenantId="Id" />
+
+    <div class="section-title">Houses (@houses.Count)</div>
+    <div class="card" style="padding:4px 16px;">
+        @if (houses.Count == 0)
+        {
+            <div class="empty-state">No houses yet.</div>
+        }
+        @foreach (var h in houses)
+        {
+            <div class="list-row">
+                <div>
+                    <div class="list-row-title">@h.Name @(string.IsNullOrWhiteSpace(h.Code) ? "" : $"({h.Code})")</div>
+                    <div class="list-row-sub">@(h.CapacityBirds > 0 ? $"Capacity {h.CapacityBirds:N0} birds" : "Capacity not set")</div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="card">
+        <div class="form-grid">
+            <div class="field">
+                <label>New House Name</label>
+                <input @bind="newHouseName" type="text" placeholder="@($"House {houses.Count + 1}")" />
+            </div>
+            <div class="field">
+                <label>Code</label>
+                <input @bind="newHouseCode" type="text" placeholder="@($"H{houses.Count + 1}")" />
+            </div>
+            <div class="field">
+                <label>Capacity (birds)</label>
+                <input @bind="newHouseCapacity" type="number" min="0" step="100" />
+            </div>
+        </div>
+        @if (!string.IsNullOrEmpty(houseMessage))
+        {
+            <p>@houseMessage</p>
+        }
+    </div>
+    <div class="action-row">
+        <button class="btn btn-primary btn-block" @onclick="AddHouse" disabled="@addingHouse">+ Add House</button>
+    </div>
+
+    <div class="section-title">Allowed Integrators (@selectedIntegrators.Count)</div>
+    <div class="card" style="padding:4px 16px;">
+        @if (integrators.Count == 0)
+        {
+            <div class="empty-state">No integrators yet. <a href="superadmin/integrators/new">Add one</a>.</div>
+        }
+        @foreach (var i in integrators)
+        {
+            <label class="check-row">
+                <input type="checkbox" checked="@selectedIntegrators.Contains(i.Id)" @onchange="e => ToggleIntegrator(i.Id, (bool)e.Value!)" />
+                <span>
+                    <a href="@($"superadmin/integrators/{i.Id}")">@i.Name</a> @(i.IsActive ? "" : "(inactive)")
+                    <span class="list-row-sub">· chick ₹@i.ChickCostPerBird.ToString("0.00") · bag @i.BagWeightKg.ToString("0.##") kg · ₹@i.GrowingChargePerKg.ToString("0.00")/kg</span>
+                </span>
+            </label>
+        }
+        @if (!string.IsNullOrEmpty(integratorMessage))
+        {
+            <p>@integratorMessage</p>
+        }
+    </div>
+    <div class="action-row">
+        <button class="btn btn-primary btn-block" @onclick="SaveIntegrators">Save Allowed Integrators</button>
+    </div>
+
     <div class="section-title">Reset Admin Password</div>
     <div class="card">
         <div class="form-grid single">
@@ -66,10 +135,56 @@ else
     private string newPassword = "";
     private string? resetMessage;
 
+    private List<House> houses = new();
+    private string newHouseName = "";
+    private string newHouseCode = "";
+    private int newHouseCapacity = 5000;
+    private string? houseMessage;
+    private bool addingHouse;
+
     protected override async Task OnInitializedAsync()
     {
         tenant = await PlatformAdminService.GetTenantAsync(Id);
+        if (tenant is not null)
+        {
+            houses = await PlatformAdminService.GetTenantHousesAsync(Id);
+            integrators = await PlatformAdminService.GetIntegratorsAsync();
+            selectedIntegrators = (await PlatformAdminService.GetTenantIntegratorIdsAsync(Id)).ToHashSet();
+        }
         loading = false;
+    }
+
+    private List<Integrator> integrators = new();
+    private HashSet<int> selectedIntegrators = new();
+    private string? integratorMessage;
+
+    private void ToggleIntegrator(int id, bool on)
+    {
+        if (on) selectedIntegrators.Add(id); else selectedIntegrators.Remove(id);
+        integratorMessage = null;
+    }
+
+    private async Task SaveIntegrators()
+    {
+        await PlatformAdminService.SetTenantIntegratorsAsync(Id, selectedIntegrators);
+        integratorMessage = "Saved. Removed integrators disappear from the client's new-batch list; existing batches are unchanged.";
+    }
+
+    private async Task AddHouse()
+    {
+        if (houses.Any(h => string.Equals(h.Name, newHouseName.Trim(), StringComparison.OrdinalIgnoreCase)))
+        {
+            houseMessage = $"This client already has a house named \"{newHouseName.Trim()}\".";
+            return;
+        }
+
+        addingHouse = true;
+        var house = await PlatformAdminService.AddHouseAsync(Id, newHouseName, newHouseCode, newHouseCapacity);
+        houses = await PlatformAdminService.GetTenantHousesAsync(Id);
+        houseMessage = $"{house.Name} added. The client's admin will see it right away (assign it to other users under Settings → Users).";
+        newHouseName = "";
+        newHouseCode = "";
+        addingHouse = false;
     }
 
     private async Task Deactivate()

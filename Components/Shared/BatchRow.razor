@@ -4,11 +4,11 @@
         <div>
             <div class="list-row-title">@Batch.BatchCode</div>
             <div class="list-row-sub">
-                Placed @Batch.PlacementDate.ToString("dd MMM yyyy") · @Batch.ChicksPlaced.ToString("N0") chicks · @Batch.Integrator?.Name
+                @L["Placed"] @Batch.PlacementDate.ToString("dd MMM yyyy") · @L["{0:N0} chicks", Batch.ChicksPlaced] · @Batch.Integrator?.Name
             </div>
         </div>
         <span class="badge @(Batch.Status == BatchStatus.Closed ? "closed" : "")">
-            @(Batch.Status == BatchStatus.Closed ? "Closed" : $"Day {Batch.AgeDays}")
+            @(Batch.Status == BatchStatus.Closed ? L["Closed"] : L["Day {0}", Batch.AgeDays])
         </span>
     </a>
 }

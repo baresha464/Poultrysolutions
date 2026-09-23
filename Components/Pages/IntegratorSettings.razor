@@ -1,43 +1,46 @@
-@page "/settings/integrators"
+﻿@page "/settings/integrators"
 @inject FarmService FarmService
 @inject AuthService AuthService
-@inject NavigationManager Nav
 
-<div class="page-title">Integrators / Companies</div>
+<div class="page-title">@L["Integrators / Companies"]</div>
 
 @if (!AuthService.HasPermission(Permissions.Integrators.View))
 {
-    <div class="card empty-state">You don't have permission to view integrators.</div>
+    <div class="card empty-state">@L["You don't have permission to view integrators."]</div>
 }
 else if (loading)
 {
-    <p class="empty-state">Loading…</p>
+    <p class="empty-state">@L["Loading…"]</p>
 }
 else if (!integrators.Any())
 {
-    <div class="card empty-state">No integrators yet. Tap + to add one.</div>
+    <div class="card empty-state">@L["No integrators are enabled for your farm yet. Please ask the platform administrator to add one."]</div>
 }
 else
 {
-    <div class="card" style="padding:4px 10px;">
-        @foreach (var i in integrators)
-        {
-            <a class="list-row" href="@($"settings/integrators/{i.Id}/edit")">
-                <div>
-                    <div class="list-row-title">@i.Name</div>
-                    @if (!string.IsNullOrWhiteSpace(i.Notes))
-                    {
-                        <div class="list-row-sub">@i.Notes</div>
-                    }
-                </div>
-            </a>
-        }
-    </div>
-}
-
-@if (AuthService.HasPermission(Permissions.Integrators.Add))
-{
-    <button class="btn-fab" @onclick='() => Nav.NavigateTo("settings/integrators/new")' title="New integrator">+</button>
+    <p class="field-hint" style="margin:0 4px 10px;">@L["These integrators and their rates are set by the platform administrator. Contact them if anything needs to change."]</p>
+    @foreach (var i in integrators)
+    {
+        <div class="card">
+            <div class="list-row-title">@i.Name @if (!i.IsActive) { <span class="status-chip muted">@L["Inactive"]</span> }</div>
+            <div class="terms-grid">
+                <div>@L["Chick cost / bird"]<b>₹@i.ChickCostPerBird.ToString("0.00")</b></div>
+                <div>@L["Feed bag weight"]<b>@i.BagWeightKg.ToString("0.##") kg</b></div>
+                <div>@L["Breed"]<b>@i.DefaultBreed</b></div>
+                <div>@L["Target Weight"]<b>@i.TargetWeightKg.ToString("0.00") kg</b></div>
+                <div>@L["Growing charge / kg"]<b>₹@i.GrowingChargePerKg.ToString("0.00")</b></div>
+                <div>@L["Standard FCR"]<b>@i.StandardFcr.ToString("0.00")</b></div>
+                <div>@L["FCR incentive"]<b>@L["₹{0} / kg per 0.01", i.FcrIncentivePerKg.ToString("0.00")]</b></div>
+                <div>@L["Mortality allowed"]<b>@i.MortalityAllowancePct.ToString("0.#")%</b></div>
+                <div>@L["Deduction above allowance"]<b>@L["₹{0} / bird", i.MortalityDeductionPerBird.ToString("0.00")]</b></div>
+                <div>@L["Payment due"]<b>@L["{0} days after lifting", i.PaymentDays]</b></div>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(i.Notes))
+            {
+                <div class="list-row-sub">@i.Notes</div>
+            }
+        </div>
+    }
 }
 
 @code {

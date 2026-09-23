@@ -27,16 +27,43 @@ public class House : ITenantScoped
     public List<Batch> Batches { get; set; } = new();
 }
 
-/// <summary>A company/integrator the farm grows birds for. Managed centrally so batches pick from one list.</summary>
-public class Integrator : ITenantScoped
+/// <summary>A company/integrator farms grow birds for. Platform-level: only the Super Admin creates
+/// integrators and sets their contract terms; each client sees just the integrators allowed for it
+/// (<see cref="TenantIntegrator"/>) and can't change them. Batches copy the chick cost when placed,
+/// so later rate changes never rewrite history.</summary>
+public class Integrator
 {
     public int Id { get; set; }
-    public int TenantId { get; set; }
 
     [Required, MaxLength(80)]
     public string Name { get; set; } = "";
 
-    public decimal BagWeightKg { get; set; } = 50m;
+    /// <summary>Hidden from clients' pickers when false; existing batches keep showing it.</summary>
+    public bool IsActive { get; set; } = true;
+
+    // ---- Supplies ----
+    [Range(1, 200)]
+    public decimal BagWeightKg { get; set; } = 50m;          // feed kg per bag
+    [Range(0, 500)]
+    public decimal ChickCostPerBird { get; set; }            // chick (bird) cost as per integrator DC
+    [MaxLength(40)]
+    public string DefaultBreed { get; set; } = "Cobb 430Y";
+    [Range(0, 10)]
+    public decimal TargetWeightKg { get; set; } = 2.3m;
+
+    // ---- Contract terms (used to pre-fill settlements and income projections) ----
+    [Range(0, 100)]
+    public decimal GrowingChargePerKg { get; set; } = 8m;    // ₹ per kg live weight lifted
+    [Range(0, 5)]
+    public decimal StandardFcr { get; set; } = 1.70m;        // incentive paid when FCR is below this
+    [Range(0, 100)]
+    public decimal FcrIncentivePerKg { get; set; }           // ₹ per kg for every 0.01 FCR below standard
+    [Range(0, 100)]
+    public decimal MortalityAllowancePct { get; set; } = 5m; // mortality allowed before deductions
+    [Range(0, 1000)]
+    public decimal MortalityDeductionPerBird { get; set; }   // ₹ per bird above the allowance
+    [Range(0, 365)]
+    public int PaymentDays { get; set; } = 15;               // settlement due this many days after lifting
 
     [MaxLength(300)]
     public string Notes { get; set; } = "";
@@ -44,6 +71,16 @@ public class Integrator : ITenantScoped
     public int SortOrder { get; set; }
 
     public List<Batch> Batches { get; set; } = new();
+    public List<TenantIntegrator> Tenants { get; set; } = new();
+}
+
+/// <summary>Join: which integrators a client may use. Set by the Super Admin only.</summary>
+public class TenantIntegrator : ITenantScoped
+{
+    public int Id { get; set; }
+    public int TenantId { get; set; }
+    public int IntegratorId { get; set; }
+    public Integrator? Integrator { get; set; }
 }
 
 /// <summary>One growing cycle / flock placed in a house.</summary>
@@ -253,6 +290,10 @@ public class User
     public string DisplayName { get; set; } = "";
 
     public bool IsActive { get; set; } = true;
+
+    /// <summary>UI + AI language: "en" (default) or "te" (Telugu). Applied at sign-in on any device.</summary>
+    [MaxLength(5)]
+    public string PreferredLanguage { get; set; } = "en";
 
     public List<UserRole> UserRoles { get; set; } = new();
     public List<UserHouse> UserHouses { get; set; } = new();

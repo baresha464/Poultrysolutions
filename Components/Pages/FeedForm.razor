@@ -4,11 +4,11 @@
 @inject AuthService AuthService
 @inject NavigationManager Nav
 
-<div class="page-title">Feed Delivery</div>
+<div class="page-title">@L["Feed Delivery"]</div>
 
 @if (!CanEdit || !batchAccessible)
 {
-    <div class="card empty-state">You don't have permission to do this.</div>
+    <div class="card empty-state">@L["You don't have permission to do this."]</div>
 }
 else
 {
@@ -16,38 +16,38 @@ else
         <div class="card">
             <div class="form-grid">
                 <div class="field">
-                    <label>Date</label>
+                    <label>@L["Date"]</label>
                     <InputDate @bind-Value="feed.Date" />
                 </div>
                 <div class="field">
-                    <label>Feed Type</label>
-                    <Dropdown TValue="string" @bind-Value="feed.FeedType" Options="_feedTypeOptions" />
+                    <label>@L["Feed Type"]</label>
+                    <Dropdown TValue="string" @bind-Value="feed.FeedType" Options="FeedTypeOptions" />
                 </div>
                 <div class="field">
-                    <label>Bags</label>
+                    <label>@L["Bags"]</label>
                     <InputNumber @bind-Value="feed.Bags" />
                 </div>
                 <div class="field">
-                    <label>Bag Weight (kg)</label>
-                    <InputNumber @bind-Value="feed.BagWeightKg" step="0.5" />
+                    <label>@L["Bag Weight (kg)"]</label>
+                    <input type="text" value="@feed.BagWeightKg.ToString("0.##")" readonly title="@L["Set by the integrator"]" />
                 </div>
                 <div class="field">
-                    <label>DC Number</label>
+                    <label>@L["DC Number"]</label>
                     <InputText @bind-Value="feed.DcNumber" />
                 </div>
                 <div class="field full">
-                    <label>Remarks</label>
+                    <label>@L["Remarks"]</label>
                     <InputTextArea @bind-Value="feed.Remarks" />
                 </div>
             </div>
-            <div class="list-row"><span>Total</span><b>@feed.TotalKg.ToString("N0") kg</b></div>
+            <div class="list-row"><span>@L["Total"]</span><b>@feed.TotalKg.ToString("N0") kg</b></div>
         </div>
 
         <div class="action-row">
-            <button type="submit" class="btn btn-primary btn-block">Save</button>
+            <button type="submit" class="btn btn-primary btn-block">@L["Save"]</button>
             @if (RecordId.HasValue && AuthService.HasPermission(Permissions.Feed.Delete))
             {
-                <button type="button" class="btn btn-danger" @onclick="Delete">Delete</button>
+                <button type="button" class="btn btn-danger" @onclick="Delete">@L["Delete"]</button>
             }
         </div>
     </EditForm>
@@ -61,17 +61,16 @@ else
 
     private bool CanEdit => AuthService.HasPermission(RecordId.HasValue ? Permissions.Feed.Edit : Permissions.Feed.Add);
 
-    private static readonly (string Value, string Label)[] _feedTypeOptions =
-    {
-        ("Pre-starter", "Pre-starter"),
-        ("Starter", "Starter"),
-        ("Finisher", "Finisher"),
-    };
+    // Stored value stays English; only the label is translated.
+    private (string Value, string Label)[] FeedTypeOptions => new[] { "Pre-starter", "Starter", "Finisher" }
+        .Select(v => (v, L[v].Value)).ToArray();
 
     protected override async Task OnInitializedAsync()
     {
         feed.BatchId = BatchId;
-        batchAccessible = await FarmService.GetBatchAsync(BatchId) is not null;
+        var batch = await FarmService.GetBatchAsync(BatchId);
+        batchAccessible = batch is not null;
+        if (batch?.Integrator is not null) feed.BagWeightKg = batch.Integrator.BagWeightKg;
         if (RecordId.HasValue)
         {
             var list = await FarmService.GetFeedDeliveriesAsync(BatchId);

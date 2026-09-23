@@ -3,25 +3,25 @@
 @inject AuthService AuthService
 @inject NavigationManager Nav
 
-<PageTitle>Batches — @(AuthService.CurrentTenant?.Name ?? "AMR Poultry Farms")</PageTitle>
+<PageTitle>@L["Batches"] — @(AuthService.CurrentTenant?.Name ?? AppBrand.Name)</PageTitle>
 
 @if (!AuthService.HasPermission(Permissions.Batches.View))
 {
-    <div class="card empty-state">You don't have permission to view batches.</div>
+    <div class="card empty-state">@L["You don't have permission to view batches."]</div>
 }
 else
 {
     <div class="page-head">
         <div>
-            <div class="page-eyebrow">Flock Operations</div>
-            <h1 class="page-title">Broiler Batches &amp; Lifecycle</h1>
-            <div class="page-head-sub">Breed standards, FCR metrics, and contractual harvest tracking across every house.</div>
+            <div class="page-eyebrow">@L["Flock Operations"]</div>
+            <h1 class="page-title">@L["Broiler Batches & Lifecycle"]</h1>
+            <div class="page-head-sub">@L["Breed standards, FCR metrics, and contractual harvest tracking across every house."]</div>
         </div>
         @if (AuthService.HasPermission(Permissions.Batches.Add))
         {
             <div class="page-head-actions">
                 <button class="btn btn-primary" @onclick='() => Nav.NavigateTo("batch/new")'>
-                    <span class="material-symbols-outlined">add_circle</span> New Batch Placement
+                    <span class="material-symbols-outlined">add_circle</span> @L["New Batch Placement"]
                 </button>
             </div>
         }
@@ -29,57 +29,57 @@ else
 
     <div class="ops-hero compact">
         <div class="ops-hero-top">
-            <span class="ops-hero-eyebrow"><span class="ops-hero-dot"></span> @filtered.Count batch@(filtered.Count == 1 ? "" : "es") matching filters</span>
+            <span class="ops-hero-eyebrow"><span class="ops-hero-dot"></span> @L["{0} batch(es) matching filters", filtered.Count]</span>
         </div>
         <div class="stat-grid" style="margin-bottom:0;">
             <div class="stat-card" style="background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.16);">
-                <div class="stat-label" style="color:rgba(255,255,255,.75);"><span>Active Batches</span></div>
+                <div class="stat-label" style="color:rgba(255,255,255,.75);"><span>@L["Active Batches"]</span></div>
                 <div class="stat-value" style="color:#fff;">@filtered.Count(b => b.Status == BatchStatus.Active)</div>
             </div>
             <div class="stat-card" style="background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.16);">
-                <div class="stat-label" style="color:rgba(255,255,255,.75);"><span>Live Birds</span></div>
+                <div class="stat-label" style="color:rgba(255,255,255,.75);"><span>@L["Live Birds"]</span></div>
                 <div class="stat-value" style="color:#fff;">@filteredLiveBirds.ToString("N0")</div>
             </div>
             <div class="stat-card" style="background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.16);">
-                <div class="stat-label" style="color:rgba(255,255,255,.75);"><span>Avg FCR (active)</span></div>
+                <div class="stat-label" style="color:rgba(255,255,255,.75);"><span>@L["Avg FCR (active)"]</span></div>
                 <div class="stat-value" style="color:#fff;">@filteredAvgFcr.ToString("0.000")</div>
             </div>
             <div class="stat-card" style="background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.16);">
-                <div class="stat-label" style="color:rgba(255,255,255,.75);"><span>Livability (active)</span></div>
+                <div class="stat-label" style="color:rgba(255,255,255,.75);"><span>@L["Livability (active)"]</span></div>
                 <div class="stat-value" style="color:#fff;">@filteredAvgLivability.ToString("0.0")%</div>
             </div>
         </div>
     </div>
 
     <div class="tab-strip">
-        <button class="tab-btn @(status=="all"?"active":"")" @onclick='() => SetStatus("all")'>All</button>
-        <button class="tab-btn @(status=="active"?"active":"")" @onclick='() => SetStatus("active")'>Active</button>
-        <button class="tab-btn @(status=="closed"?"active":"")" @onclick='() => SetStatus("closed")'>Closed</button>
+        <button class="tab-btn @(status=="all"?"active":"")" @onclick='() => SetStatus("all")'>@L["All"]</button>
+        <button class="tab-btn @(status=="active"?"active":"")" @onclick='() => SetStatus("active")'>@L["Active"]</button>
+        <button class="tab-btn @(status=="closed"?"active":"")" @onclick='() => SetStatus("closed")'>@L["Closed"]</button>
     </div>
 
     <div class="form-grid" style="margin-bottom:16px;">
         <div class="field">
-            <label>House</label>
+            <label>@L["House"]</label>
             <Dropdown TValue="int?" Value="houseId" ValueChanged="OnHouseChanged"
-                      Options="houseOptions" Placeholder="All houses" />
+                      Options="houseOptions" Placeholder="@L["All houses"]" />
         </div>
         <div class="field">
-            <label>Year</label>
+            <label>@L["Year"]</label>
             <Dropdown TValue="int?" Value="year" ValueChanged="OnYearChanged"
-                      Options="yearOptions" Placeholder="All years" />
+                      Options="yearOptions" Placeholder="@L["All years"]" />
         </div>
         <div class="field full">
-            <input type="search" placeholder="Search batch number or integrator…" value="@search" @oninput="OnSearchInput" />
+            <input type="search" placeholder="@L["Search batch number or integrator…"]" value="@search" @oninput="OnSearchInput" />
         </div>
     </div>
 
     @if (loading)
     {
-        <p class="empty-state">Loading…</p>
+        <p class="empty-state">@L["Loading…"]</p>
     }
     else if (!filtered.Any())
     {
-        <div class="card empty-state">No batches match these filters.</div>
+        <div class="card empty-state">@L["No batches match these filters."]</div>
     }
     else
     {
@@ -98,13 +98,13 @@ else
                                 <div class="op-chip @(closed ? "muted" : variant)">@Abbrev(b.House?.Name)</div>
                                 <div>
                                     <div class="op-card-title-row">
-                                        <span class="op-card-name">Batch #@b.BatchCode</span>
-                                        <span class="status-chip @(closed ? "muted" : "")">@(closed ? "Closed" : $"Day {b.AgeDays}")</span>
+                                        <span class="op-card-name">@L["Batch"] #@b.BatchCode</span>
+                                        <span class="status-chip @(closed ? "muted" : "")">@(closed ? L["Closed"] : L["Day {0}", b.AgeDays])</span>
                                     </div>
                                     <div class="op-card-sub">@b.House?.Name · @b.Integrator?.Name · @b.Breed</div>
                                 </div>
                                 <div class="op-card-meta">
-                                    Placed<br /><b style="color:var(--ink);">@b.PlacementDate.ToString("dd MMM yyyy")</b>
+                                    @L["Placed"]<br /><b style="color:var(--ink);">@b.PlacementDate.ToString("dd MMM yyyy")</b>
                                 </div>
                             </div>
 
@@ -113,34 +113,34 @@ else
                                 @if (!closed)
                                 {
                                     <div class="op-progress-label">
-                                        <span>Growth Cycle</span>
-                                        <span>Day @b.AgeDays / @TargetCycleDays</span>
+                                        <span>@L["Growth Cycle"]</span>
+                                        <span>@L["Day {0}", b.AgeDays] / @TargetCycleDays</span>
                                     </div>
                                     <div class="op-progress-track">
                                         <div class="op-progress-fill @(b.AgeDays >= TargetCycleDays ? "amber" : "")" style="width:@(Math.Min(100, b.AgeDays * 100 / TargetCycleDays))%"></div>
                                     </div>
 
                                     <div class="op-stat-grid">
-                                        <div class="op-stat"><div class="op-stat-label">Live Birds</div><div class="op-stat-value">@perf.LiveBirds.ToString("N0")</div></div>
-                                        <div class="op-stat"><div class="op-stat-label">Avg Weight</div><div class="op-stat-value">@perf.AvgBodyWeightKg.ToString("0.00") kg</div></div>
+                                        <div class="op-stat"><div class="op-stat-label">@L["Live Birds"]</div><div class="op-stat-value">@perf.LiveBirds.ToString("N0")</div></div>
+                                        <div class="op-stat"><div class="op-stat-label">@L["Avg Weight"]</div><div class="op-stat-value">@perf.AvgBodyWeightKg.ToString("0.00") kg</div></div>
                                         <div class="op-stat"><div class="op-stat-label">FCR</div><div class="op-stat-value">@perf.Fcr.ToString("0.000")</div></div>
-                                        <div class="op-stat"><div class="op-stat-label">Livability</div><div class="op-stat-value">@perf.LivabilityPct.ToString("0.0")%</div></div>
+                                        <div class="op-stat"><div class="op-stat-label">@L["Livability"]</div><div class="op-stat-value">@perf.LivabilityPct.ToString("0.0")%</div></div>
                                     </div>
                                 }
                                 else
                                 {
                                     <div class="op-stat-grid">
-                                        <div class="op-stat"><div class="op-stat-label">Birds Lifted</div><div class="op-stat-value">@perf.BirdsLifted.ToString("N0")</div></div>
-                                        <div class="op-stat"><div class="op-stat-label">Final FCR</div><div class="op-stat-value">@perf.Fcr.ToString("0.000")</div></div>
-                                        <div class="op-stat"><div class="op-stat-label">Final Livability</div><div class="op-stat-value">@perf.LivabilityPct.ToString("0.0")%</div></div>
-                                        <div class="op-stat"><div class="op-stat-label">Expenses</div><div class="op-stat-value">₹@perf.TotalExpenses.ToString("N0")</div></div>
+                                        <div class="op-stat"><div class="op-stat-label">@L["Birds Lifted"]</div><div class="op-stat-value">@perf.BirdsLifted.ToString("N0")</div></div>
+                                        <div class="op-stat"><div class="op-stat-label">@L["Final FCR"]</div><div class="op-stat-value">@perf.Fcr.ToString("0.000")</div></div>
+                                        <div class="op-stat"><div class="op-stat-label">@L["Final Livability"]</div><div class="op-stat-value">@perf.LivabilityPct.ToString("0.0")%</div></div>
+                                        <div class="op-stat"><div class="op-stat-label">@L["Expenses"]</div><div class="op-stat-value">₹@perf.TotalExpenses.ToString("N0")</div></div>
                                     </div>
                                 }
                             }
 
                             <div class="op-card-footline">
-                                <span class="foot-note"><span class="material-symbols-outlined">groups</span> @b.ChicksPlaced.ToString("N0") DOCs placed</span>
-                                <a class="btn btn-outline" href="@($"batch/{b.Id}")">View Batch</a>
+                                <span class="foot-note"><span class="material-symbols-outlined">groups</span> @L["{0:N0} DOCs placed", b.ChicksPlaced]</span>
+                                <a class="btn btn-outline" href="@($"batch/{b.Id}")">@L["View Batch"]</a>
                             </div>
                         </div>
                     </div>
@@ -148,18 +148,18 @@ else
             </div>
 
             <div>
-                <div class="panel-title"><h2><span class="material-symbols-outlined">summarize</span> Filtered Totals</h2></div>
+                <div class="panel-title"><h2><span class="material-symbols-outlined">summarize</span> @L["Filtered Totals"]</h2></div>
                 <div class="card" style="padding:4px 10px;">
-                    <div class="list-row"><span>Chicks Placed</span><b>@filtered.Sum(b => b.ChicksPlaced).ToString("N0")</b></div>
-                    <div class="list-row"><span>Total Mortality</span><b>@perfByBatch.Values.Sum(p => p.TotalMortality).ToString("N0")</b></div>
-                    <div class="list-row"><span>Birds Lifted</span><b>@perfByBatch.Values.Sum(p => p.BirdsLifted).ToString("N0")</b></div>
-                    <div class="list-row"><span>Feed Consumed</span><b>@perfByBatch.Values.Sum(p => p.FeedConsumedKg).ToString("N0") kg</b></div>
-                    <div class="list-row"><span>Total Expenses</span><b>₹@perfByBatch.Values.Sum(p => p.TotalExpenses).ToString("N0")</b></div>
+                    <div class="list-row"><span>@L["Chicks Placed"]</span><b>@filtered.Sum(b => b.ChicksPlaced).ToString("N0")</b></div>
+                    <div class="list-row"><span>@L["Total Mortality"]</span><b>@perfByBatch.Values.Sum(p => p.TotalMortality).ToString("N0")</b></div>
+                    <div class="list-row"><span>@L["Birds Lifted"]</span><b>@perfByBatch.Values.Sum(p => p.BirdsLifted).ToString("N0")</b></div>
+                    <div class="list-row"><span>@L["Feed Consumed"]</span><b>@perfByBatch.Values.Sum(p => p.FeedConsumedKg).ToString("N0") kg</b></div>
+                    <div class="list-row"><span>@L["Total Expenses"]</span><b>₹@perfByBatch.Values.Sum(p => p.TotalExpenses).ToString("N0")</b></div>
                 </div>
 
                 @if (AuthService.HasPermission(Permissions.Houses.View))
                 {
-                    <div class="panel-title"><h2><span class="material-symbols-outlined">home_work</span> Houses</h2><a class="panel-title-link" href="houses">All houses</a></div>
+                    <div class="panel-title"><h2><span class="material-symbols-outlined">home_work</span> @L["Houses"]</h2><a class="panel-title-link" href="houses">@L["All houses"]</a></div>
                     <div class="card" style="padding:4px 10px;">
                         @foreach (var h in houses)
                         {
@@ -167,15 +167,15 @@ else
                             <a class="list-row" href="@($"houses/{h.Id}")">
                                 <div>
                                     <div class="list-row-title">@h.Name</div>
-                                    <div class="list-row-sub">@(houseActive is null ? "No active batch" : $"Batch #{houseActive.BatchCode}")</div>
+                                    <div class="list-row-sub">@(houseActive is null ? L["No active batch"] : $"{L["Batch"]} #{houseActive.BatchCode}")</div>
                                 </div>
                                 @if (houseActive is not null)
                                 {
-                                    <span class="badge">Day @houseActive.AgeDays</span>
+                                    <span class="badge">@L["Day {0}", houseActive.AgeDays]</span>
                                 }
                                 else
                                 {
-                                    <span class="badge closed">Empty</span>
+                                    <span class="badge closed">@L["Empty"]</span>
                                 }
                             </a>
                         }
@@ -218,7 +218,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         houses = await FarmService.GetHousesAsync();
-        houseOptions = new List<(int?, string)> { (null, "All houses") }
+        houseOptions = new List<(int?, string)> { (null, L["All houses"]) }
             .Concat(houses.Select(h => ((int?)h.Id, h.Name))).ToList();
 
         foreach (var h in houses)
@@ -229,7 +229,7 @@ else
         }
 
         var years = await FarmService.GetBatchYearsAsync();
-        yearOptions = new List<(int?, string)> { (null, "All years") }
+        yearOptions = new List<(int?, string)> { (null, L["All years"]) }
             .Concat(years.Select(y => ((int?)y, y.ToString()))).ToList();
         year = years.Contains(DateTime.Today.Year) ? DateTime.Today.Year : null;
 

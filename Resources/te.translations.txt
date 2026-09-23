@@ -1,0 +1,647 @@
+﻿# Telugu translations — source for Resources/SharedResource.te.resx (regenerate with
+# Resources/build-resx.ps1). One entry per line: English key ||| Telugu text.
+# Keep {0}, {1:0.0} … placeholders exactly as in the key. Keep FCR, EEF, DC, kg, °C, % as-is.
+ — the factors on the right are the usual causes ||| — కింద చూపిన కారణాలే సాధారణంగా ఉంటాయి
+(capacity {0}, {1:0}% filled) ||| (సామర్థ్యం {0}, {1:0}% నిండింది)
+{0:+0;-0;0} g (was {1:0}g) ||| {0:+0;-0;0} g (నిన్న {1:0}g)
+{0:0.#} bags ||| {0:0.#} బస్తాలు
+{0:0.00} kg eaten per bird ||| ఒక్కో కోడి {0:0.00} kg తిన్నది
+{0:0} g vs {1:0} g at day {2} ||| {2}వ రోజున {0:0} g / ప్రమాణం {1:0} g
+{0:0}g/day ||| {0:0}g/రోజుకు
+{0:N0} batch(es) this year ||| ఈ సంవత్సరం {0:N0} బ్యాచ్‌లు
+{0:N0} birds ||| {0:N0} కోళ్లు
+{0:N0} chicks ||| {0:N0} పిల్లలు
+{0:N0} DOCs placed ||| {0:N0} పిల్లలు వేశారు
+{0:N0} total mortality ||| మొత్తం {0:N0} చనిపోయాయి
+{0} / bird ||| {0} / కోడి
+{0} active shed(s) ||| {0} షెడ్లు నడుస్తున్నాయి
+{0} batch(es) matching filters ||| ఫిల్టర్‌కు సరిపోయే {0} బ్యాచ్‌లు
+{0} birds ||| {0} కోళ్లు
+{0} days cycle ||| {0} రోజుల పెంపకం
+{0} dead · {1} culls ||| {0} చనిపోయాయి · {1} తీసివేసినవి
+{0} per bird ||| కోడికి {0}
+{0} still in house ||| {0} ఇంకా షెడ్‌లో ఉన్నాయి
+{0} vaccination(s) · health cost {1} ||| {0} టీకాలు · ఆరోగ్య ఖర్చు {1}
+{0} vaccination(s) logged, in line with a batch of this age. ||| {0} టీకాలు నమోదయ్యాయి — ఈ వయసు బ్యాచ్‌కు సరిపోతుంది.
+{0} vs {1} ||| {0} / {1}
+{0} vs {1} placement ||| {0} / {1} కాలంలో వేసిన బ్యాచ్
+{0} vs {1} vaccinations logged ||| {0} / {1} టీకాలు నమోదు
+{0}: check - {1}. ||| {0}: చూడండి - {1}.
+{0}: Today's log recorded ||| {0}: ఈరోజు వివరాలు నమోదయ్యాయి
+7-day weight ||| 7వ రోజు బరువు
+7-day weight {0:0} g vs {1:0} g ||| 7వ రోజు బరువు {0:0} g / {1:0} g
+7-day weight was {0:0} g (target ~180 g). Improve pre-heating, crop fill checks and early feed access. ||| 7వ రోజు బరువు {0:0} g మాత్రమే (లక్ష్యం ~180 g). పిల్లలు రాకముందే షెడ్ వేడి చేయండి, పిల్లల కడుపు (క్రాప్) నిండిందో చూడండి, మొదటి రోజుల్లో మేత సులువుగా అందేలా చేయండి.
+Across {0} active batch(es) ||| {0} నడుస్తున్న బ్యాచ్‌లలో
+Act today ||| ఈరోజే చర్య తీసుకోండి
+Actions for this batch ||| ఈ బ్యాచ్ కోసం చేయాల్సినవి
+Active ||| నడుస్తున్నవి
+Active Batch ||| నడుస్తున్న బ్యాచ్
+Active Batches ||| నడుస్తున్న బ్యాచ్‌లు
+Active Sheds & Housing Status ||| షెడ్ల ప్రస్తుత స్థితి
+Active, day {0} ||| నడుస్తోంది, {0}వ రోజు
+Actual ||| వాస్తవం
+Add Daily Record ||| రోజువారీ వివరాలు నమోదు
+Add Feed Delivery ||| మేత సరఫరా నమోదు
+Add Health Event ||| ఆరోగ్య వివరం నమోదు
+Add Lifting ||| లిఫ్టింగ్ నమోదు
+Add photo ||| ఫోటో జోడించండి
+Add Settlement ||| సెటిల్‌మెంట్ నమోదు
+Additional Expected ||| ఇంకా రావాల్సిన ఖర్చు
+Additional Mortality Expected (%) ||| ఇంకా చనిపోవచ్చని అంచనా (%)
+Adjusted to {0:0.0} kg ||| {0:0.0} kg కు సరిచేసినది
+Administrator ||| నిర్వాహకుడు
+Advisor ||| సలహాదారు
+Advisor composite ||| సలహాదారు మొత్తం స్కోర్
+Against the breed standard and {0} other completed batch(es) on this farm ||| జాతి ప్రమాణంతో మరియు ఈ ఫారంలో పూర్తయిన మరో {0} బ్యాచ్‌లతో పోలిక
+Age ||| వయసు
+AI Assistant ||| AI సహాయకుడు
+AI Assistant is not enabled ||| AI సహాయకుడు ఇంకా ఆన్ చేయలేదు
+AI suggestion based on photos and farm records — not a diagnosis. Always confirm with a veterinarian before treating. ||| ఇది ఫోటోలు మరియు ఫారం వివరాల ఆధారంగా AI ఇచ్చిన సూచన మాత్రమే — నిర్ధారణ కాదు. మందులు వాడే ముందు తప్పకుండా పశువైద్యుడిని సంప్రదించండి.
+All ||| అన్నీ
+All houses ||| అన్ని షెడ్లు
+All years ||| అన్ని సంవత్సరాలు
+Ammonia build-up from wet litter / poor ventilation ||| తడి లిట్టర్ / గాలి సరిగా ఆడకపోవడం వల్ల అమ్మోనియా వాసన పెరగడం
+Amount ||| మొత్తం
+Amount Received ||| అందిన మొత్తం
+Analysing photos… usually 20-60 seconds ||| ఫోటోలు పరిశీలిస్తోంది… సాధారణంగా 20-60 సెకన్లు
+Analytics & Reports ||| విశ్లేషణ & రిపోర్టులు
+Ask anything about this batch — it answers from your own daily records, weights, feed and health log. ||| ఈ బ్యాచ్ గురించి ఏదైనా అడగండి — మీ రోజువారీ వివరాలు, బరువులు, మేత, ఆరోగ్య నమోదుల ఆధారంగా సమాధానం ఇస్తుంది.
+Ask follow-up questions about this ||| దీని గురించి ఇంకా అడగండి
+Ask the Farm Assistant ||| ఫారం సహాయకుడిని అడగండి
+At the current consumption rate (~{0:0} kg/day) the {1:0} kg on hand covers roughly {2:0.#} day(s). Place the next feed order now to avoid a forced ration change, which itself hurts FCR. ||| ప్రస్తుతం రోజుకు ~{0:0} kg మేత వాడుతున్నారు; ఉన్న {1:0} kg సుమారు {2:0.#} రోజులకే సరిపోతుంది. ఇప్పుడే తదుపరి మేత ఆర్డర్ చేయండి — మేత అకస్మాత్తుగా మార్చాల్సి వస్తే FCR దెబ్బతింటుంది.
+Authorized personnel only. ||| అనుమతి ఉన్నవారికి మాత్రమే.
+Average Farm FCR ||| ఫారం సగటు FCR
+Average weight {0:0}g is about {1:0}% behind the ~{2:0}g benchmark for day {3}. Falling behind now usually means more days to reach sale weight, which adds feed cost and delays the next placement. ||| సగటు బరువు {0:0}g — {3}వ రోజు ప్రమాణం ~{2:0}g కంటే సుమారు {1:0}% తక్కువ. ఇప్పుడు వెనుకబడితే అమ్మకం బరువుకు ఎక్కువ రోజులు పడతాయి; మేత ఖర్చు పెరుగుతుంది, తర్వాతి బ్యాచ్ ఆలస్యమవుతుంది.
+Average weight {0:0}g is on pace with the ~{1:0}g benchmark for day {2}. ||| సగటు బరువు {0:0}g — {2}వ రోజు ప్రమాణం ~{1:0}g కి తగ్గట్టుగా ఉంది.
+Avg ||| సగటు
+Avg °C ||| సగటు °C
+Avg Body Weight ||| సగటు శరీర బరువు
+Avg Body Weight (gm) ||| సగటు శరీర బరువు (గ్రాములు)
+Avg Body Wt ||| సగటు బరువు
+Avg daily gain ||| రోజువారీ సగటు పెరుగుదల
+Avg FCR (active) ||| సగటు FCR (నడుస్తున్నవి)
+Avg kg ||| సగటు kg
+Avg Weight ||| సగటు బరువు
+Avg Weight / Bird ||| కోడి సగటు బరువు
+Avg Wt ||| సగటు బరువు
+Bag Weight (kg) ||| బస్తా బరువు (kg)
+Bags ||| బస్తాలు
+Batch ||| బ్యాచ్
+Batch Closeout Report ||| బ్యాచ్ ముగింపు రిపోర్ట్
+Batch code ||| బ్యాచ్ కోడ్
+Batch details ||| బ్యాచ్ వివరాలు
+Batch economics ||| బ్యాచ్ ఆదాయ-ఖర్చులు
+Batch History ||| బ్యాచ్ చరిత్ర
+Batch Info ||| బ్యాచ్ సమాచారం
+Batch not found. ||| బ్యాచ్ కనబడలేదు.
+Batch Progress Report ||| బ్యాచ్ ప్రగతి రిపోర్ట్
+Batches ||| బ్యాచ్‌లు
+Batch-wise growth, FCR & livability at a glance ||| బ్యాచ్ వారీగా పెరుగుదల, FCR & బతికిన శాతం ఒక్క చూపులో
+Birds ||| కోళ్లు
+Birds Lifted ||| లిఫ్ట్ అయిన కోళ్లు
+Bloody droppings ||| రక్తంతో రెట్టలు
+Branch Code ||| బ్రాంచ్ కోడ్
+Breed ||| జాతి
+Breed standards, FCR metrics, and contractual harvest tracking across every house. ||| ప్రతి షెడ్‌కు జాతి ప్రమాణాలు, FCR లెక్కలు మరియు కంపెనీ లిఫ్టింగ్ వివరాలు.
+Broiler Batches & Lifecycle ||| బ్రాయిలర్ బ్యాచ్‌లు & పెంపకం
+Broiler Operations ||| బ్రాయిలర్ నిర్వహణ
+Brooding temperature too high/low for age ||| వయసుకు తగ్గట్టు బ్రూడింగ్ వేడి ఎక్కువ/తక్కువగా ఉండటం
+Brooding temperature too low in week 1 (chicks huddle instead of eating) ||| మొదటి వారంలో బ్రూడింగ్ వేడి తక్కువ (పిల్లలు తినకుండా గుంపుగా చేరతాయి)
+By {0} ||| తయారు చేసినవారు: {0}
+Call your vet ||| పశువైద్యుడికి ఫోన్ చేయండి
+Capacity ||| సామర్థ్యం
+Capacity {0:N0} birds · no active batch ||| సామర్థ్యం {0:N0} కోళ్లు · బ్యాచ్ లేదు
+Check Bird Health ||| కోళ్ల ఆరోగ్యం చూడండి
+Check to confirm ||| నిర్ధారణకు చూడాల్సినవి
+Chick cost (integrator DC) ||| పిల్ల ధర (కంపెనీ DC)
+Chicks Placed ||| వేసిన పిల్లలు
+Close Batch ||| బ్యాచ్ ముగించండి
+Close menu ||| మెనూ మూసివేయండి
+Closed ||| ముగిసింది
+Coccidiosis, worm load or other gut-health issues ||| కాక్సిడియోసిస్, నులిపురుగులు లేదా ఇతర పేగు సమస్యలు
+Collapse menu ||| మెనూ చిన్నది చేయండి
+Corrected FCR ||| సరిచేసిన FCR
+Cost ||| ఖర్చు
+Cost (₹) ||| ఖర్చు (₹)
+Couldn't read "{0}". Use a JPG or PNG photo (on iPhone, set Camera → Formats → Most Compatible). ||| "{0}" చదవలేకపోయాం. JPG లేదా PNG ఫోటో వాడండి (iPhone లో Camera → Formats → Most Compatible ఎంచుకోండి).
+Critical ||| తీవ్రం
+Culls ||| తీసివేసినవి
+Cum. FCR ||| మొత్తం FCR
+Cum. mort. ||| మొత్తం మరణాలు
+Cumulative Livability ||| మొత్తం బతికిన శాతం
+Current avg weight ||| ప్రస్తుత సగటు బరువు
+Daily Gain ||| రోజువారీ పెరుగుదల
+Daily Log ||| రోజువారీ నమోదు
+Daily Mortality ||| రోజువారీ మరణాలు
+Daily mortality pattern ||| రోజువారీ మరణాల తీరు
+Daily Record ||| రోజువారీ వివరాలు
+Dashboard ||| డ్యాష్‌బోర్డ్
+Date ||| తేదీ
+Day {0} ||| {0}వ రోజు
+DC no. ||| DC నం.
+DC Number ||| DC నంబర్
+Dead ||| చనిపోయినవి
+Dead + culls per day of age; red bars are spikes (> 2.5x the running average) ||| రోజువారీ మరణాలు + తీసివేసినవి; ఎరుపు గీతలు అసాధారణంగా పెరిగిన రోజులు (సగటుకు 2.5 రెట్లు మించి)
+Deductions ||| కోతలు
+Delete ||| తొలగించండి
+Deliveries ||| సరఫరాలు
+Diesel ||| డీజిల్
+Disease or subclinical infection diverting energy from growth ||| వ్యాధి లేదా లోపలి ఇన్ఫెక్షన్ వల్ల శక్తి పెరుగుదలకు కాకుండా పోవడం
+Disease outbreak (check for a mortality spike vs the daily average) ||| వ్యాధి వ్యాప్తి (రోజువారీ సగటు కంటే మరణాలు ఒక్కసారిగా పెరిగాయేమో చూడండి)
+Disinfection ||| క్రిమిసంహారం
+Do now ||| ఇప్పుడే చేయండి
+Dose ||| మోతాదు
+Download Report ||| రిపోర్ట్ డౌన్‌లోడ్
+Draughts at bird level ||| కోళ్ల ఎత్తులో చల్లటి గాలి దూరడం
+Drinking more ||| ఎక్కువ నీళ్లు తాగుతున్నాయి
+Drinking water ||| తాగునీటిలో
+e.g. 1 drop/bird ||| ఉదా. కోడికి 1 చుక్క
+e.g. 15 birds dead since morning, some sitting with closed eyes, droppings greenish ||| ఉదా. ఉదయం నుండి 15 కోళ్లు చనిపోయాయి, కొన్ని కళ్లు మూసుకుని కూర్చున్నాయి, రెట్టలు ఆకుపచ్చగా ఉన్నాయి
+e.g. ND Lasota ||| ఉదా. ND లసోటా
+e.g. Why did mortality go up this week? ||| ఉదా. ఈ వారం మరణాలు ఎందుకు పెరిగాయి?
+Eating less ||| తక్కువగా తింటున్నాయి
+Edit Batch ||| బ్యాచ్ మార్చండి
+Edit House ||| షెడ్ మార్చండి
+Edit Settlement ||| సెటిల్‌మెంట్ మార్చండి
+EEF (interim) ||| EEF (మధ్యంతర)
+EEF / EPEF ||| EEF / EPEF
+EEF Index ||| EEF సూచిక
+Electricity ||| కరెంటు
+Emergency — act now ||| అత్యవసరం — ఇప్పుడే చర్య తీసుకోండి
+Emergency local purchase is usually costlier and lower quality ||| అత్యవసరంగా బయట కొనే మేత సాధారణంగా ఖరీదు ఎక్కువ, నాణ్యత తక్కువ
+Empty ||| ఖాళీ
+Enter today's weight ||| ఈరోజు బరువు నమోదు చేయండి
+Environment ||| షెడ్ వాతావరణం
+Estimated across active houses ||| నడుస్తున్న షెడ్లలో అంచనా
+Expand menu ||| మెనూ పెద్దది చేయండి
+Expected Deductions (₹) ||| అంచనా కోతలు (₹)
+Expected FCR at Harvest ||| లిఫ్టింగ్ సమయానికి అంచనా FCR
+Expected Incentive (₹) ||| అంచనా ప్రోత్సాహకం (₹)
+Expense - {0} ||| ఖర్చు - {0}
+Expenses ||| ఖర్చులు
+Eye drop ||| కంటి చుక్క
+Farm average ||| ఫారం సగటు
+Farm best ||| ఫారంలో ఉత్తమం
+Farm best is {0} (EEF {1:0} vs {2:0} here). ||| ఫారంలో ఉత్తమ బ్యాచ్ {0} (EEF {1:0}, ఇక్కడ {2:0}).
+Farm cost per kg ||| kg కు ఫారం ఖర్చు
+Farm Overview & Operations ||| ఫారం స్థితి & నిర్వహణ
+Farm owner ||| ఫారం యజమాని
+Farm supervisor ||| ఫారం సూపర్‌వైజర్
+Farmer-side income and costs (chicks and feed are supplied by the integrator) ||| రైతు వైపు ఆదాయం, ఖర్చులు (పిల్లలు, మేత కంపెనీ ఇస్తుంది)
+FCR ||| FCR
+FCR (raw) ||| FCR (సాధారణ)
+FCR is behind benchmark ||| FCR ప్రమాణం కంటే వెనుకబడి ఉంది
+FCR is on target ||| FCR లక్ష్యానికి తగ్గట్టుగా ఉంది
+FCR of {0:0.000} is at or better than the {1:0.00} benchmark for this age — feed conversion is efficient right now. ||| FCR {0:0.000} — ఈ వయసు ప్రమాణం {1:0.00} కి సమానంగా లేదా మెరుగ్గా ఉంది. మేత బాగా మాంసంగా మారుతోంది.
+FCR of {0:0.000} is running about {1:0}% worse than the {2:0.00} benchmark for this age. Every 0.1 point of extra FCR adds real feed cost per kg of bird produced — the factors on the right are the usual causes. ||| FCR {0:0.000} — ఈ వయసు ప్రమాణం {2:0.00} కంటే సుమారు {1:0}% ఎక్కువగా ఉంది. FCR 0.1 పెరిగినా ప్రతి kg కోడికి మేత ఖర్చు పెరుగుతుంది — కింద చూపిన కారణాలే సాధారణంగా ఉంటాయి.
+FCR Trend ||| FCR తీరు
+Feed ||| మేత
+Feed balance ||| మిగిలిన మేత
+Feed Consumed ||| వాడిన మేత
+Feed Consumed (bags) ||| వాడిన మేత (బస్తాలు)
+Feed deliveries ||| మేత సరఫరాలు
+Feed Delivery ||| మేత సరఫరా
+Feed In Stock ||| నిల్వ ఉన్న మేత
+Feed kg ||| మేత kg
+Feed mix ||| మేతలో కలిపి
+Feed or water access issues in part of the shed ||| షెడ్‌లో కొంత భాగంలో మేత లేదా నీళ్లు సరిగా అందకపోవడం
+Feed particle size/quality inconsistent with age ||| వయసుకు తగ్గ మేత పరిమాణం/నాణ్యత లేకపోవడం
+Feed received / consumed ||| వచ్చిన / వాడిన మేత
+Feed Still Needed (from Integrator) ||| ఇంకా కావాల్సిన మేత (కంపెనీ నుండి)
+Feed Stock ||| మేత నిల్వ
+Feed stock is running low ||| మేత నిల్వ తగ్గిపోతోంది
+Feed Type ||| మేత రకం
+Feed wastage — feeder height/fill level not adjusted to bird age ||| మేత వృథా — కోడి వయసుకు తగ్గట్టు ఫీడర్ ఎత్తు/నింపే స్థాయి సరిచేయకపోవడం
+Filtered Totals ||| ఫిల్టర్ చేసిన మొత్తాలు
+Final avg weight ||| చివరి సగటు బరువు
+Final EEF is set at lifting ||| చివరి EEF లిఫ్టింగ్ సమయంలో తేలుతుంది
+Final FCR ||| చివరి FCR
+Final Livability ||| చివరి బతికిన శాతం
+Financials & Expenses ||| ఆదాయ వ్యయాలు & ఖర్చులు
+Finisher ||| ఫినిషర్
+First-week mortality ||| మొదటి వారం మరణాలు
+first-week mortality {0:0.00}% vs {1:0.00}% ||| మొదటి వారం మరణాలు {0:0.00}% / {1:0.00}%
+First-week mortality was {0:0.00}% (target < 1%). Record chick quality on arrival and raise it with the hatchery/integrator. ||| మొదటి వారం మరణాలు {0:0.00}% (లక్ష్యం 1% లోపు). పిల్లలు వచ్చినప్పుడే నాణ్యత నమోదు చేసి హ్యాచరీ/కంపెనీకి తెలియజేయండి.
+Flock advisor findings ||| సలహాదారు గుర్తించినవి
+Flock Health Score ||| మంద ఆరోగ్య స్కోర్
+Flock Livability ||| మంద బతికిన శాతం
+Flock Operations ||| మంద నిర్వహణ
+Flock score ||| మంద స్కోర్
+For your vet: ||| మీ పశువైద్యుడి కోసం:
+g/bird/wk ||| g/కోడి/వారం
+Gas ||| గ్యాస్
+Gasping / rattling breath ||| నోరు తెరిచి ఊపిరి / గురక శబ్దం
+Generated {0:dd MMM yyyy, HH:mm} ||| తయారైన సమయం {0:dd MMM yyyy, HH:mm}
+Good ||| బాగుంది
+Green = better than the farm average (or standard when there is no history); amber = within 3%; red = worse. Corrected FCR adjusts each batch to {0:0.0} kg at 0.03 per 100 g so batches lifted at different weights compare fairly. ||| ఆకుపచ్చ = ఫారం సగటు (చరిత్ర లేకపోతే ప్రమాణం) కంటే మెరుగు; పసుపు = 3% లోపు తేడా; ఎరుపు = తక్కువ. వేర్వేరు బరువుల్లో లిఫ్ట్ అయిన బ్యాచ్‌లను న్యాయంగా పోల్చడానికి సరిచేసిన FCR ప్రతి బ్యాచ్‌ను 100 g కు 0.03 చొప్పున {0:0.0} kg కు సరిచేస్తుంది.
+Green droppings ||| ఆకుపచ్చ రెట్టలు
+Gross Revenue ||| మొత్తం ఆదాయం
+Growing charge ||| పెంపకం చార్జీ
+Growing Charge (₹/kg live wt) ||| పెంపకం చార్జీ (₹/kg బతికున్న బరువు)
+Growing Charge/kg ||| పెంపకం చార్జీ/kg
+Growth ||| పెరుగుదల
+Growth Curve ||| పెరుగుదల రేఖ
+Growth curve vs standard ||| పెరుగుదల రేఖ vs ప్రమాణం
+Growth Cycle ||| పెంపకం కాలం
+Growth is behind benchmark ||| పెరుగుదల ప్రమాణం కంటే వెనుకబడి ఉంది
+Growth is on target ||| పెరుగుదల లక్ష్యానికి తగ్గట్టుగా ఉంది
+Health ||| ఆరోగ్యం
+Health Event ||| ఆరోగ్య వివరం
+Health Program ||| టీకాల కార్యక్రమం
+Heat stress cutting feed-to-gain efficiency ||| వేడి ఒత్తిడి వల్ల మేత సరిగా మాంసంగా మారకపోవడం
+Heat/cold stress, especially in the first and last week ||| వేడి/చలి ఒత్తిడి, ముఖ్యంగా మొదటి మరియు చివరి వారంలో
+high likelihood ||| ఎక్కువ అవకాశం
+High stocking density limiting feeder/drinker access ||| కోళ్లు ఎక్కువగా ఉండి ఫీడర్/డ్రింకర్ దగ్గరికి చేరలేకపోవడం
+House ||| షెడ్
+house fill {0:0}% vs {1:0}% ||| షెడ్ నింపకం {0:0}% / {1:0}%
+House not found. ||| షెడ్ కనబడలేదు.
+House temperature averaged {0:0.0} °C off the age target. Tighten curtain/fan/brooder control. ||| షెడ్ వేడి వయసు లక్ష్యానికి సగటున {0:0.0} °C తేడాగా ఉంది. కర్టెన్లు/ఫ్యాన్లు/బ్రూడర్లను సరిగా నియంత్రించండి.
+House was filled to {0:0}% of capacity. Place at or below capacity next time. ||| షెడ్ సామర్థ్యంలో {0:0}% నింపారు. తర్వాతి సారి సామర్థ్యానికి మించకుండా పిల్లలు వేయండి.
+Houses ||| షెడ్లు
+Houses & Sheds ||| షెడ్లు
+How can I improve FCR in the remaining days? ||| మిగిలిన రోజుల్లో FCR ఎలా మెరుగుపరచాలి?
+How is this batch doing compared to the standard? ||| ఈ బ్యాచ్ ప్రమాణంతో పోలిస్తే ఎలా ఉంది?
+How this batch compares ||| ఈ బ్యాచ్ పోలిక
+Huddling / dull ||| గుంపుగా చేరడం / నీరసం
+Humidity (%) ||| తేమ (%)
+humidity at {0:0}% is high — check ventilation and litter moisture ||| తేమ {0:0}% ఎక్కువగా ఉంది — గాలి ప్రసరణ, లిట్టర్ తడి చూడండి
+humidity at {0:0}% is low — dusty conditions can stress the respiratory tract ||| తేమ {0:0}% తక్కువగా ఉంది — దుమ్ము వల్ల శ్వాస సమస్యలు రావచ్చు
+In progress: early-cycle metrics vs {0} completed batch(es); age-dependent metrics vs the standard for day {1} ||| నడుస్తోంది: మొదటి రోజుల లెక్కలు పూర్తయిన {0} బ్యాచ్‌లతో; వయసుపై ఆధారపడే లెక్కలు {1}వ రోజు ప్రమాణంతో పోలిక
+Income (settlement) ||| ఆదాయం (సెటిల్‌మెంట్)
+Inconsistent lighting program reducing feeding time ||| లైటింగ్ సరిగా లేక మేత తినే సమయం తగ్గడం
+Info ||| సమాచారం
+Injection ||| ఇంజెక్షన్
+Integrator ||| కంపెనీ (ఇంటిగ్రేటర్)
+Integrator / branch ||| కంపెనీ / బ్రాంచ్
+Integrator representative ||| కంపెనీ ప్రతినిధి
+Internal Operations Portal ||| అంతర్గత నిర్వహణ పోర్టల్
+Invalid username or password. Please contact your administrator. ||| యూజర్‌నేమ్ లేదా పాస్‌వర్డ్ తప్పు. మీ నిర్వాహకుడిని సంప్రదించండి.
+Is the mortality this week normal? ||| ఈ వారం మరణాలు సాధారణమేనా?
+Item ||| అంశం
+kg/bag ||| kg/బస్తా
+Labour ||| కూలీ
+Lame / leg problems ||| కుంటడం / కాళ్ల సమస్యలు
+Latest reading ({0:0.#}°C avg, {1:0}% humidity) is within the expected range for day {2}. ||| తాజా నమోదు (సగటు {0:0.#}°C, తేమ {1:0}%) {2}వ రోజుకు సరైన పరిధిలో ఉంది.
+Latest reading flags: {0}. Both temperature and humidity swings push birds to spend energy on comfort instead of growth, which shows up as worse FCR. ||| తాజా నమోదులో సమస్య: {0}. వేడి, తేమ మారుతుంటే కోళ్లు శక్తిని పెరుగుదలకు కాకుండా తట్టుకోవడానికి వాడతాయి — దాంతో FCR దెబ్బతింటుంది.
+Lessons for the next batch ||| తర్వాతి బ్యాచ్ కోసం నేర్చుకోవాల్సినవి
+Lifting ||| లిఫ్టింగ్
+Lifting / Harvest ||| లిఫ్టింగ్ / అమ్మకం
+Lifting / sales ||| లిఫ్టింగ్ / అమ్మకాలు
+Likely causes: {0}. ||| కారణాలు కావచ్చు: {0}.
+Line ||| వివరం
+Litter ||| లిట్టర్ (ఊక)
+Livability ||| బతికిన శాతం
+Livability (active) ||| బతికిన శాతం (నడుస్తున్నవి)
+livability {0:0.0}% vs {1:0.0}% ||| బతికిన శాతం {0:0.0}% / {1:0.0}%
+Livability has dropped to {0:0.0}% ({1} lost of {2} placed), below the ~97% benchmark. ||| బతికిన శాతం {0:0.0}% కి పడిపోయింది ({2} పిల్లల్లో {1} పోయాయి), ప్రమాణం ~97% కంటే తక్కువ.
+Livability is healthy ||| బతికిన శాతం బాగుంది
+Livability needs attention ||| బతికిన శాతంపై దృష్టి పెట్టాలి
+Livability of {0:0.0}% is healthy — total mortality/culls {1} of {2} placed. ||| బతికిన శాతం {0:0.0}% బాగుంది — {2} పిల్లల్లో మొత్తం మరణాలు/తీసివేసినవి {1}.
+Live ||| లైవ్
+Live Birds ||| బతికున్న కోళ్లు
+Live telemetry across {0} active house(s), {1:N0} birds on the ground. ||| {0} నడుస్తున్న షెడ్లలో {1:N0} కోళ్లు ఉన్నాయి.
+Loading… ||| లోడ్ అవుతోంది…
+Log a body-weight sample on the next daily record to start tracking FCR. ||| FCR లెక్కించడానికి తర్వాతి రోజువారీ నమోదులో బరువు నమూనా నమోదు చేయండి.
+Log a few daily records (weight, mortality, temperature) to get suggestions here. ||| ఇక్కడ సూచనల కోసం కొన్ని రోజువారీ వివరాలు (బరువు, మరణాలు, వేడి) నమోదు చేయండి.
+Log an incoming feed DC ||| వచ్చిన మేత DC నమోదు చేయండి
+Log Health Event ||| ఆరోగ్య వివరం నమోదు
+Log out ||| లాగ్ అవుట్
+Log Today ||| ఈరోజు నమోదు
+Log Today's Record ||| ఈరోజు వివరాలు నమోదు
+Lost birds lower income directly — they're feed cost already spent with no sale weight to show for it. ||| పోయిన ప్రతి కోడి ఆదాయాన్ని నేరుగా తగ్గిస్తుంది — వాటికి పెట్టిన మేత ఖర్చు వృథా, అమ్మకానికి బరువు ఉండదు.
+low likelihood ||| తక్కువ అవకాశం
+Main differences: {0}. ||| ముఖ్య తేడాలు: {0}.
+Manage Houses ||| షెడ్ల నిర్వహణ
+Margin ||| మార్జిన్
+Max Temp (°C) ||| గరిష్ఠ వేడి (°C)
+Medication ||| మందు
+Medicine & vaccine (health log) ||| మందులు & టీకాలు (ఆరోగ్య నమోదు)
+medium likelihood ||| మధ్యస్థ అవకాశం
+Menu ||| మెనూ
+Metric ||| కొలమానం
+Min Temp (°C) ||| కనిష్ఠ వేడి (°C)
+Missed or delayed ND/IBD vaccination ||| ND/IBD టీకా మిస్ అవడం లేదా ఆలస్యం
+Missing/unlogged feed delivery DCs make stock look lower than it is ||| నమోదు చేయని మేత DC ల వల్ల నిల్వ తక్కువగా కనబడుతుంది
+Monitor 24-48 h ||| 24-48 గంటలు గమనించండి
+Monsoon ||| వర్షాకాలం
+Mort ||| మరణాలు
+Mort {0} · Feed {1} · Wt {2:0}g ||| మరణాలు {0} · మేత {1} · బరువు {2:0}g
+Mortality ||| మరణాలు
+Mortality (birds) ||| మరణాలు (కోళ్లు)
+Mortality spikes to investigate ||| పరిశీలించాల్సిన మరణాల పెరుగుదల
+Mortality, feed, weight, water ||| మరణాలు, మేత, బరువు, నీళ్లు
+Name ||| పేరు
+Navigation ||| మెనూ
+Need another house? Contact your platform administrator to have it added to your account. ||| మరో షెడ్ కావాలా? మీ ఖాతాకు జోడించడానికి ప్లాట్‌ఫారం నిర్వాహకుడిని సంప్రదించండి.
+Net Profit ||| నికర లాభం
+New Batch ||| కొత్త బ్యాచ్
+New Batch Placement ||| కొత్త బ్యాచ్ వేయండి
+New chat ||| కొత్త సంభాషణ
+No active batch ||| బ్యాచ్ లేదు
+No batches are currently active. Start a new placement to begin tracking a flock. ||| ప్రస్తుతం ఏ బ్యాచ్ నడవడం లేదు. కొత్త బ్యాచ్ వేసి నమోదు ప్రారంభించండి.
+No batches match here. ||| ఇక్కడ సరిపోయే బ్యాచ్‌లు లేవు.
+No batches match these filters. ||| ఈ ఫిల్టర్లకు సరిపోయే బ్యాచ్‌లు లేవు.
+No booster for extended cycles ||| ఎక్కువ రోజుల బ్యాచ్‌కు బూస్టర్ టీకా ఇవ్వకపోవడం
+No daily records yet. ||| ఇంకా రోజువారీ వివరాలు లేవు.
+No feed deliveries recorded. ||| మేత సరఫరాలు నమోదు కాలేదు.
+No houses set up yet. ||| ఇంకా షెడ్లు జోడించలేదు.
+No liftings recorded. ||| లిఫ్టింగ్‌లు నమోదు కాలేదు.
+No logs recorded today yet. ||| ఈరోజు ఇంకా నమోదులు లేవు.
+No major gaps found. Keep the same programme and aim to match or beat this result. ||| పెద్ద లోపాలు కనబడలేదు. ఇదే పద్ధతి కొనసాగించి ఈ ఫలితాన్ని మించేలా ప్రయత్నించండి.
+No prior record ||| ముందటి నమోదు లేదు
+No shed expenses logged for this batch yet. ||| ఈ బ్యాచ్‌కు ఇంకా షెడ్ ఖర్చులు నమోదు కాలేదు.
+No temperature/humidity readings logged yet — add them on the daily record to track brooding conditions. ||| ఇంకా వేడి/తేమ నమోదు కాలేదు — బ్రూడింగ్ పరిస్థితి తెలుసుకోవడానికి రోజువారీ నమోదులో జోడించండి.
+No vaccination due yet at this age. Log the first dose (typically ND) here once given, so it's tracked. ||| ఈ వయసులో ఇంకా టీకా సమయం రాలేదు. మొదటి టీకా (సాధారణంగా ND) వేసిన వెంటనే ఇక్కడ నమోదు చేయండి.
+No vaccinations/medications recorded. ||| టీకాలు/మందులు నమోదు కాలేదు.
+No weight sample yet ||| ఇంకా బరువు నమూనా లేదు
+Not enough data for an FCR reading yet ||| FCR లెక్కించడానికి ఇంకా సరిపడా వివరాలు లేవు
+Not settled yet ||| ఇంకా సెటిల్ కాలేదు
+Notes ||| గమనికలు
+One dashboard for every house and active flock ||| ప్రతి షెడ్, ప్రతి బ్యాచ్‌కు ఒకే డ్యాష్‌బోర్డ్
+Only {0} vaccination(s) logged for a day-{1} batch — typically {2}+ would be given by now (e.g. ND around day 5-7, IBD around day 14-18). If a dose was given but not logged, add it here; if it was missed, talk to your vet about a catch-up schedule. ||| {1}వ రోజు బ్యాచ్‌కు {0} టీకాలే నమోదయ్యాయి — సాధారణంగా ఈపాటికి {2}+ ఇచ్చి ఉండాలి (ఉదా. ND 5-7 రోజుల్లో, IBD 14-18 రోజుల్లో). టీకా వేసి నమోదు చేయకపోతే ఇక్కడ జోడించండి; మిస్ అయితే మళ్లీ ఎప్పుడు వేయాలో పశువైద్యుడిని అడగండి.
+Operational Hub ||| నిర్వహణ కేంద్రం
+Operations ||| నిర్వహణ
+Other ||| ఇతరం
+Other Shed Expenses Still Expected (₹) ||| ఇంకా రావాల్సిన ఇతర షెడ్ ఖర్చులు (₹)
+Overall Score ||| మొత్తం స్కోర్
+Overall score {0:0}/100 ||| మొత్తం స్కోర్ {0:0}/100
+Overcrowding cutting effective airflow ||| కోళ్లు ఎక్కువై గాలి ప్రసరణ తగ్గడం
+Overstocking increasing competition at the feeder ||| కోళ్లు ఎక్కువై ఫీడర్ దగ్గర పోటీ పెరగడం
+Overview ||| సారాంశం
+Page ||| పేజీ
+Panting / heat ||| ఆయాసం / వేడి
+Password ||| పాస్‌వర్డ్
+Per bird placed / per kg live ||| వేసిన కోడికి / బతికున్న kg కు
+Performance Incentive ||| ప్రోత్సాహకం
+Photo {0} ||| ఫోటో {0}
+Photo Health Check ||| ఫోటోతో ఆరోగ్య పరీక్ష
+Placed ||| వేసిన తేదీ
+Placement date ||| పిల్లలు వేసిన తేదీ
+Poor vaccine cold-chain / storage ||| టీకాను చల్లగా నిల్వ చేయకపోవడం
+Poor ventilation / high humidity raising litter moisture ||| గాలి సరిగా ఆడకపోవడం / తేమ ఎక్కువై లిట్టర్ తడవడం
+Possible conditions ||| ఉండే అవకాశం ఉన్న సమస్యలు
+Possible notifiable disease. ||| ప్రభుత్వానికి తెలియజేయాల్సిన వ్యాధి కావచ్చు.
+Precision Broiler Farm Operations Console ||| ఖచ్చితమైన బ్రాయిలర్ ఫారం నిర్వహణ
+Pre-starter ||| ప్రీ-స్టార్టర్
+Profit / Bird ||| లాభం / కోడి
+Projected Avg Weight at Sale (kg) ||| అమ్మే సమయానికి అంచనా సగటు బరువు (kg)
+Projected Live Birds ||| అంచనా బతికున్న కోళ్లు
+Projected Net Profit ||| అంచనా నికర లాభం
+Projected Sale Age (days) ||| అమ్మే వయసు అంచనా (రోజులు)
+Projected Total Weight ||| అంచనా మొత్తం బరువు
+Quick Links ||| త్వరిత లింకులు
+Ration density/energy too low for the growth stage ||| పెరుగుదల దశకు తగ్గ శక్తి మేతలో లేకపోవడం
+Ready for a new batch ||| కొత్త బ్యాచ్‌కు సిద్ధం
+Ready for DOC Intake ||| పిల్లలు వేయడానికి సిద్ధం
+Received {0} kg · consumed {1} kg · balance {2} kg ||| వచ్చింది {0} kg · వాడింది {1} kg · మిగిలింది {2} kg
+Recent Activity ||| ఇటీవలి నమోదులు
+Record an average body weight sample to start tracking growth against benchmark. ||| ప్రమాణంతో పెరుగుదల పోల్చడానికి సగటు బరువు నమూనా నమోదు చేయండి.
+Record Feed Delivery ||| మేత సరఫరా నమోదు
+Recorded consumption exceeds recorded deliveries by {0} kg - some feed delivery challans are probably not entered, which also makes FCR unreliable. ||| నమోదు చేసిన వాడకం, వచ్చిన మేత కంటే {0} kg ఎక్కువగా ఉంది - కొన్ని మేత DC లు నమోదు చేయలేదేమో; దీనివల్ల FCR కూడా సరిగా రాదు.
+Recorded feed deliveries are already {0:0} kg behind recorded consumption — check that all feed delivery DCs have been logged, then place the next order right away. ||| నమోదైన మేత సరఫరా, వాడకం కంటే ఇప్పటికే {0:0} kg తక్కువ — అన్ని మేత DC లు నమోదయ్యాయో చూసి, వెంటనే తదుపరి ఆర్డర్ పెట్టండి.
+Remarks ||| వ్యాఖ్యలు
+Remove ||| తీసివేయండి
+Repairs ||| మరమ్మతులు
+Revenue ||| ఆదాయం
+Revenue Calculator ||| ఆదాయ లెక్కింపు
+Revenue vs Expenses vs Profit ||| ఆదాయం vs ఖర్చు vs లాభం
+RH % ||| తేమ %
+Role-based access for supervisors and field staff ||| సూపర్‌వైజర్లు, సిబ్బందికి పాత్ర ఆధారిత అనుమతులు
+Route ||| ఇచ్చే విధానం
+Routine ||| సాధారణం
+Running out mid-cycle forces a feed-type switch ||| మధ్యలో మేత అయిపోతే మేత రకం మార్చాల్సి వస్తుంది
+Sampled average body weight (g) by age in days ||| వయసు (రోజులు) వారీగా సగటు బరువు నమూనా (g)
+Save ||| సేవ్ చేయండి
+Score ||| స్కోర్
+Score Breakdown ||| స్కోర్ వివరాలు
+Search batch number or integrator… ||| బ్యాచ్ నంబర్ లేదా కంపెనీ పేరుతో వెతకండి…
+Season ||| కాలం
+Send ||| పంపండి
+Settings ||| సెట్టింగ్స్
+Settlement ||| సెటిల్‌మెంట్
+Settlement pending ||| సెటిల్‌మెంట్ రావాలి
+Share ||| వాటా
+Shed conditions may be stressing the flock ||| షెడ్ పరిస్థితులు కోళ్లను ఇబ్బంది పెడుతుండవచ్చు
+Shed ready for placement ||| పిల్లలు వేయడానికి షెడ్ సిద్ధం
+shed running ~{0:0.#}°C above the ~{1:0}°C target for this age (heat stress risk) ||| షెడ్ వేడి ఈ వయసు లక్ష్యం ~{1:0}°C కంటే ~{0:0.#}°C ఎక్కువ (వేడి ఒత్తిడి ప్రమాదం)
+shed running ~{0:0.#}°C below the ~{1:0}°C target for this age (chilling risk) ||| షెడ్ వేడి ఈ వయసు లక్ష్యం ~{1:0}°C కంటే ~{0:0.#}°C తక్కువ (చలి ప్రమాదం)
+Shed temperature & humidity in range ||| షెడ్ వేడి & తేమ సరిగా ఉన్నాయి
+Sign In ||| లాగిన్ అవ్వండి
+Sign in to continue ||| కొనసాగడానికి లాగిన్ అవ్వండి
+Sorry, the assistant couldn't answer. Please try again. ||| క్షమించండి, సహాయకుడు సమాధానం ఇవ్వలేకపోయాడు. మళ్లీ ప్రయత్నించండి.
+Spray ||| స్ప్రే
+Standard ||| ప్రమాణం
+Start New Batch ||| కొత్త బ్యాచ్ ప్రారంభించండి
+Starter ||| స్టార్టర్
+Status ||| స్థితి
+Std {0:0.00} at day {1} ||| {1}వ రోజు ప్రమాణం {0:0.00}
+Std {0:0} g at day {1} ||| {1}వ రోజు ప్రమాణం {0:0} g
+Std FCR ||| ప్రమాణ FCR
+Std g ||| ప్రమాణ g
+Stop ||| ఆపండి
+Stop all bird, vehicle and people movement in and out of the shed and report to your local veterinary officer / animal husbandry department today. Do not sell or move birds until advised. ||| షెడ్‌లోకి, బయటకు కోళ్లు, వాహనాలు, మనుషుల రాకపోకలు వెంటనే ఆపండి; ఈరోజే స్థానిక పశువైద్యాధికారి / పశుసంవర్ధక శాఖకు తెలియజేయండి. వారు చెప్పే వరకు కోళ్లను అమ్మవద్దు, తరలించవద్దు.
+Stress at vaccination reducing uptake ||| టీకా వేసేటప్పుడు ఒత్తిడి వల్ల టీకా సరిగా పనిచేయకపోవడం
+Sudden deaths ||| అకస్మాత్తు మరణాలు
+Suggestions ||| సూచనలు
+Summer ||| వేసవి
+Supplement ||| సప్లిమెంట్
+Swollen head / eyes ||| తల / కళ్ల వాపు
+Target {0:0.00} kg ||| లక్ష్యం {0:0.00} kg
+Target °C ||| లక్ష్యం °C
+Target 350+ ||| లక్ష్యం 350+
+Target Weight ||| లక్ష్య బరువు
+temperature off-target by {0:0.0} °C vs {1:0.0} °C ||| లక్ష్యం నుండి వేడి తేడా {0:0.0} °C / {1:0.0} °C
+The assistant is busy right now. Please try again in a minute. ||| సహాయకుడు ప్రస్తుతం బిజీగా ఉన్నాడు. ఒక నిమిషం తర్వాత మళ్లీ ప్రయత్నించండి.
+The health check couldn't be completed. Please try again; if birds are dying fast, call your vet now. ||| ఆరోగ్య పరీక్ష పూర్తి కాలేదు. మళ్లీ ప్రయత్నించండి; కోళ్లు వేగంగా చనిపోతుంటే వెంటనే పశువైద్యుడికి ఫోన్ చేయండి.
+The latest day's mortality ({0}) is well above the recent average ({1:0.1}) — worth a closer look today, not at week's end. ||| తాజా రోజు మరణాలు ({0}) ఇటీవలి సగటు ({1:0.1}) కంటే చాలా ఎక్కువ — వారం చివర కాదు, ఈరోజే పరిశీలించండి.
+The photo health check said: "{0}" Possible conditions: {1}. What exactly should I do in the next 24 hours, and what signs mean it is getting worse? ||| ఫోటో ఆరోగ్య పరీక్ష ఇలా చెప్పింది: "{0}" ఉండే అవకాశం ఉన్న సమస్యలు: {1}. రాబోయే 24 గంటల్లో నేను సరిగ్గా ఏమి చేయాలి, పరిస్థితి ముదురుతోందని ఏ లక్షణాలు చెబుతాయి?
+This account is deactivated. Contact your administrator for access. ||| ఈ ఖాతా నిలిపివేయబడింది. అనుమతి కోసం మీ నిర్వాహకుడిని సంప్రదించండి.
+This batch ||| ఈ బ్యాచ్
+This is the farm's best batch so far by EEF ({0:0}). Document the brooding set-up, lighting and vaccination timing so it can be repeated. ||| EEF ({0:0}) ప్రకారం ఇది ఇప్పటివరకు ఫారంలో ఉత్తమ బ్యాచ్. మళ్లీ ఇలాగే చేయడానికి బ్రూడింగ్ ఏర్పాటు, లైటింగ్, టీకాల సమయాలు రాసి పెట్టుకోండి.
+Today ||| ఈరోజు
+Today's Feed ||| ఈరోజు మేత
+Total ||| మొత్తం
+Total Expenses ||| మొత్తం ఖర్చులు
+Total farm cost ||| మొత్తం ఫారం ఖర్చు
+Total Live Birds ||| మొత్తం బతికున్న కోళ్లు
+Total Mortality ||| మొత్తం మరణాలు
+Total Weight (kg) ||| మొత్తం బరువు (kg)
+Track every house, batch and daily record in one place — from placement to settlement — across all your sheds. ||| పిల్లలు వేసినప్పటి నుండి సెటిల్‌మెంట్ వరకు — ప్రతి షెడ్, బ్యాచ్, రోజువారీ వివరాలు ఒకే చోట.
+Transport ||| రవాణా
+Type ||| రకం
+Upload up to {0} clear photos — sick birds up close (head, eyes, comb, legs), fresh droppings, litter, or post-mortem findings. The assistant reads them together with this batch's records and suggests what it could be and what to do now. ||| గరిష్ఠంగా {0} స్పష్టమైన ఫోటోలు పెట్టండి — జబ్బు కోళ్లను దగ్గరగా (తల, కళ్లు, జుట్టు, కాళ్లు), తాజా రెట్టలు, లిట్టర్ లేదా పోస్ట్-మార్టం. సహాయకుడు వాటిని ఈ బ్యాచ్ వివరాలతో కలిపి చూసి, సమస్య ఏమై ఉండొచ్చో, ఇప్పుడు ఏమి చేయాలో సూచిస్తాడు.
+Use Today's Numbers (Sell Now) ||| ఈరోజు లెక్కలు వాడండి (ఇప్పుడే అమ్మితే)
+Username ||| యూజర్‌నేమ్
+Vaccination ||| టీకా
+Vaccination & medication log ||| టీకాలు & మందుల నమోదు
+Vaccination log started — keep logging each dose as it's given. ||| టీకాల నమోదు మొదలైంది — ప్రతి టీకా వేసినప్పుడు నమోదు చేస్తూ ఉండండి.
+Vaccination or medication ||| టీకా లేదా మందు
+Vaccination schedule needs attention ||| టీకాల షెడ్యూల్‌పై దృష్టి పెట్టాలి
+Vaccination schedule on track ||| టీకాల షెడ్యూల్ సరిగా ఉంది
+Value ||| విలువ
+Vehicle ||| వాహనం
+Vehicle Number ||| వాహనం నంబర్
+View Batch ||| బ్యాచ్ చూడండి
+Warning ||| హెచ్చరిక
+Water Consumed (ltr) ||| తాగిన నీళ్లు (లీటర్లు)
+Water spillage soaking litter (birds eat less, feed spoils) ||| నీళ్లు ఒలికి లిట్టర్ తడవడం (కోళ్లు తక్కువ తింటాయి, మేత పాడవుతుంది)
+Watery or white droppings ||| నీళ్ల లేదా తెల్లని రెట్టలు
+Week ||| వారం
+Week-by-week performance ||| వారం వారీ పనితీరు
+Weight / age ||| బరువు / వయసు
+Weight and cumulative FCR are at the last sample of each week ||| బరువు మరియు మొత్తం FCR ప్రతి వారం చివరి నమూనా ప్రకారం
+Weight g ||| బరువు g
+Weight Gain vs Yesterday ||| నిన్నటితో పోలిస్తే బరువు పెరుగుదల
+Weight vs standard ||| బరువు vs ప్రమాణం
+Weighted by live weight ||| బతికున్న బరువు ఆధారంగా
+Welcome — ask an admin to grant you access to a section. ||| స్వాగతం — ఏదైనా విభాగం చూడటానికి నిర్వాహకుడిని అనుమతి అడగండి.
+What affects this ||| దీనిపై ప్రభావం చూపేవి
+What are you seeing? (tap any that apply, or type) ||| మీకు ఏమి కనబడుతోంది? (సరిపోయేవి నొక్కండి లేదా రాయండి)
+What should I check in the shed today? ||| ఈరోజు షెడ్‌లో ఏమి చూడాలి?
+What the assistant saw in the photos ||| ఫోటోల్లో సహాయకుడు గమనించినవి
+When is the best time to lift this batch? ||| ఈ బ్యాచ్ లిఫ్ట్ చేయడానికి సరైన సమయం ఎప్పుడు?
+Winter ||| చలికాలం
+Wt ||| బరువు
+Year ||| సంవత్సరం
+You don't have permission to do this. ||| ఇది చేయడానికి మీకు అనుమతి లేదు.
+You don't have permission to view batches. ||| బ్యాచ్‌లు చూడటానికి మీకు అనుమతి లేదు.
+You don't have permission to view houses. ||| షెడ్లు చూడటానికి మీకు అనుమతి లేదు.
+Your Expenses, by Category ||| మీ ఖర్చులు, రకాల వారీగా
+Your Shed Expenses ||| మీ షెడ్ ఖర్చులు
+Powered by {0} ||| {0} సహకారంతో
+{0:0.000} (standard {1:0.00}) ||| {0:0.000} (ప్రమాణం {1:0.00})
+{0:0} g (standard {1:0} g) ||| {0:0} g (ప్రమాణం {1:0} g)
+{0:N0} kg ||| {0:N0} kg
+{0:N0} kg (~{1:0.#} days) ||| {0:N0} kg (~{1:0.#} రోజులకు)
+{0:N0} kg in stock by the records, using about {1:N0} kg a day. ||| నమోదుల ప్రకారం నిల్వ {0:N0} kg; రోజుకు సుమారు {1:N0} kg వాడుతున్నారు.
+{0} is usually given around day {1}. Tomorrow the batch is on day {2}. ||| {0} సాధారణంగా {1}వ రోజు దగ్గర ఇస్తారు. రేపు బ్యాచ్ {2}వ రోజులో ఉంటుంది.
+{0} is usually given around day {1}; the batch is on day {2} with {3} vaccination(s) logged. ||| {0} సాధారణంగా {1}వ రోజు దగ్గర ఇస్తారు; బ్యాచ్ {2}వ రోజులో ఉంది, {3} టీకాలు మాత్రమే నమోదయ్యాయి.
+{0} today (total {1:0.00}%) ||| ఈరోజు {0} (మొత్తం {1:0.00}%)
+Ask the integrator for the next feed delivery today, and log the DC in BroilIQ when it arrives (a missing DC also makes stock look low). ||| ఈరోజే కంపెనీని తదుపరి మేత సరఫరా అడగండి; మేత వచ్చాక DC ను BroilIQ లో నమోదు చేయండి (DC నమోదు కాకపోయినా నిల్వ తక్కువగా కనిపిస్తుంది).
+BroilIQ test message ||| BroilIQ పరీక్ష సందేశం
+Check the shed now, remove dead birds, note the symptoms and call your vet if deaths continue. You can use the Photo Health Check in BroilIQ. ||| ఇప్పుడే షెడ్ చూడండి, చనిపోయిన కోళ్లను తీసివేయండి, లక్షణాలు గమనించండి; మరణాలు కొనసాగితే పశువైద్యుడికి ఫోన్ చేయండి. BroilIQ లో ఫోటో ఆరోగ్య పరీక్ష కూడా వాడవచ్చు.
+Chilling risk: shed down to {0:0.#} °C ||| చలి ప్రమాదం: షెడ్ {0:0.#} °C కి పడిపోయింది
+Close curtains on the wind side, check brooders and gas, and watch the chicks for huddling. ||| గాలి వచ్చే వైపు కర్టెన్లు మూయండి, బ్రూడర్లు, గ్యాస్ చూడండి, పిల్లలు గుంపుగా చేరుతున్నాయేమో గమనించండి.
+Daily summary time ||| రోజువారీ సారాంశం సమయం
+Death spikes, heat, low feed, vaccinations and a daily summary on your phone ||| మరణాల పెరుగుదల, వేడి, మేత కొరత, టీకాలు మరియు రోజువారీ సారాంశం మీ ఫోన్‌కే
+Deaths spiked: {0} birds on {1} ||| మరణాలు పెరిగాయి: {1}న {0} కోళ్లు
+Feed running low: about {0:0.#} day(s) left ||| మేత తగ్గిపోతోంది: సుమారు {0:0.#} రోజులకే సరిపోతుంది
+Flock score {0:0}/100 — all on track. ||| మంద స్కోర్ {0:0}/100 — అంతా సరిగా ఉంది.
+Flock score {0:0}/100 — check: {1} ||| మంద స్కోర్ {0:0}/100 — చూడండి: {1}
+Get urgent farm alerts and an evening summary on WhatsApp, for the houses you can see. ||| మీరు చూడగలిగే షెడ్ల అత్యవసర హెచ్చరికలు, సాయంత్రం సారాంశం WhatsApp లో పొందండి.
+Heat stress risk: shed at {0:0.#} °C ||| వేడి ఒత్తిడి ప్రమాదం: షెడ్ {0:0.#} °C
+I agree to receive farm alerts and daily summaries from BroilIQ on WhatsApp. I can turn this off at any time. ||| BroilIQ నుండి ఫారం హెచ్చరికలు, రోజువారీ సారాంశాలు WhatsApp లో పొందడానికి అంగీకరిస్తున్నాను. ఎప్పుడైనా ఆపేయవచ్చు.
+If it was given, log it in BroilIQ. If it was missed, ask your vet about a catch-up dose. ||| టీకా వేసి ఉంటే BroilIQ లో నమోదు చేయండి. మిస్ అయితే మళ్లీ ఎప్పుడు వేయాలో పశువైద్యుడిని అడగండి.
+Keep the vaccine cold, stop water sanitiser 24 hours before, and log the dose in BroilIQ after giving it. ||| టీకాను చల్లగా ఉంచండి, 24 గంటల ముందు నీటిలో శానిటైజర్ ఆపండి, వేసిన తర్వాత BroilIQ లో నమోదు చేయండి.
+Message history ||| సందేశాల చరిత్ర
+Mobile number ||| మొబైల్ నంబర్
+No action needed. ||| ఏమీ చేయనవసరం లేదు.
+No daily record for {0} yet. Deaths, feed and weight every day are what let BroilIQ spot problems early. ||| {0} రోజువారీ వివరాలు ఇంకా నమోదు కాలేదు. ప్రతిరోజూ మరణాలు, మేత, బరువు నమోదు చేస్తేనే BroilIQ సమస్యలను ముందే గుర్తించగలదు.
+No messages yet. ||| ఇంకా సందేశాలు లేవు.
+no sample yet ||| ఇంకా నమూనా లేదు
+not entered yet (total {0:0.00}%) ||| ఇంకా నమోదు కాలేదు (మొత్తం {0:0.00}%)
+Open BroilIQ and add today's record before the day ends. ||| రోజు ముగిసేలోపు BroilIQ తెరిచి ఈరోజు వివరాలు నమోదు చేయండి.
+Open curtains, run fans and foggers, give cool water with electrolytes, and avoid feeding in the hottest hours. ||| కర్టెన్లు తెరవండి, ఫ్యాన్లు, ఫాగర్లు నడపండి, ఎలక్ట్రోలైట్లతో చల్లటి నీళ్లు ఇవ్వండి, బాగా ఎండగా ఉన్న సమయంలో మేత వేయవద్దు.
+Save your number with alerts turned on first. ||| ముందుగా హెచ్చరికలు ఆన్ చేసి మీ నంబర్ సేవ్ చేయండి.
+Saved. ||| సేవ్ అయింది.
+Send test message ||| పరీక్ష సందేశం పంపండి
+Test message sent. Check WhatsApp on your phone. ||| పరీక్ష సందేశం పంపాం. మీ ఫోన్‌లో WhatsApp చూడండి.
+Test mode: messages are recorded in the history below but not delivered yet. Your administrator will switch this on once WhatsApp is connected. ||| పరీక్ష మోడ్: సందేశాలు కింద చరిత్రలో నమోదవుతాయి కానీ ఇంకా పంపబడవు. WhatsApp అనుసంధానం అయ్యాక మీ నిర్వాహకుడు దీన్ని ఆన్ చేస్తారు.
+Test mode: the message was recorded below but not delivered. ||| పరీక్ష మోడ్: సందేశం కింద నమోదైంది కానీ పంపబడలేదు.
+That is {0:0.#}x the recent daily average of {1:0.#}. Total mortality is now {2:0.00}%. ||| ఇది ఇటీవలి రోజువారీ సగటు {1:0.#} కి {0:0.#} రెట్లు. మొత్తం మరణాలు ఇప్పుడు {2:0.00}%.
+The number that has WhatsApp. Indian numbers can be entered without +91. ||| WhatsApp ఉన్న నంబర్. భారతీయ నంబర్లు +91 లేకుండా ఇవ్వవచ్చు.
+The target for day {0} is about {1:0} °C. A hot shed causes panting, lower feed intake and sudden deaths. ||| {0}వ రోజుకు లక్ష్యం సుమారు {1:0} °C. షెడ్ వేడిగా ఉంటే కోళ్లు ఆయాసపడతాయి, తక్కువ తింటాయి, అకస్మాత్తుగా చనిపోవచ్చు.
+Today's record is not entered yet ||| ఈరోజు వివరాలు ఇంకా నమోదు కాలేదు
+Vaccination due tomorrow: {0} ||| రేపు టీకా వేయాలి: {0}
+Vaccination not logged: {0} ||| టీకా నమోదు కాలేదు: {0}
+What to send ||| ఏమి పంపాలి
+WhatsApp Alerts ||| WhatsApp హెచ్చరికలు
+WhatsApp alerts are set up for {0}. You will get alerts for your farm here. ||| {0} కోసం WhatsApp హెచ్చరికలు సిద్ధమయ్యాయి. మీ ఫారం హెచ్చరికలు ఇక్కడికే వస్తాయి.
+WhatsApp didn't accept the message: {0} ||| WhatsApp సందేశాన్ని అంగీకరించలేదు: {0}
+Young chicks need about {0:0} °C at day {1}. Cold chicks huddle, eat less and fall behind on weight. ||| {1}వ రోజున పిల్లలకు సుమారు {0:0} °C వేడి కావాలి. చలిగా ఉంటే పిల్లలు గుంపుగా చేరి, తక్కువ తిని, బరువులో వెనుకబడతాయి.
+Your WhatsApp number ||| మీ WhatsApp నంబర్
+Enter a valid mobile number, e.g. 98765 43210 or +91 98765 43210. ||| సరైన మొబైల్ నంబర్ ఇవ్వండి, ఉదా. 98765 43210 లేదా +91 98765 43210.
+Enter your WhatsApp number to turn alerts on. ||| హెచ్చరికలు ఆన్ చేయడానికి మీ WhatsApp నంబర్ ఇవ్వండి.
+Daily summary ||| రోజువారీ సారాంశం
+Deaths, weight, FCR, feed left and flock score for each batch, once every evening. ||| ప్రతి బ్యాచ్ మరణాలు, బరువు, FCR, మిగిలిన మేత, మంద స్కోర్ — ప్రతి సాయంత్రం ఒకసారి.
+Death spikes ||| మరణాల పెరుగుదల
+When a day's deaths jump well above the recent average. ||| ఒక రోజు మరణాలు ఇటీవలి సగటు కంటే బాగా పెరిగినప్పుడు.
+Heat and cold stress ||| వేడి, చలి ఒత్తిడి
+When the shed temperature is dangerous for the birds' age. ||| షెడ్ వేడి కోళ్ల వయసుకు ప్రమాదకరంగా ఉన్నప్పుడు.
+Feed running low ||| మేత తగ్గిపోతోంది
+When feed in stock covers about 2 days or less. ||| నిల్వ మేత సుమారు 2 రోజులు లేదా అంతకంటే తక్కువకు సరిపోయినప్పుడు.
+Vaccinations ||| టీకాలు
+A reminder the day before each vaccine, and a note if one looks missed. ||| ప్రతి టీకాకు ముందు రోజు గుర్తుచేస్తుంది; ఏదైనా మిస్ అయినట్టు ఉంటే తెలియజేస్తుంది.
+Missing daily record ||| రోజువారీ వివరాలు నమోదు కాలేదు
+At 8 PM if today's record hasn't been entered. ||| రాత్రి 8 గంటలకు ఈరోజు వివరాలు నమోదు కాకపోతే.
+Heat stress ||| వేడి ఒత్తిడి
+Cold stress ||| చలి ఒత్తిడి
+Vaccination reminder ||| టీకా గుర్తింపు
+Vaccination not logged ||| టీకా నమోదు కాలేదు
+Test message ||| పరీక్ష సందేశం
+Sent ||| పంపబడింది
+Failed ||| విఫలమైంది
+Simulated ||| పరీక్ష మోడ్
+Pending ||| పంపుతోంది
+{0} birds lost in one day is unusually high — check the number, and call your vet if it is right. ||| ఒక్క రోజులో {0} కోళ్లు పోవడం చాలా ఎక్కువ — సంఖ్య సరిచూడండి; నిజమైతే పశువైద్యుడికి ఫోన్ చేయండి.
+A record for {0} already exists. ||| {0} వివరాలు ఇప్పటికే నమోదై ఉన్నాయి.
+Anything unusual: symptoms, power cut, feed quality… ||| ఏదైనా ప్రత్యేకం: లక్షణాలు, కరెంటు పోవడం, మేత నాణ్యత…
+Batch so far ||| ఇప్పటివరకు బ్యాచ్
+Couldn't save. Check your connection and try again. ||| సేవ్ కాలేదు. ఇంటర్నెట్ చూసి మళ్లీ ప్రయత్నించండి.
+Deaths + culls ({0}) are more than the live birds ({1:N0}). Please check. ||| మరణాలు + తీసివేసినవి ({0}) బతికున్న కోళ్ల ({1:N0}) కంటే ఎక్కువ. దయచేసి సరిచూడండి.
+Feed & water ||| మేత & నీళ్లు
+Feed is more than double yesterday's ({0:0.#} bags). Check the number. ||| మేత నిన్నటి ({0:0.#} బస్తాలు) కంటే రెట్టింపు కంటే ఎక్కువ. సంఖ్య సరిచూడండి.
+Live birds before this record: {0:N0} ||| ఈ నమోదుకు ముందు బతికున్న కోళ్లు: {0:N0}
+Min temperature is higher than max temperature. ||| కనిష్ఠ వేడి గరిష్ఠ వేడి కంటే ఎక్కువగా ఉంది.
+Open it to edit ||| మార్చడానికి తెరవండి
+Same as yesterday ||| నిన్నటిలాగే
+Same as yesterday ({0:0.#} bags) ||| నిన్నటిలాగే ({0:0.#} బస్తాలు)
+Shed conditions ||| షెడ్ పరిస్థితి
+Standard for day {0}: about {1:0} g ||| {0}వ రోజు ప్రమాణం: సుమారు {1:0} g
+Target for day {0}: about {1:0} °C ||| {0}వ రోజు లక్ష్యం: సుమారు {1:0} °C
+Weight ||| బరువు
+Weight is lower than the last sample ({0:0} g). Check the weighing. ||| బరువు గత నమూనా ({0:0} g) కంటే తక్కువగా ఉంది. తూకం సరిచూడండి.
+Weight jumped more than 50% since the last sample ({0:0} g). Check the number. ||| బరువు గత నమూనా ({0:0} g) కంటే 50% కంటే ఎక్కువ పెరిగింది. సంఖ్య సరిచూడండి.
+Integrators / Companies ||| ఇంటిగ్రేటర్లు / కంపెనీలు
+You don't have permission to view integrators. ||| ఇంటిగ్రేటర్లను చూడటానికి మీకు అనుమతి లేదు.
+No integrators are enabled for your farm yet. Please ask the platform administrator to add one. ||| మీ ఫారానికి ఇంకా ఏ ఇంటిగ్రేటర్ ఇవ్వలేదు. దయచేసి ప్లాట్‌ఫారమ్ అడ్మిన్‌ను జోడించమని అడగండి.
+These integrators and their rates are set by the platform administrator. Contact them if anything needs to change. ||| ఈ ఇంటిగ్రేటర్లు, వాటి రేట్లు ప్లాట్‌ఫారమ్ అడ్మిన్ నిర్ణయిస్తారు. ఏదైనా మార్చాలంటే వారిని సంప్రదించండి.
+Inactive ||| నిలిపివేయబడింది
+Chick cost / bird ||| ఒక్కో పిల్ల ధర
+Feed bag weight ||| దాణా బస్తా బరువు
+Growing charge / kg ||| పెంపకం చార్జీ / kg
+Standard FCR ||| ప్రామాణిక FCR
+FCR incentive ||| FCR ప్రోత్సాహకం
+₹{0} / kg per 0.01 ||| ప్రతి 0.01కి ₹{0} / kg
+Mortality allowed ||| అనుమతించిన మరణాలు
+Deduction above allowance ||| పరిమితి మించితే కోత
+₹{0} / bird ||| ఒక్కో కోడికి ₹{0}
+Payment due ||| చెల్లింపు గడువు
+{0} days after lifting ||| లిఫ్టింగ్ తర్వాత {0} రోజులు
+Set by the integrator ||| ఇంటిగ్రేటర్ నిర్ణయించింది
+~{0:0.#} day(s) ||| ~{0:0.#} రోజులు
+All factors on track — keep the routine going. ||| అన్నీ సరిగ్గా ఉన్నాయి — ఇదే పద్ధతి కొనసాగించండి.
+Batch score {0:0} of 100 ||| బ్యాచ్ స్కోరు 100కి {0:0}
+Needs attention ||| శ్రద్ధ అవసరం
+Open batch for full advice ||| పూర్తి సలహా కోసం బ్యాచ్ తెరవండి
+target {0:0.000} ||| లక్ష్యం {0:0.000}
+target {0:N0} g ||| లక్ష్యం {0:N0} g
+Today vs target ||| ఈరోజు vs లక్ష్యం
+Excellent ||| అద్భుతం
+AI Assistant and WhatsApp alerts — see what's on or request them ||| AI అసిస్టెంట్, వాట్సాప్ హెచ్చరికలు — ఏవి ఆన్‌లో ఉన్నాయో చూడండి లేదా అభ్యర్థించండి
+Ask your farm admin to request this feature. ||| ఈ సౌకర్యం కోసం మీ ఫారం అడ్మిన్‌ను అభ్యర్థించమని అడగండి.
+Choose your alerts and WhatsApp number ||| మీ హెచ్చరికలు, వాట్సాప్ నంబర్ ఎంచుకోండి
+Death spikes, heat, low feed, vaccination reminders and an evening summary sent to your phone on WhatsApp, in English or Telugu. ||| మరణాలు పెరగడం, వేడి, మేత తక్కువ, టీకా గుర్తింపులు, సాయంత్రం సారాంశం — ఇంగ్లీష్ లేదా తెలుగులో మీ ఫోన్‌కు వాట్సాప్‌లో.
+Features ||| సౌకర్యాలు
+Open any batch and go to the AI Assistant tab. ||| ఏదైనా బ్యాచ్ తెరిచి AI అసిస్టెంట్ ట్యాబ్‌కు వెళ్లండి.
+Optional features are switched on for your farm by the platform administrator. Request any you'd like to use. ||| అదనపు సౌకర్యాలను ప్లాట్‌ఫారమ్ అడ్మిన్ మీ ఫారానికి ఆన్ చేస్తారు. మీకు కావలసినవి అభ్యర్థించండి.
+Optional note for the administrator, e.g. number of sheds or a phone number to call ||| అడ్మిన్‌కు గమనిక (ఐచ్ఛికం), ఉదా. షెడ్ల సంఖ్య లేదా సంప్రదించాల్సిన ఫోన్ నంబర్
+Request sent. The platform administrator will contact you. ||| అభ్యర్థన పంపబడింది. ప్లాట్‌ఫారమ్ అడ్మిన్ మిమ్మల్ని సంప్రదిస్తారు.
+Request this feature ||| ఈ సౌకర్యాన్ని అభ్యర్థించండి
+Requested on {0} by {1}. The platform administrator will contact you. ||| {0}న {1} అభ్యర్థించారు. ప్లాట్‌ఫారమ్ అడ్మిన్ మిమ్మల్ని సంప్రదిస్తారు.
+Switched on for your farm — the platform administrator is finishing the setup. It will start working here automatically. ||| మీ ఫారానికి ఆన్ చేయబడింది — ప్లాట్‌ఫారమ్ అడ్మిన్ సెటప్ పూర్తి చేస్తున్నారు. ఇది ఇక్కడ ఆటోమేటిక్‌గా పనిచేయడం మొదలవుతుంది.
+Upload photos of sick birds for an instant health check, and ask questions about your batch in English or Telugu. The assistant reads your own daily records, weights, feed and health log. ||| జబ్బు పడిన కోళ్ల ఫోటోలు అప్‌లోడ్ చేసి వెంటనే ఆరోగ్య పరీక్ష పొందండి, మీ బ్యాచ్ గురించి ఇంగ్లీష్ లేదా తెలుగులో ప్రశ్నలు అడగండి. అసిస్టెంట్ మీ రోజువారీ రికార్డులు, బరువులు, మేత, ఆరోగ్య లాగ్ చదువుతుంది.
+Your last request was not approved. ||| మీ గత అభ్యర్థన ఆమోదించబడలేదు.
+Being set up ||| సెటప్ జరుగుతోంది
+Not enabled ||| ఆన్ చేయలేదు
+Test mode ||| టెస్ట్ మోడ్

@@ -36,12 +36,12 @@ else
                 @if (integratorOptions.Count == 0)
                 {
                     <div class="empty-state" style="padding:10px 0; text-align:left;">
-                        No integrators set up yet. <a href="settings/integrators">Add one</a> before placing a batch.
+                        No integrators are enabled for your farm yet. Please ask the platform administrator to add one.
                     </div>
                 }
                 else
                 {
-                    <Dropdown TValue="int" Value="batch.IntegratorId" ValueChanged="v => batch.IntegratorId = v"
+                    <Dropdown TValue="int" Value="batch.IntegratorId" ValueChanged="OnIntegratorChanged"
                               Options="integratorOptions" Placeholder="Select integrator…" />
                 }
             </div>
@@ -63,7 +63,8 @@ else
             </div>
             <div class="field">
                 <label>Chick Cost / Bird (₹)</label>
-                <InputNumber @bind-Value="batch.ChickCostPerBird" step="0.01" />
+                <input type="text" readonly value="@ChickCostShown.ToString("0.00")" title="Set by the integrator" />
+                <div class="field-hint">Set by the integrator@(SelectedIntegrator is { } si ? $" · feed bag {si.BagWeightKg:0.##} kg" : "")</div>
             </div>
             <div class="field">
                 <label>Target Weight (kg)</label>
@@ -76,6 +77,10 @@ else
         </div>
     </div>
 
+    @if (error is not null)
+    {
+        <div class="card empty-state">@error</div>
+    }
     <div class="action-row">
         <button type="submit" class="btn btn-primary btn-block">Save Batch</button>
     </div>
@@ -88,6 +93,9 @@ else
     private Batch batch = new();
     private List<(int Value, string Label)> houseOptions = new();
     private List<(int Value, string Label)> integratorOptions = new();
+    private List<Integrator> integrators = new();
+    private int originalIntegratorId;
+    private string? error;
     private bool loading = true;
 
     protected override async Task OnInitializedAsync()
@@ -95,26 +103,58 @@ else
         var houses = await FarmService.GetHousesAsync();
         houseOptions = houses.Select(h => (h.Id, h.Name)).ToList();
 
-        var integrators = await FarmService.GetIntegratorsAsync();
-        integratorOptions = integrators.Select(i => (i.Id, i.Name)).ToList();
+        integrators = await FarmService.GetIntegratorsAsync(activeOnly: true);
 
         if (Id.HasValue)
         {
             var existing = await FarmService.GetBatchAsync(Id.Value);
-            if (existing != null) batch = existing;
+            if (existing != null)
+            {
+                batch = existing;
+                originalIntegratorId = batch.IntegratorId;
+                // Keep a since-deactivated/removed integrator selectable for the batch that already uses it.
+                if (batch.Integrator is not null && integrators.All(i => i.Id != batch.IntegratorId))
+                    integrators.Insert(0, batch.Integrator);
+            }
         }
         else
         {
             batch.HouseId = HouseId ?? (houses.Count > 0 ? houses[0].Id : 0);
-            batch.IntegratorId = integrators.Count > 0 ? integrators[0].Id : 0;
+            if (integrators.Count > 0) OnIntegratorChanged(integrators[0].Id);
         }
+        integratorOptions = integrators.Select(i => (i.Id, i.Name)).ToList();
 
         loading = false;
     }
 
+    private Integrator? SelectedIntegrator => integrators.FirstOrDefault(i => i.Id == batch.IntegratorId);
+
+    // Existing batches keep the chick cost recorded at placement unless moved to another integrator.
+    private decimal ChickCostShown => batch.Id != 0 && batch.IntegratorId == originalIntegratorId
+        ? batch.ChickCostPerBird
+        : SelectedIntegrator?.ChickCostPerBird ?? 0;
+
+    private void OnIntegratorChanged(int id)
+    {
+        batch.IntegratorId = id;
+        if (batch.Id == 0 && SelectedIntegrator is { } i)
+        {
+            batch.Breed = i.DefaultBreed;
+            batch.TargetWeightKg = i.TargetWeightKg;
+        }
+    }
+
     private async Task Save()
     {
-        var id = await FarmService.SaveBatchAsync(batch);
-        Nav.NavigateTo($"batch/{id}");
+        error = null;
+        try
+        {
+            var id = await FarmService.SaveBatchAsync(batch);
+            Nav.NavigateTo($"batch/{id}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            error = ex.Message;
+        }
     }
 }

@@ -1,0 +1,196 @@
+@page "/settings/whatsapp"
+@using AmrPoultryFarmWeb.Services.Notifications
+@using Microsoft.Extensions.Options
+@inject NotificationService Notifications
+@inject IOptions<WhatsAppOptions> WhatsAppOptions
+@inject AuthService AuthService
+
+<PageTitle>@L["WhatsApp Alerts"] — @(AuthService.CurrentTenant?.Name ?? AppBrand.Name)</PageTitle>
+
+<div class="page-head">
+    <div>
+        <a href="settings" style="font-size:12px; font-weight:700; color:var(--ink-soft); text-decoration:none;">← @L["Settings"]</a>
+        <h1 class="page-title" style="margin-top:4px;">@L["WhatsApp Alerts"]</h1>
+        <div class="page-head-sub">@L["Get urgent farm alerts and an evening summary on WhatsApp, for the houses you can see."]</div>
+    </div>
+</div>
+
+@if (feature is { WhatsAppEnabled: false })
+{
+    <FeatureRequestCard Feature="@Features.WhatsAppAlerts" Icon="chat"
+                        Description="@L["Death spikes, heat, low feed, vaccination reminders and an evening summary sent to your phone on WhatsApp, in English or Telugu."]" />
+    return;
+}
+
+@if (feature is not null && !live)
+{
+    <div class="wa-banner">
+        <span class="material-symbols-outlined">science</span>
+        <span>@L["Test mode: messages are recorded in the history below but not delivered yet. Your administrator will switch this on once WhatsApp is connected."]</span>
+    </div>
+}
+
+@if (pref is null)
+{
+    <p class="empty-state">@L["Loading…"]</p>
+}
+else
+{
+    <div class="card">
+        <div class="section-title mt-0">@L["Your WhatsApp number"]</div>
+        <div class="form-grid">
+            <div class="field">
+                <label>@L["Mobile number"]</label>
+                <input @bind="number" type="tel" inputmode="tel" placeholder="+91 98765 43210" maxlength="20" />
+                <div class="list-row-sub">@L["The number that has WhatsApp. Indian numbers can be entered without +91."]</div>
+            </div>
+        </div>
+        <label class="wa-consent">
+            <input type="checkbox" @bind="pref.WhatsAppOptIn" />
+            <span>@L["I agree to receive farm alerts and daily summaries from BroilIQ on WhatsApp. I can turn this off at any time."]</span>
+        </label>
+    </div>
+
+    <div class="card">
+        <div class="section-title mt-0">@L["What to send"]</div>
+        @foreach (var option in Options)
+        {
+            <label class="wa-toggle">
+                <input type="checkbox" checked="@option.Get()" @onchange="e => option.Set((bool)e.Value!)" />
+                <span>
+                    <b>@L[option.Title]</b>
+                    <span class="list-row-sub">@L[option.Description]</span>
+                </span>
+            </label>
+        }
+        <div class="field" style="max-width:260px; margin-top:8px;">
+            <label>@L["Daily summary time"]</label>
+            <select @bind="pref.SummaryHour" disabled="@(!pref.DailySummary)">
+                @for (int h = 6; h <= 22; h++)
+                {
+                    var hour = h;
+                    <option value="@hour">@(new DateTime(2000, 1, 1, hour, 0, 0).ToString("h:00 tt"))</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    @if (message is not null)
+    {
+        <div class="@(messageIsError ? "ai-error" : "wa-ok")">@message</div>
+    }
+
+    <div class="action-row">
+        <button class="btn btn-primary" @onclick="Save" disabled="@busy">@L["Save"]</button>
+        <button class="btn btn-outline" @onclick="SendTest" disabled="@(busy || !savedOptIn)">
+            <span class="material-symbols-outlined" style="font-size:18px;">send</span>&nbsp;@L["Send test message"]
+        </button>
+    </div>
+
+    <div class="panel-title" style="margin-top:18px;"><h2><span class="material-symbols-outlined">history</span> @L["Message history"]</h2></div>
+    <div class="card" style="padding:4px 12px;">
+        @if (history.Count == 0)
+        {
+            <div class="empty-state">@L["No messages yet."]</div>
+        }
+        @foreach (var h in history)
+        {
+            <div class="list-row">
+                <div style="min-width:0;">
+                    <div class="list-row-title" style="font-size:13.5px;">@L[KindLabel(h.Kind)]</div>
+                    <div class="list-row-sub" style="white-space:normal;">@h.Summary</div>
+                    @if (!string.IsNullOrWhiteSpace(h.Error))
+                    {
+                        <div class="list-row-sub" style="color:var(--danger);">@h.Error</div>
+                    }
+                </div>
+                <div style="text-align:right; flex:0 0 auto; margin-left:10px;">
+                    <span class="wa-status @h.Status.ToLowerInvariant()">@L[h.Status]</span>
+                    <div class="list-row-sub">@TimeZoneInfo.ConvertTimeFromUtc(h.CreatedAtUtc, zone).ToString("dd MMM, h:mm tt")</div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private NotificationPreference? pref;
+    private string number = "";
+    private bool savedOptIn;
+    private bool busy;
+    private string? message;
+    private bool messageIsError;
+    private List<NotificationLog> history = new();
+    private TimeZoneInfo zone = TimeZoneInfo.Local;
+
+    private record AlertOption(string Title, string Description, Func<bool> Get, Action<bool> Set);
+    private List<AlertOption> Options = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        zone = WhatsAppOptions.Value.ResolveTimeZone();
+        // The toggles read/write through the `pref` field, so they follow it across reloads.
+        Options = new()
+        {
+            new("Daily summary", "Deaths, weight, FCR, feed left and flock score for each batch, once every evening.", () => pref!.DailySummary, v => pref!.DailySummary = v),
+            new("Death spikes", "When a day's deaths jump well above the recent average.", () => pref!.MortalityAlerts, v => pref!.MortalityAlerts = v),
+            new("Heat and cold stress", "When the shed temperature is dangerous for the birds' age.", () => pref!.HeatAlerts, v => pref!.HeatAlerts = v),
+            new("Feed running low", "When feed in stock covers about 2 days or less.", () => pref!.FeedAlerts, v => pref!.FeedAlerts = v),
+            new("Vaccinations", "A reminder the day before each vaccine, and a note if one looks missed.", () => pref!.VaccinationAlerts, v => pref!.VaccinationAlerts = v),
+            new("Missing daily record", "At 8 PM if today's record hasn't been entered.", () => pref!.MissingEntryAlerts, v => pref!.MissingEntryAlerts = v),
+        };
+        feature = await Notifications.GetFeatureStatusAsync();
+        if (!feature.WhatsAppEnabled) return;
+        live = await Notifications.IsLiveAsync();
+        await LoadAsync();
+    }
+
+    private FeatureStatus? feature;
+    private bool live;
+
+    private async Task LoadAsync()
+    {
+        pref = await Notifications.GetMyPreferenceAsync();
+        number = string.IsNullOrEmpty(pref.WhatsAppNumber) ? "" : "+" + pref.WhatsAppNumber;
+        savedOptIn = pref.WhatsAppOptIn && pref.WhatsAppNumber.Length > 0;
+        history = await Notifications.GetMyHistoryAsync();
+    }
+
+    private async Task Save()
+    {
+        if (pref is null) return;
+        busy = true;
+        pref.WhatsAppNumber = number;
+        var error = await Notifications.SaveMyPreferenceAsync(pref);
+        messageIsError = error is not null;
+        message = error ?? L["Saved."];
+        if (error is null) await LoadAsync(); // show the number as normalised/stored
+        busy = false;
+    }
+
+    private async Task SendTest()
+    {
+        busy = true;
+        var row = await Notifications.SendTestAsync();
+        messageIsError = row is null || row.Status == "Failed";
+        message = row is null ? L["Save your number with alerts turned on first."]
+            : row.Status == "Failed" ? L["WhatsApp didn't accept the message: {0}", row.Error ?? ""]
+            : row.Status == "Simulated" ? L["Test mode: the message was recorded below but not delivered."]
+            : L["Test message sent. Check WhatsApp on your phone."];
+        history = await Notifications.GetMyHistoryAsync();
+        busy = false;
+    }
+
+    private static string KindLabel(string kind) => kind switch
+    {
+        AlertKinds.Mortality => "Death spikes",
+        AlertKinds.Heat => "Heat stress",
+        AlertKinds.Cold => "Cold stress",
+        AlertKinds.Feed => "Feed running low",
+        AlertKinds.VaccinationDue => "Vaccination reminder",
+        AlertKinds.VaccinationLate => "Vaccination not logged",
+        AlertKinds.MissingEntry => "Missing daily record",
+        AlertKinds.DailySummary => "Daily summary",
+        _ => "Test message",
+    };
+}

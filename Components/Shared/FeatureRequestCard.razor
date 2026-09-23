@@ -1,0 +1,86 @@
+﻿@* Shown in place of an optional feature (AI Assistant, WhatsApp alerts) that isn't switched on for
+   this client: explains what it does and lets the farm's admin ask the platform administrator for it.
+   Other users are told to ask their farm admin. Pending/declined requests are shown back to them. *@
+@inject TenantFeatureService FeatureService
+@inject AuthService AuthService
+
+<div class="card feature-lock">
+    <div class="feature-lock-icon"><span class="material-symbols-outlined">@Icon</span></div>
+    <div class="feature-lock-body">
+        <div class="feature-lock-title">
+            @L[Features.Label(Feature)]
+            <span class="status-chip muted">@L[Enabled ? "Being set up" : "Not enabled"]</span>
+        </div>
+        <p class="calc-note" style="margin:4px 0 10px;">@Description</p>
+
+        @if (Enabled)
+        {
+            <div class="feature-lock-state"><span class="material-symbols-outlined">hourglass_top</span> @L["Switched on for your farm — the platform administrator is finishing the setup. It will start working here automatically."]</div>
+        }
+        else if (pending is not null)
+        {
+            <div class="feature-lock-state"><span class="material-symbols-outlined">schedule_send</span> @L["Requested on {0} by {1}. The platform administrator will contact you.", pending.CreatedAtUtc.ToLocalTime().ToString("dd MMM yyyy"), pending.RequestedByName]</div>
+        }
+        else
+        {
+            @if (declined is not null)
+            {
+                <div class="feature-lock-state declined"><span class="material-symbols-outlined">info</span>
+                    @L["Your last request was not approved."]@(string.IsNullOrWhiteSpace(declined.AdminNote) ? "" : " " + declined.AdminNote)
+                </div>
+            }
+            @if (AuthService.IsSystemAdmin)
+            {
+                <textarea @bind="message" rows="2" maxlength="500" placeholder="@L["Optional note for the administrator, e.g. number of sheds or a phone number to call"]"></textarea>
+                <button class="btn btn-primary" style="margin-top:8px;" @onclick="Request" disabled="@busy">
+                    <span class="material-symbols-outlined" style="font-size:18px;">send</span>&nbsp;@L["Request this feature"]
+                </button>
+            }
+            else
+            {
+                <div class="feature-lock-state"><span class="material-symbols-outlined">person</span> @L["Ask your farm admin to request this feature."]</div>
+            }
+        }
+        @if (result is not null)
+        {
+            <div class="wa-ok" style="margin-top:8px;">@result</div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public string Feature { get; set; } = "";
+    [Parameter, EditorRequired] public string Description { get; set; } = "";
+    [Parameter] public string Icon { get; set; } = "lock";
+    /// <summary>Switched on by the Super Admin but credentials not saved yet.</summary>
+    [Parameter] public bool Enabled { get; set; }
+
+    private FeatureRequest? pending;
+    private FeatureRequest? declined;
+    private string message = "";
+    private string? result;
+    private bool busy;
+
+    protected override async Task OnParametersSetAsync() => await LoadAsync();
+
+    private async Task LoadAsync()
+    {
+        if (AuthService.CurrentTenantId is not { } tenantId) return;
+        var mine = (await FeatureService.GetRequestsAsync(tenantId)).Where(r => r.Feature == Feature).ToList();
+        pending = mine.FirstOrDefault(r => r.Status == FeatureRequestStatus.Pending);
+        // Only mention a decline if it's the latest word on this feature.
+        declined = pending is null && mine.FirstOrDefault() is { Status: FeatureRequestStatus.Declined } last ? last : null;
+    }
+
+    private async Task Request()
+    {
+        if (AuthService.CurrentTenantId is not { } tenantId || AuthService.CurrentUser is not { } user || !AuthService.IsSystemAdmin) return;
+        busy = true;
+        var name = string.IsNullOrWhiteSpace(user.DisplayName) ? user.Username : user.DisplayName;
+        await FeatureService.RequestAsync(tenantId, user.Id, name, Feature, message);
+        message = "";
+        result = L["Request sent. The platform administrator will contact you."];
+        await LoadAsync();
+        busy = false;
+    }
+}

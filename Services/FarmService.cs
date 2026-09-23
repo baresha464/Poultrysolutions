@@ -277,11 +277,14 @@ public class FarmService
         return await db.Houses.FirstOrDefaultAsync(h => h.Id == id);
     }
 
+    /// <summary>Updates an existing house. New houses are only created by the Super Admin
+    /// (PlatformAdminService.AddHouseAsync), never from inside a tenant.</summary>
     public async Task<int> SaveHouseAsync(House house)
     {
+        if (house.Id == 0)
+            throw new InvalidOperationException("New houses are added by the platform administrator.");
         using var db = NewContext();
-        if (house.Id == 0) db.Houses.Add(house);
-        else db.Houses.Update(house);
+        db.Houses.Update(house);
         await db.SaveChangesAsync();
         return house.Id;
     }
@@ -298,46 +301,24 @@ public class FarmService
         return true;
     }
 
-    // ---------------- Integrators ----------------
-    public async Task<List<Integrator>> GetIntegratorsAsync()
+    // ---------------- Integrators (read-only for tenants) ----------------
+    // Integrators and their terms are managed by the Super Admin (PlatformAdminService); a tenant
+    // only sees the ones allowed for it via TenantIntegrators (tenant-filtered).
+
+    /// <summary>Integrators allowed for the current client. <paramref name="activeOnly"/> hides ones
+    /// the Super Admin has deactivated — use it for pickers on new records.</summary>
+    public async Task<List<Integrator>> GetIntegratorsAsync(bool activeOnly = false)
     {
         using var db = NewContext();
-        return await db.Integrators.OrderBy(i => i.SortOrder).ThenBy(i => i.Name).ToListAsync();
+        var q = db.Integrators.Where(i => db.TenantIntegrators.Any(t => t.IntegratorId == i.Id));
+        if (activeOnly) q = q.Where(i => i.IsActive);
+        return await q.OrderBy(i => i.SortOrder).ThenBy(i => i.Name).ToListAsync();
     }
 
     public async Task<Integrator?> GetIntegratorAsync(int id)
     {
         using var db = NewContext();
-        return await db.Integrators.FirstOrDefaultAsync(i => i.Id == id);
-    }
-
-    public async Task<int> SaveIntegratorAsync(Integrator integrator)
-    {
-        using var db = NewContext();
-        if (integrator.Id == 0) db.Integrators.Add(integrator);
-        else db.Integrators.Update(integrator);
-        await db.SaveChangesAsync();
-        return integrator.Id;
-    }
-
-    /// <summary>Returns false (and does not delete) if the integrator still has batches attached.</summary>
-    public async Task<bool> DeleteIntegratorAsync(int integratorId)
-    {
-        using var db = NewContext();
-        if (await db.Batches.AnyAsync(b => b.IntegratorId == integratorId)) return false;
-        var integrator = await db.Integrators.FindAsync(integratorId);
-        if (integrator is null) return false;
-        db.Integrators.Remove(integrator);
-        await db.SaveChangesAsync();
-        return true;
-    }
-
-    /// <summary>Unscoped (deliberately ignores house scoping) — used for delete-safety checks, which
-    /// must consider every batch system-wide, not just the ones the current viewer can see.</summary>
-    public async Task<int> CountBatchesForIntegratorAsync(int integratorId)
-    {
-        using var db = NewContext();
-        return await db.Batches.CountAsync(b => b.IntegratorId == integratorId);
+        return await db.Integrators.FirstOrDefaultAsync(i => i.Id == id && db.TenantIntegrators.Any(t => t.IntegratorId == i.Id));
     }
 
     // ---------------- Batches ----------------
@@ -388,8 +369,34 @@ public class FarmService
     public async Task<int> SaveBatchAsync(Batch batch)
     {
         using var db = NewContext();
-        if (batch.Id == 0) db.Batches.Add(batch);
-        else db.Batches.Update(batch);
+        var integrator = await db.Integrators.FirstOrDefaultAsync(i => i.Id == batch.IntegratorId);
+        if (batch.Id == 0)
+        {
+            // New batches may only use an active integrator allowed for this client, and take the
+            // chick cost from the integrator's terms (set by the Super Admin, not editable here).
+            if (integrator is null || !integrator.IsActive
+                || !await db.TenantIntegrators.AnyAsync(t => t.IntegratorId == batch.IntegratorId))
+                throw new InvalidOperationException("This integrator isn't available for your farm.");
+            batch.ChickCostPerBird = integrator.ChickCostPerBird;
+            db.Batches.Add(batch);
+        }
+        else
+        {
+            // Existing batch: keep the integrator and chick cost recorded when it was placed, unless
+            // it is moved to another allowed integrator.
+            var saved = await db.Batches.AsNoTracking().FirstOrDefaultAsync(b => b.Id == batch.Id)
+                ?? throw new InvalidOperationException("Batch not found.");
+            if (saved.IntegratorId != batch.IntegratorId)
+            {
+                if (integrator is null || !await db.TenantIntegrators.AnyAsync(t => t.IntegratorId == batch.IntegratorId))
+                    throw new InvalidOperationException("This integrator isn't available for your farm.");
+                batch.ChickCostPerBird = integrator.ChickCostPerBird;
+            }
+            else batch.ChickCostPerBird = saved.ChickCostPerBird;
+            batch.Integrator = null;
+            batch.House = null;
+            db.Batches.Update(batch);
+        }
         await db.SaveChangesAsync();
         return batch.Id;
     }
@@ -450,6 +457,13 @@ public class FarmService
     public async Task<int> SaveFeedDeliveryAsync(FeedDelivery feed)
     {
         using var db = NewContext();
+        // Bag weight is an integrator term (Super Admin-managed); new deliveries always use it.
+        if (feed.Id == 0)
+        {
+            var bagKg = await db.Batches.Where(b => b.Id == feed.BatchId)
+                .Select(b => (decimal?)b.Integrator!.BagWeightKg).FirstOrDefaultAsync();
+            if (bagKg is > 0) feed.BagWeightKg = bagKg.Value;
+        }
         if (feed.Id == 0) db.FeedDeliveries.Add(feed);
         else db.FeedDeliveries.Update(feed);
         await db.SaveChangesAsync();

@@ -1,0 +1,652 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- GENERATED from te.translations.txt by build-resx.ps1 - edit that file, not this one. -->
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name=" — the factors on the right are the usual causes" xml:space="preserve"><value>— కింద చూపిన కారణాలే సాధారణంగా ఉంటాయి</value></data>
+  <data name="(capacity {0}, {1:0}% filled)" xml:space="preserve"><value>(సామర్థ్యం {0}, {1:0}% నిండింది)</value></data>
+  <data name="{0:+0;-0;0} g (was {1:0}g)" xml:space="preserve"><value>{0:+0;-0;0} g (నిన్న {1:0}g)</value></data>
+  <data name="{0:0.#} bags" xml:space="preserve"><value>{0:0.#} బస్తాలు</value></data>
+  <data name="{0:0.00} kg eaten per bird" xml:space="preserve"><value>ఒక్కో కోడి {0:0.00} kg తిన్నది</value></data>
+  <data name="{0:0} g vs {1:0} g at day {2}" xml:space="preserve"><value>{2}వ రోజున {0:0} g / ప్రమాణం {1:0} g</value></data>
+  <data name="{0:0}g/day" xml:space="preserve"><value>{0:0}g/రోజుకు</value></data>
+  <data name="{0:N0} batch(es) this year" xml:space="preserve"><value>ఈ సంవత్సరం {0:N0} బ్యాచ్‌లు</value></data>
+  <data name="{0:N0} birds" xml:space="preserve"><value>{0:N0} కోళ్లు</value></data>
+  <data name="{0:N0} chicks" xml:space="preserve"><value>{0:N0} పిల్లలు</value></data>
+  <data name="{0:N0} DOCs placed" xml:space="preserve"><value>{0:N0} పిల్లలు వేశారు</value></data>
+  <data name="{0:N0} total mortality" xml:space="preserve"><value>మొత్తం {0:N0} చనిపోయాయి</value></data>
+  <data name="{0} / bird" xml:space="preserve"><value>{0} / కోడి</value></data>
+  <data name="{0} active shed(s)" xml:space="preserve"><value>{0} షెడ్లు నడుస్తున్నాయి</value></data>
+  <data name="{0} batch(es) matching filters" xml:space="preserve"><value>ఫిల్టర్‌కు సరిపోయే {0} బ్యాచ్‌లు</value></data>
+  <data name="{0} birds" xml:space="preserve"><value>{0} కోళ్లు</value></data>
+  <data name="{0} days cycle" xml:space="preserve"><value>{0} రోజుల పెంపకం</value></data>
+  <data name="{0} dead · {1} culls" xml:space="preserve"><value>{0} చనిపోయాయి · {1} తీసివేసినవి</value></data>
+  <data name="{0} per bird" xml:space="preserve"><value>కోడికి {0}</value></data>
+  <data name="{0} still in house" xml:space="preserve"><value>{0} ఇంకా షెడ్‌లో ఉన్నాయి</value></data>
+  <data name="{0} vaccination(s) · health cost {1}" xml:space="preserve"><value>{0} టీకాలు · ఆరోగ్య ఖర్చు {1}</value></data>
+  <data name="{0} vaccination(s) logged, in line with a batch of this age." xml:space="preserve"><value>{0} టీకాలు నమోదయ్యాయి — ఈ వయసు బ్యాచ్‌కు సరిపోతుంది.</value></data>
+  <data name="{0} vs {1}" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="{0} vs {1} placement" xml:space="preserve"><value>{0} / {1} కాలంలో వేసిన బ్యాచ్</value></data>
+  <data name="{0} vs {1} vaccinations logged" xml:space="preserve"><value>{0} / {1} టీకాలు నమోదు</value></data>
+  <data name="{0}: check - {1}." xml:space="preserve"><value>{0}: చూడండి - {1}.</value></data>
+  <data name="{0}: Today&apos;s log recorded" xml:space="preserve"><value>{0}: ఈరోజు వివరాలు నమోదయ్యాయి</value></data>
+  <data name="7-day weight" xml:space="preserve"><value>7వ రోజు బరువు</value></data>
+  <data name="7-day weight {0:0} g vs {1:0} g" xml:space="preserve"><value>7వ రోజు బరువు {0:0} g / {1:0} g</value></data>
+  <data name="7-day weight was {0:0} g (target ~180 g). Improve pre-heating, crop fill checks and early feed access." xml:space="preserve"><value>7వ రోజు బరువు {0:0} g మాత్రమే (లక్ష్యం ~180 g). పిల్లలు రాకముందే షెడ్ వేడి చేయండి, పిల్లల కడుపు (క్రాప్) నిండిందో చూడండి, మొదటి రోజుల్లో మేత సులువుగా అందేలా చేయండి.</value></data>
+  <data name="Across {0} active batch(es)" xml:space="preserve"><value>{0} నడుస్తున్న బ్యాచ్‌లలో</value></data>
+  <data name="Act today" xml:space="preserve"><value>ఈరోజే చర్య తీసుకోండి</value></data>
+  <data name="Actions for this batch" xml:space="preserve"><value>ఈ బ్యాచ్ కోసం చేయాల్సినవి</value></data>
+  <data name="Active" xml:space="preserve"><value>నడుస్తున్నవి</value></data>
+  <data name="Active Batch" xml:space="preserve"><value>నడుస్తున్న బ్యాచ్</value></data>
+  <data name="Active Batches" xml:space="preserve"><value>నడుస్తున్న బ్యాచ్‌లు</value></data>
+  <data name="Active Sheds &amp; Housing Status" xml:space="preserve"><value>షెడ్ల ప్రస్తుత స్థితి</value></data>
+  <data name="Active, day {0}" xml:space="preserve"><value>నడుస్తోంది, {0}వ రోజు</value></data>
+  <data name="Actual" xml:space="preserve"><value>వాస్తవం</value></data>
+  <data name="Add Daily Record" xml:space="preserve"><value>రోజువారీ వివరాలు నమోదు</value></data>
+  <data name="Add Feed Delivery" xml:space="preserve"><value>మేత సరఫరా నమోదు</value></data>
+  <data name="Add Health Event" xml:space="preserve"><value>ఆరోగ్య వివరం నమోదు</value></data>
+  <data name="Add Lifting" xml:space="preserve"><value>లిఫ్టింగ్ నమోదు</value></data>
+  <data name="Add photo" xml:space="preserve"><value>ఫోటో జోడించండి</value></data>
+  <data name="Add Settlement" xml:space="preserve"><value>సెటిల్‌మెంట్ నమోదు</value></data>
+  <data name="Additional Expected" xml:space="preserve"><value>ఇంకా రావాల్సిన ఖర్చు</value></data>
+  <data name="Additional Mortality Expected (%)" xml:space="preserve"><value>ఇంకా చనిపోవచ్చని అంచనా (%)</value></data>
+  <data name="Adjusted to {0:0.0} kg" xml:space="preserve"><value>{0:0.0} kg కు సరిచేసినది</value></data>
+  <data name="Administrator" xml:space="preserve"><value>నిర్వాహకుడు</value></data>
+  <data name="Advisor" xml:space="preserve"><value>సలహాదారు</value></data>
+  <data name="Advisor composite" xml:space="preserve"><value>సలహాదారు మొత్తం స్కోర్</value></data>
+  <data name="Against the breed standard and {0} other completed batch(es) on this farm" xml:space="preserve"><value>జాతి ప్రమాణంతో మరియు ఈ ఫారంలో పూర్తయిన మరో {0} బ్యాచ్‌లతో పోలిక</value></data>
+  <data name="Age" xml:space="preserve"><value>వయసు</value></data>
+  <data name="AI Assistant" xml:space="preserve"><value>AI సహాయకుడు</value></data>
+  <data name="AI Assistant is not enabled" xml:space="preserve"><value>AI సహాయకుడు ఇంకా ఆన్ చేయలేదు</value></data>
+  <data name="AI suggestion based on photos and farm records — not a diagnosis. Always confirm with a veterinarian before treating." xml:space="preserve"><value>ఇది ఫోటోలు మరియు ఫారం వివరాల ఆధారంగా AI ఇచ్చిన సూచన మాత్రమే — నిర్ధారణ కాదు. మందులు వాడే ముందు తప్పకుండా పశువైద్యుడిని సంప్రదించండి.</value></data>
+  <data name="All" xml:space="preserve"><value>అన్నీ</value></data>
+  <data name="All houses" xml:space="preserve"><value>అన్ని షెడ్లు</value></data>
+  <data name="All years" xml:space="preserve"><value>అన్ని సంవత్సరాలు</value></data>
+  <data name="Ammonia build-up from wet litter / poor ventilation" xml:space="preserve"><value>తడి లిట్టర్ / గాలి సరిగా ఆడకపోవడం వల్ల అమ్మోనియా వాసన పెరగడం</value></data>
+  <data name="Amount" xml:space="preserve"><value>మొత్తం</value></data>
+  <data name="Amount Received" xml:space="preserve"><value>అందిన మొత్తం</value></data>
+  <data name="Analysing photos… usually 20-60 seconds" xml:space="preserve"><value>ఫోటోలు పరిశీలిస్తోంది… సాధారణంగా 20-60 సెకన్లు</value></data>
+  <data name="Analytics &amp; Reports" xml:space="preserve"><value>విశ్లేషణ &amp; రిపోర్టులు</value></data>
+  <data name="Ask anything about this batch — it answers from your own daily records, weights, feed and health log." xml:space="preserve"><value>ఈ బ్యాచ్ గురించి ఏదైనా అడగండి — మీ రోజువారీ వివరాలు, బరువులు, మేత, ఆరోగ్య నమోదుల ఆధారంగా సమాధానం ఇస్తుంది.</value></data>
+  <data name="Ask follow-up questions about this" xml:space="preserve"><value>దీని గురించి ఇంకా అడగండి</value></data>
+  <data name="Ask the Farm Assistant" xml:space="preserve"><value>ఫారం సహాయకుడిని అడగండి</value></data>
+  <data name="At the current consumption rate (~{0:0} kg/day) the {1:0} kg on hand covers roughly {2:0.#} day(s). Place the next feed order now to avoid a forced ration change, which itself hurts FCR." xml:space="preserve"><value>ప్రస్తుతం రోజుకు ~{0:0} kg మేత వాడుతున్నారు; ఉన్న {1:0} kg సుమారు {2:0.#} రోజులకే సరిపోతుంది. ఇప్పుడే తదుపరి మేత ఆర్డర్ చేయండి — మేత అకస్మాత్తుగా మార్చాల్సి వస్తే FCR దెబ్బతింటుంది.</value></data>
+  <data name="Authorized personnel only." xml:space="preserve"><value>అనుమతి ఉన్నవారికి మాత్రమే.</value></data>
+  <data name="Average Farm FCR" xml:space="preserve"><value>ఫారం సగటు FCR</value></data>
+  <data name="Average weight {0:0}g is about {1:0}% behind the ~{2:0}g benchmark for day {3}. Falling behind now usually means more days to reach sale weight, which adds feed cost and delays the next placement." xml:space="preserve"><value>సగటు బరువు {0:0}g — {3}వ రోజు ప్రమాణం ~{2:0}g కంటే సుమారు {1:0}% తక్కువ. ఇప్పుడు వెనుకబడితే అమ్మకం బరువుకు ఎక్కువ రోజులు పడతాయి; మేత ఖర్చు పెరుగుతుంది, తర్వాతి బ్యాచ్ ఆలస్యమవుతుంది.</value></data>
+  <data name="Average weight {0:0}g is on pace with the ~{1:0}g benchmark for day {2}." xml:space="preserve"><value>సగటు బరువు {0:0}g — {2}వ రోజు ప్రమాణం ~{1:0}g కి తగ్గట్టుగా ఉంది.</value></data>
+  <data name="Avg" xml:space="preserve"><value>సగటు</value></data>
+  <data name="Avg °C" xml:space="preserve"><value>సగటు °C</value></data>
+  <data name="Avg Body Weight" xml:space="preserve"><value>సగటు శరీర బరువు</value></data>
+  <data name="Avg Body Weight (gm)" xml:space="preserve"><value>సగటు శరీర బరువు (గ్రాములు)</value></data>
+  <data name="Avg Body Wt" xml:space="preserve"><value>సగటు బరువు</value></data>
+  <data name="Avg daily gain" xml:space="preserve"><value>రోజువారీ సగటు పెరుగుదల</value></data>
+  <data name="Avg FCR (active)" xml:space="preserve"><value>సగటు FCR (నడుస్తున్నవి)</value></data>
+  <data name="Avg kg" xml:space="preserve"><value>సగటు kg</value></data>
+  <data name="Avg Weight" xml:space="preserve"><value>సగటు బరువు</value></data>
+  <data name="Avg Weight / Bird" xml:space="preserve"><value>కోడి సగటు బరువు</value></data>
+  <data name="Avg Wt" xml:space="preserve"><value>సగటు బరువు</value></data>
+  <data name="Bag Weight (kg)" xml:space="preserve"><value>బస్తా బరువు (kg)</value></data>
+  <data name="Bags" xml:space="preserve"><value>బస్తాలు</value></data>
+  <data name="Batch" xml:space="preserve"><value>బ్యాచ్</value></data>
+  <data name="Batch Closeout Report" xml:space="preserve"><value>బ్యాచ్ ముగింపు రిపోర్ట్</value></data>
+  <data name="Batch code" xml:space="preserve"><value>బ్యాచ్ కోడ్</value></data>
+  <data name="Batch details" xml:space="preserve"><value>బ్యాచ్ వివరాలు</value></data>
+  <data name="Batch economics" xml:space="preserve"><value>బ్యాచ్ ఆదాయ-ఖర్చులు</value></data>
+  <data name="Batch History" xml:space="preserve"><value>బ్యాచ్ చరిత్ర</value></data>
+  <data name="Batch Info" xml:space="preserve"><value>బ్యాచ్ సమాచారం</value></data>
+  <data name="Batch not found." xml:space="preserve"><value>బ్యాచ్ కనబడలేదు.</value></data>
+  <data name="Batch Progress Report" xml:space="preserve"><value>బ్యాచ్ ప్రగతి రిపోర్ట్</value></data>
+  <data name="Batches" xml:space="preserve"><value>బ్యాచ్‌లు</value></data>
+  <data name="Batch-wise growth, FCR &amp; livability at a glance" xml:space="preserve"><value>బ్యాచ్ వారీగా పెరుగుదల, FCR &amp; బతికిన శాతం ఒక్క చూపులో</value></data>
+  <data name="Birds" xml:space="preserve"><value>కోళ్లు</value></data>
+  <data name="Birds Lifted" xml:space="preserve"><value>లిఫ్ట్ అయిన కోళ్లు</value></data>
+  <data name="Bloody droppings" xml:space="preserve"><value>రక్తంతో రెట్టలు</value></data>
+  <data name="Branch Code" xml:space="preserve"><value>బ్రాంచ్ కోడ్</value></data>
+  <data name="Breed" xml:space="preserve"><value>జాతి</value></data>
+  <data name="Breed standards, FCR metrics, and contractual harvest tracking across every house." xml:space="preserve"><value>ప్రతి షెడ్‌కు జాతి ప్రమాణాలు, FCR లెక్కలు మరియు కంపెనీ లిఫ్టింగ్ వివరాలు.</value></data>
+  <data name="Broiler Batches &amp; Lifecycle" xml:space="preserve"><value>బ్రాయిలర్ బ్యాచ్‌లు &amp; పెంపకం</value></data>
+  <data name="Broiler Operations" xml:space="preserve"><value>బ్రాయిలర్ నిర్వహణ</value></data>
+  <data name="Brooding temperature too high/low for age" xml:space="preserve"><value>వయసుకు తగ్గట్టు బ్రూడింగ్ వేడి ఎక్కువ/తక్కువగా ఉండటం</value></data>
+  <data name="Brooding temperature too low in week 1 (chicks huddle instead of eating)" xml:space="preserve"><value>మొదటి వారంలో బ్రూడింగ్ వేడి తక్కువ (పిల్లలు తినకుండా గుంపుగా చేరతాయి)</value></data>
+  <data name="By {0}" xml:space="preserve"><value>తయారు చేసినవారు: {0}</value></data>
+  <data name="Call your vet" xml:space="preserve"><value>పశువైద్యుడికి ఫోన్ చేయండి</value></data>
+  <data name="Capacity" xml:space="preserve"><value>సామర్థ్యం</value></data>
+  <data name="Capacity {0:N0} birds · no active batch" xml:space="preserve"><value>సామర్థ్యం {0:N0} కోళ్లు · బ్యాచ్ లేదు</value></data>
+  <data name="Check Bird Health" xml:space="preserve"><value>కోళ్ల ఆరోగ్యం చూడండి</value></data>
+  <data name="Check to confirm" xml:space="preserve"><value>నిర్ధారణకు చూడాల్సినవి</value></data>
+  <data name="Chick cost (integrator DC)" xml:space="preserve"><value>పిల్ల ధర (కంపెనీ DC)</value></data>
+  <data name="Chicks Placed" xml:space="preserve"><value>వేసిన పిల్లలు</value></data>
+  <data name="Close Batch" xml:space="preserve"><value>బ్యాచ్ ముగించండి</value></data>
+  <data name="Close menu" xml:space="preserve"><value>మెనూ మూసివేయండి</value></data>
+  <data name="Closed" xml:space="preserve"><value>ముగిసింది</value></data>
+  <data name="Coccidiosis, worm load or other gut-health issues" xml:space="preserve"><value>కాక్సిడియోసిస్, నులిపురుగులు లేదా ఇతర పేగు సమస్యలు</value></data>
+  <data name="Collapse menu" xml:space="preserve"><value>మెనూ చిన్నది చేయండి</value></data>
+  <data name="Corrected FCR" xml:space="preserve"><value>సరిచేసిన FCR</value></data>
+  <data name="Cost" xml:space="preserve"><value>ఖర్చు</value></data>
+  <data name="Cost (₹)" xml:space="preserve"><value>ఖర్చు (₹)</value></data>
+  <data name="Couldn&apos;t read &quot;{0}&quot;. Use a JPG or PNG photo (on iPhone, set Camera → Formats → Most Compatible)." xml:space="preserve"><value>&quot;{0}&quot; చదవలేకపోయాం. JPG లేదా PNG ఫోటో వాడండి (iPhone లో Camera → Formats → Most Compatible ఎంచుకోండి).</value></data>
+  <data name="Critical" xml:space="preserve"><value>తీవ్రం</value></data>
+  <data name="Culls" xml:space="preserve"><value>తీసివేసినవి</value></data>
+  <data name="Cum. FCR" xml:space="preserve"><value>మొత్తం FCR</value></data>
+  <data name="Cum. mort." xml:space="preserve"><value>మొత్తం మరణాలు</value></data>
+  <data name="Cumulative Livability" xml:space="preserve"><value>మొత్తం బతికిన శాతం</value></data>
+  <data name="Current avg weight" xml:space="preserve"><value>ప్రస్తుత సగటు బరువు</value></data>
+  <data name="Daily Gain" xml:space="preserve"><value>రోజువారీ పెరుగుదల</value></data>
+  <data name="Daily Log" xml:space="preserve"><value>రోజువారీ నమోదు</value></data>
+  <data name="Daily Mortality" xml:space="preserve"><value>రోజువారీ మరణాలు</value></data>
+  <data name="Daily mortality pattern" xml:space="preserve"><value>రోజువారీ మరణాల తీరు</value></data>
+  <data name="Daily Record" xml:space="preserve"><value>రోజువారీ వివరాలు</value></data>
+  <data name="Dashboard" xml:space="preserve"><value>డ్యాష్‌బోర్డ్</value></data>
+  <data name="Date" xml:space="preserve"><value>తేదీ</value></data>
+  <data name="Day {0}" xml:space="preserve"><value>{0}వ రోజు</value></data>
+  <data name="DC no." xml:space="preserve"><value>DC నం.</value></data>
+  <data name="DC Number" xml:space="preserve"><value>DC నంబర్</value></data>
+  <data name="Dead" xml:space="preserve"><value>చనిపోయినవి</value></data>
+  <data name="Dead + culls per day of age; red bars are spikes (&gt; 2.5x the running average)" xml:space="preserve"><value>రోజువారీ మరణాలు + తీసివేసినవి; ఎరుపు గీతలు అసాధారణంగా పెరిగిన రోజులు (సగటుకు 2.5 రెట్లు మించి)</value></data>
+  <data name="Deductions" xml:space="preserve"><value>కోతలు</value></data>
+  <data name="Delete" xml:space="preserve"><value>తొలగించండి</value></data>
+  <data name="Deliveries" xml:space="preserve"><value>సరఫరాలు</value></data>
+  <data name="Diesel" xml:space="preserve"><value>డీజిల్</value></data>
+  <data name="Disease or subclinical infection diverting energy from growth" xml:space="preserve"><value>వ్యాధి లేదా లోపలి ఇన్ఫెక్షన్ వల్ల శక్తి పెరుగుదలకు కాకుండా పోవడం</value></data>
+  <data name="Disease outbreak (check for a mortality spike vs the daily average)" xml:space="preserve"><value>వ్యాధి వ్యాప్తి (రోజువారీ సగటు కంటే మరణాలు ఒక్కసారిగా పెరిగాయేమో చూడండి)</value></data>
+  <data name="Disinfection" xml:space="preserve"><value>క్రిమిసంహారం</value></data>
+  <data name="Do now" xml:space="preserve"><value>ఇప్పుడే చేయండి</value></data>
+  <data name="Dose" xml:space="preserve"><value>మోతాదు</value></data>
+  <data name="Download Report" xml:space="preserve"><value>రిపోర్ట్ డౌన్‌లోడ్</value></data>
+  <data name="Draughts at bird level" xml:space="preserve"><value>కోళ్ల ఎత్తులో చల్లటి గాలి దూరడం</value></data>
+  <data name="Drinking more" xml:space="preserve"><value>ఎక్కువ నీళ్లు తాగుతున్నాయి</value></data>
+  <data name="Drinking water" xml:space="preserve"><value>తాగునీటిలో</value></data>
+  <data name="e.g. 1 drop/bird" xml:space="preserve"><value>ఉదా. కోడికి 1 చుక్క</value></data>
+  <data name="e.g. 15 birds dead since morning, some sitting with closed eyes, droppings greenish" xml:space="preserve"><value>ఉదా. ఉదయం నుండి 15 కోళ్లు చనిపోయాయి, కొన్ని కళ్లు మూసుకుని కూర్చున్నాయి, రెట్టలు ఆకుపచ్చగా ఉన్నాయి</value></data>
+  <data name="e.g. ND Lasota" xml:space="preserve"><value>ఉదా. ND లసోటా</value></data>
+  <data name="e.g. Why did mortality go up this week?" xml:space="preserve"><value>ఉదా. ఈ వారం మరణాలు ఎందుకు పెరిగాయి?</value></data>
+  <data name="Eating less" xml:space="preserve"><value>తక్కువగా తింటున్నాయి</value></data>
+  <data name="Edit Batch" xml:space="preserve"><value>బ్యాచ్ మార్చండి</value></data>
+  <data name="Edit House" xml:space="preserve"><value>షెడ్ మార్చండి</value></data>
+  <data name="Edit Settlement" xml:space="preserve"><value>సెటిల్‌మెంట్ మార్చండి</value></data>
+  <data name="EEF (interim)" xml:space="preserve"><value>EEF (మధ్యంతర)</value></data>
+  <data name="EEF / EPEF" xml:space="preserve"><value>EEF / EPEF</value></data>
+  <data name="EEF Index" xml:space="preserve"><value>EEF సూచిక</value></data>
+  <data name="Electricity" xml:space="preserve"><value>కరెంటు</value></data>
+  <data name="Emergency — act now" xml:space="preserve"><value>అత్యవసరం — ఇప్పుడే చర్య తీసుకోండి</value></data>
+  <data name="Emergency local purchase is usually costlier and lower quality" xml:space="preserve"><value>అత్యవసరంగా బయట కొనే మేత సాధారణంగా ఖరీదు ఎక్కువ, నాణ్యత తక్కువ</value></data>
+  <data name="Empty" xml:space="preserve"><value>ఖాళీ</value></data>
+  <data name="Enter today&apos;s weight" xml:space="preserve"><value>ఈరోజు బరువు నమోదు చేయండి</value></data>
+  <data name="Environment" xml:space="preserve"><value>షెడ్ వాతావరణం</value></data>
+  <data name="Estimated across active houses" xml:space="preserve"><value>నడుస్తున్న షెడ్లలో అంచనా</value></data>
+  <data name="Expand menu" xml:space="preserve"><value>మెనూ పెద్దది చేయండి</value></data>
+  <data name="Expected Deductions (₹)" xml:space="preserve"><value>అంచనా కోతలు (₹)</value></data>
+  <data name="Expected FCR at Harvest" xml:space="preserve"><value>లిఫ్టింగ్ సమయానికి అంచనా FCR</value></data>
+  <data name="Expected Incentive (₹)" xml:space="preserve"><value>అంచనా ప్రోత్సాహకం (₹)</value></data>
+  <data name="Expense - {0}" xml:space="preserve"><value>ఖర్చు - {0}</value></data>
+  <data name="Expenses" xml:space="preserve"><value>ఖర్చులు</value></data>
+  <data name="Eye drop" xml:space="preserve"><value>కంటి చుక్క</value></data>
+  <data name="Farm average" xml:space="preserve"><value>ఫారం సగటు</value></data>
+  <data name="Farm best" xml:space="preserve"><value>ఫారంలో ఉత్తమం</value></data>
+  <data name="Farm best is {0} (EEF {1:0} vs {2:0} here)." xml:space="preserve"><value>ఫారంలో ఉత్తమ బ్యాచ్ {0} (EEF {1:0}, ఇక్కడ {2:0}).</value></data>
+  <data name="Farm cost per kg" xml:space="preserve"><value>kg కు ఫారం ఖర్చు</value></data>
+  <data name="Farm Overview &amp; Operations" xml:space="preserve"><value>ఫారం స్థితి &amp; నిర్వహణ</value></data>
+  <data name="Farm owner" xml:space="preserve"><value>ఫారం యజమాని</value></data>
+  <data name="Farm supervisor" xml:space="preserve"><value>ఫారం సూపర్‌వైజర్</value></data>
+  <data name="Farmer-side income and costs (chicks and feed are supplied by the integrator)" xml:space="preserve"><value>రైతు వైపు ఆదాయం, ఖర్చులు (పిల్లలు, మేత కంపెనీ ఇస్తుంది)</value></data>
+  <data name="FCR" xml:space="preserve"><value>FCR</value></data>
+  <data name="FCR (raw)" xml:space="preserve"><value>FCR (సాధారణ)</value></data>
+  <data name="FCR is behind benchmark" xml:space="preserve"><value>FCR ప్రమాణం కంటే వెనుకబడి ఉంది</value></data>
+  <data name="FCR is on target" xml:space="preserve"><value>FCR లక్ష్యానికి తగ్గట్టుగా ఉంది</value></data>
+  <data name="FCR of {0:0.000} is at or better than the {1:0.00} benchmark for this age — feed conversion is efficient right now." xml:space="preserve"><value>FCR {0:0.000} — ఈ వయసు ప్రమాణం {1:0.00} కి సమానంగా లేదా మెరుగ్గా ఉంది. మేత బాగా మాంసంగా మారుతోంది.</value></data>
+  <data name="FCR of {0:0.000} is running about {1:0}% worse than the {2:0.00} benchmark for this age. Every 0.1 point of extra FCR adds real feed cost per kg of bird produced — the factors on the right are the usual causes." xml:space="preserve"><value>FCR {0:0.000} — ఈ వయసు ప్రమాణం {2:0.00} కంటే సుమారు {1:0}% ఎక్కువగా ఉంది. FCR 0.1 పెరిగినా ప్రతి kg కోడికి మేత ఖర్చు పెరుగుతుంది — కింద చూపిన కారణాలే సాధారణంగా ఉంటాయి.</value></data>
+  <data name="FCR Trend" xml:space="preserve"><value>FCR తీరు</value></data>
+  <data name="Feed" xml:space="preserve"><value>మేత</value></data>
+  <data name="Feed balance" xml:space="preserve"><value>మిగిలిన మేత</value></data>
+  <data name="Feed Consumed" xml:space="preserve"><value>వాడిన మేత</value></data>
+  <data name="Feed Consumed (bags)" xml:space="preserve"><value>వాడిన మేత (బస్తాలు)</value></data>
+  <data name="Feed deliveries" xml:space="preserve"><value>మేత సరఫరాలు</value></data>
+  <data name="Feed Delivery" xml:space="preserve"><value>మేత సరఫరా</value></data>
+  <data name="Feed In Stock" xml:space="preserve"><value>నిల్వ ఉన్న మేత</value></data>
+  <data name="Feed kg" xml:space="preserve"><value>మేత kg</value></data>
+  <data name="Feed mix" xml:space="preserve"><value>మేతలో కలిపి</value></data>
+  <data name="Feed or water access issues in part of the shed" xml:space="preserve"><value>షెడ్‌లో కొంత భాగంలో మేత లేదా నీళ్లు సరిగా అందకపోవడం</value></data>
+  <data name="Feed particle size/quality inconsistent with age" xml:space="preserve"><value>వయసుకు తగ్గ మేత పరిమాణం/నాణ్యత లేకపోవడం</value></data>
+  <data name="Feed received / consumed" xml:space="preserve"><value>వచ్చిన / వాడిన మేత</value></data>
+  <data name="Feed Still Needed (from Integrator)" xml:space="preserve"><value>ఇంకా కావాల్సిన మేత (కంపెనీ నుండి)</value></data>
+  <data name="Feed Stock" xml:space="preserve"><value>మేత నిల్వ</value></data>
+  <data name="Feed stock is running low" xml:space="preserve"><value>మేత నిల్వ తగ్గిపోతోంది</value></data>
+  <data name="Feed Type" xml:space="preserve"><value>మేత రకం</value></data>
+  <data name="Feed wastage — feeder height/fill level not adjusted to bird age" xml:space="preserve"><value>మేత వృథా — కోడి వయసుకు తగ్గట్టు ఫీడర్ ఎత్తు/నింపే స్థాయి సరిచేయకపోవడం</value></data>
+  <data name="Filtered Totals" xml:space="preserve"><value>ఫిల్టర్ చేసిన మొత్తాలు</value></data>
+  <data name="Final avg weight" xml:space="preserve"><value>చివరి సగటు బరువు</value></data>
+  <data name="Final EEF is set at lifting" xml:space="preserve"><value>చివరి EEF లిఫ్టింగ్ సమయంలో తేలుతుంది</value></data>
+  <data name="Final FCR" xml:space="preserve"><value>చివరి FCR</value></data>
+  <data name="Final Livability" xml:space="preserve"><value>చివరి బతికిన శాతం</value></data>
+  <data name="Financials &amp; Expenses" xml:space="preserve"><value>ఆదాయ వ్యయాలు &amp; ఖర్చులు</value></data>
+  <data name="Finisher" xml:space="preserve"><value>ఫినిషర్</value></data>
+  <data name="First-week mortality" xml:space="preserve"><value>మొదటి వారం మరణాలు</value></data>
+  <data name="first-week mortality {0:0.00}% vs {1:0.00}%" xml:space="preserve"><value>మొదటి వారం మరణాలు {0:0.00}% / {1:0.00}%</value></data>
+  <data name="First-week mortality was {0:0.00}% (target &lt; 1%). Record chick quality on arrival and raise it with the hatchery/integrator." xml:space="preserve"><value>మొదటి వారం మరణాలు {0:0.00}% (లక్ష్యం 1% లోపు). పిల్లలు వచ్చినప్పుడే నాణ్యత నమోదు చేసి హ్యాచరీ/కంపెనీకి తెలియజేయండి.</value></data>
+  <data name="Flock advisor findings" xml:space="preserve"><value>సలహాదారు గుర్తించినవి</value></data>
+  <data name="Flock Health Score" xml:space="preserve"><value>మంద ఆరోగ్య స్కోర్</value></data>
+  <data name="Flock Livability" xml:space="preserve"><value>మంద బతికిన శాతం</value></data>
+  <data name="Flock Operations" xml:space="preserve"><value>మంద నిర్వహణ</value></data>
+  <data name="Flock score" xml:space="preserve"><value>మంద స్కోర్</value></data>
+  <data name="For your vet:" xml:space="preserve"><value>మీ పశువైద్యుడి కోసం:</value></data>
+  <data name="g/bird/wk" xml:space="preserve"><value>g/కోడి/వారం</value></data>
+  <data name="Gas" xml:space="preserve"><value>గ్యాస్</value></data>
+  <data name="Gasping / rattling breath" xml:space="preserve"><value>నోరు తెరిచి ఊపిరి / గురక శబ్దం</value></data>
+  <data name="Generated {0:dd MMM yyyy, HH:mm}" xml:space="preserve"><value>తయారైన సమయం {0:dd MMM yyyy, HH:mm}</value></data>
+  <data name="Good" xml:space="preserve"><value>బాగుంది</value></data>
+  <data name="Green = better than the farm average (or standard when there is no history); amber = within 3%; red = worse. Corrected FCR adjusts each batch to {0:0.0} kg at 0.03 per 100 g so batches lifted at different weights compare fairly." xml:space="preserve"><value>ఆకుపచ్చ = ఫారం సగటు (చరిత్ర లేకపోతే ప్రమాణం) కంటే మెరుగు; పసుపు = 3% లోపు తేడా; ఎరుపు = తక్కువ. వేర్వేరు బరువుల్లో లిఫ్ట్ అయిన బ్యాచ్‌లను న్యాయంగా పోల్చడానికి సరిచేసిన FCR ప్రతి బ్యాచ్‌ను 100 g కు 0.03 చొప్పున {0:0.0} kg కు సరిచేస్తుంది.</value></data>
+  <data name="Green droppings" xml:space="preserve"><value>ఆకుపచ్చ రెట్టలు</value></data>
+  <data name="Gross Revenue" xml:space="preserve"><value>మొత్తం ఆదాయం</value></data>
+  <data name="Growing charge" xml:space="preserve"><value>పెంపకం చార్జీ</value></data>
+  <data name="Growing Charge (₹/kg live wt)" xml:space="preserve"><value>పెంపకం చార్జీ (₹/kg బతికున్న బరువు)</value></data>
+  <data name="Growing Charge/kg" xml:space="preserve"><value>పెంపకం చార్జీ/kg</value></data>
+  <data name="Growth" xml:space="preserve"><value>పెరుగుదల</value></data>
+  <data name="Growth Curve" xml:space="preserve"><value>పెరుగుదల రేఖ</value></data>
+  <data name="Growth curve vs standard" xml:space="preserve"><value>పెరుగుదల రేఖ vs ప్రమాణం</value></data>
+  <data name="Growth Cycle" xml:space="preserve"><value>పెంపకం కాలం</value></data>
+  <data name="Growth is behind benchmark" xml:space="preserve"><value>పెరుగుదల ప్రమాణం కంటే వెనుకబడి ఉంది</value></data>
+  <data name="Growth is on target" xml:space="preserve"><value>పెరుగుదల లక్ష్యానికి తగ్గట్టుగా ఉంది</value></data>
+  <data name="Health" xml:space="preserve"><value>ఆరోగ్యం</value></data>
+  <data name="Health Event" xml:space="preserve"><value>ఆరోగ్య వివరం</value></data>
+  <data name="Health Program" xml:space="preserve"><value>టీకాల కార్యక్రమం</value></data>
+  <data name="Heat stress cutting feed-to-gain efficiency" xml:space="preserve"><value>వేడి ఒత్తిడి వల్ల మేత సరిగా మాంసంగా మారకపోవడం</value></data>
+  <data name="Heat/cold stress, especially in the first and last week" xml:space="preserve"><value>వేడి/చలి ఒత్తిడి, ముఖ్యంగా మొదటి మరియు చివరి వారంలో</value></data>
+  <data name="high likelihood" xml:space="preserve"><value>ఎక్కువ అవకాశం</value></data>
+  <data name="High stocking density limiting feeder/drinker access" xml:space="preserve"><value>కోళ్లు ఎక్కువగా ఉండి ఫీడర్/డ్రింకర్ దగ్గరికి చేరలేకపోవడం</value></data>
+  <data name="House" xml:space="preserve"><value>షెడ్</value></data>
+  <data name="house fill {0:0}% vs {1:0}%" xml:space="preserve"><value>షెడ్ నింపకం {0:0}% / {1:0}%</value></data>
+  <data name="House not found." xml:space="preserve"><value>షెడ్ కనబడలేదు.</value></data>
+  <data name="House temperature averaged {0:0.0} °C off the age target. Tighten curtain/fan/brooder control." xml:space="preserve"><value>షెడ్ వేడి వయసు లక్ష్యానికి సగటున {0:0.0} °C తేడాగా ఉంది. కర్టెన్లు/ఫ్యాన్లు/బ్రూడర్లను సరిగా నియంత్రించండి.</value></data>
+  <data name="House was filled to {0:0}% of capacity. Place at or below capacity next time." xml:space="preserve"><value>షెడ్ సామర్థ్యంలో {0:0}% నింపారు. తర్వాతి సారి సామర్థ్యానికి మించకుండా పిల్లలు వేయండి.</value></data>
+  <data name="Houses" xml:space="preserve"><value>షెడ్లు</value></data>
+  <data name="Houses &amp; Sheds" xml:space="preserve"><value>షెడ్లు</value></data>
+  <data name="How can I improve FCR in the remaining days?" xml:space="preserve"><value>మిగిలిన రోజుల్లో FCR ఎలా మెరుగుపరచాలి?</value></data>
+  <data name="How is this batch doing compared to the standard?" xml:space="preserve"><value>ఈ బ్యాచ్ ప్రమాణంతో పోలిస్తే ఎలా ఉంది?</value></data>
+  <data name="How this batch compares" xml:space="preserve"><value>ఈ బ్యాచ్ పోలిక</value></data>
+  <data name="Huddling / dull" xml:space="preserve"><value>గుంపుగా చేరడం / నీరసం</value></data>
+  <data name="Humidity (%)" xml:space="preserve"><value>తేమ (%)</value></data>
+  <data name="humidity at {0:0}% is high — check ventilation and litter moisture" xml:space="preserve"><value>తేమ {0:0}% ఎక్కువగా ఉంది — గాలి ప్రసరణ, లిట్టర్ తడి చూడండి</value></data>
+  <data name="humidity at {0:0}% is low — dusty conditions can stress the respiratory tract" xml:space="preserve"><value>తేమ {0:0}% తక్కువగా ఉంది — దుమ్ము వల్ల శ్వాస సమస్యలు రావచ్చు</value></data>
+  <data name="In progress: early-cycle metrics vs {0} completed batch(es); age-dependent metrics vs the standard for day {1}" xml:space="preserve"><value>నడుస్తోంది: మొదటి రోజుల లెక్కలు పూర్తయిన {0} బ్యాచ్‌లతో; వయసుపై ఆధారపడే లెక్కలు {1}వ రోజు ప్రమాణంతో పోలిక</value></data>
+  <data name="Income (settlement)" xml:space="preserve"><value>ఆదాయం (సెటిల్‌మెంట్)</value></data>
+  <data name="Inconsistent lighting program reducing feeding time" xml:space="preserve"><value>లైటింగ్ సరిగా లేక మేత తినే సమయం తగ్గడం</value></data>
+  <data name="Info" xml:space="preserve"><value>సమాచారం</value></data>
+  <data name="Injection" xml:space="preserve"><value>ఇంజెక్షన్</value></data>
+  <data name="Integrator" xml:space="preserve"><value>కంపెనీ (ఇంటిగ్రేటర్)</value></data>
+  <data name="Integrator / branch" xml:space="preserve"><value>కంపెనీ / బ్రాంచ్</value></data>
+  <data name="Integrator representative" xml:space="preserve"><value>కంపెనీ ప్రతినిధి</value></data>
+  <data name="Internal Operations Portal" xml:space="preserve"><value>అంతర్గత నిర్వహణ పోర్టల్</value></data>
+  <data name="Invalid username or password. Please contact your administrator." xml:space="preserve"><value>యూజర్‌నేమ్ లేదా పాస్‌వర్డ్ తప్పు. మీ నిర్వాహకుడిని సంప్రదించండి.</value></data>
+  <data name="Is the mortality this week normal?" xml:space="preserve"><value>ఈ వారం మరణాలు సాధారణమేనా?</value></data>
+  <data name="Item" xml:space="preserve"><value>అంశం</value></data>
+  <data name="kg/bag" xml:space="preserve"><value>kg/బస్తా</value></data>
+  <data name="Labour" xml:space="preserve"><value>కూలీ</value></data>
+  <data name="Lame / leg problems" xml:space="preserve"><value>కుంటడం / కాళ్ల సమస్యలు</value></data>
+  <data name="Latest reading ({0:0.#}°C avg, {1:0}% humidity) is within the expected range for day {2}." xml:space="preserve"><value>తాజా నమోదు (సగటు {0:0.#}°C, తేమ {1:0}%) {2}వ రోజుకు సరైన పరిధిలో ఉంది.</value></data>
+  <data name="Latest reading flags: {0}. Both temperature and humidity swings push birds to spend energy on comfort instead of growth, which shows up as worse FCR." xml:space="preserve"><value>తాజా నమోదులో సమస్య: {0}. వేడి, తేమ మారుతుంటే కోళ్లు శక్తిని పెరుగుదలకు కాకుండా తట్టుకోవడానికి వాడతాయి — దాంతో FCR దెబ్బతింటుంది.</value></data>
+  <data name="Lessons for the next batch" xml:space="preserve"><value>తర్వాతి బ్యాచ్ కోసం నేర్చుకోవాల్సినవి</value></data>
+  <data name="Lifting" xml:space="preserve"><value>లిఫ్టింగ్</value></data>
+  <data name="Lifting / Harvest" xml:space="preserve"><value>లిఫ్టింగ్ / అమ్మకం</value></data>
+  <data name="Lifting / sales" xml:space="preserve"><value>లిఫ్టింగ్ / అమ్మకాలు</value></data>
+  <data name="Likely causes: {0}." xml:space="preserve"><value>కారణాలు కావచ్చు: {0}.</value></data>
+  <data name="Line" xml:space="preserve"><value>వివరం</value></data>
+  <data name="Litter" xml:space="preserve"><value>లిట్టర్ (ఊక)</value></data>
+  <data name="Livability" xml:space="preserve"><value>బతికిన శాతం</value></data>
+  <data name="Livability (active)" xml:space="preserve"><value>బతికిన శాతం (నడుస్తున్నవి)</value></data>
+  <data name="livability {0:0.0}% vs {1:0.0}%" xml:space="preserve"><value>బతికిన శాతం {0:0.0}% / {1:0.0}%</value></data>
+  <data name="Livability has dropped to {0:0.0}% ({1} lost of {2} placed), below the ~97% benchmark." xml:space="preserve"><value>బతికిన శాతం {0:0.0}% కి పడిపోయింది ({2} పిల్లల్లో {1} పోయాయి), ప్రమాణం ~97% కంటే తక్కువ.</value></data>
+  <data name="Livability is healthy" xml:space="preserve"><value>బతికిన శాతం బాగుంది</value></data>
+  <data name="Livability needs attention" xml:space="preserve"><value>బతికిన శాతంపై దృష్టి పెట్టాలి</value></data>
+  <data name="Livability of {0:0.0}% is healthy — total mortality/culls {1} of {2} placed." xml:space="preserve"><value>బతికిన శాతం {0:0.0}% బాగుంది — {2} పిల్లల్లో మొత్తం మరణాలు/తీసివేసినవి {1}.</value></data>
+  <data name="Live" xml:space="preserve"><value>లైవ్</value></data>
+  <data name="Live Birds" xml:space="preserve"><value>బతికున్న కోళ్లు</value></data>
+  <data name="Live telemetry across {0} active house(s), {1:N0} birds on the ground." xml:space="preserve"><value>{0} నడుస్తున్న షెడ్లలో {1:N0} కోళ్లు ఉన్నాయి.</value></data>
+  <data name="Loading…" xml:space="preserve"><value>లోడ్ అవుతోంది…</value></data>
+  <data name="Log a body-weight sample on the next daily record to start tracking FCR." xml:space="preserve"><value>FCR లెక్కించడానికి తర్వాతి రోజువారీ నమోదులో బరువు నమూనా నమోదు చేయండి.</value></data>
+  <data name="Log a few daily records (weight, mortality, temperature) to get suggestions here." xml:space="preserve"><value>ఇక్కడ సూచనల కోసం కొన్ని రోజువారీ వివరాలు (బరువు, మరణాలు, వేడి) నమోదు చేయండి.</value></data>
+  <data name="Log an incoming feed DC" xml:space="preserve"><value>వచ్చిన మేత DC నమోదు చేయండి</value></data>
+  <data name="Log Health Event" xml:space="preserve"><value>ఆరోగ్య వివరం నమోదు</value></data>
+  <data name="Log out" xml:space="preserve"><value>లాగ్ అవుట్</value></data>
+  <data name="Log Today" xml:space="preserve"><value>ఈరోజు నమోదు</value></data>
+  <data name="Log Today&apos;s Record" xml:space="preserve"><value>ఈరోజు వివరాలు నమోదు</value></data>
+  <data name="Lost birds lower income directly — they&apos;re feed cost already spent with no sale weight to show for it." xml:space="preserve"><value>పోయిన ప్రతి కోడి ఆదాయాన్ని నేరుగా తగ్గిస్తుంది — వాటికి పెట్టిన మేత ఖర్చు వృథా, అమ్మకానికి బరువు ఉండదు.</value></data>
+  <data name="low likelihood" xml:space="preserve"><value>తక్కువ అవకాశం</value></data>
+  <data name="Main differences: {0}." xml:space="preserve"><value>ముఖ్య తేడాలు: {0}.</value></data>
+  <data name="Manage Houses" xml:space="preserve"><value>షెడ్ల నిర్వహణ</value></data>
+  <data name="Margin" xml:space="preserve"><value>మార్జిన్</value></data>
+  <data name="Max Temp (°C)" xml:space="preserve"><value>గరిష్ఠ వేడి (°C)</value></data>
+  <data name="Medication" xml:space="preserve"><value>మందు</value></data>
+  <data name="Medicine &amp; vaccine (health log)" xml:space="preserve"><value>మందులు &amp; టీకాలు (ఆరోగ్య నమోదు)</value></data>
+  <data name="medium likelihood" xml:space="preserve"><value>మధ్యస్థ అవకాశం</value></data>
+  <data name="Menu" xml:space="preserve"><value>మెనూ</value></data>
+  <data name="Metric" xml:space="preserve"><value>కొలమానం</value></data>
+  <data name="Min Temp (°C)" xml:space="preserve"><value>కనిష్ఠ వేడి (°C)</value></data>
+  <data name="Missed or delayed ND/IBD vaccination" xml:space="preserve"><value>ND/IBD టీకా మిస్ అవడం లేదా ఆలస్యం</value></data>
+  <data name="Missing/unlogged feed delivery DCs make stock look lower than it is" xml:space="preserve"><value>నమోదు చేయని మేత DC ల వల్ల నిల్వ తక్కువగా కనబడుతుంది</value></data>
+  <data name="Monitor 24-48 h" xml:space="preserve"><value>24-48 గంటలు గమనించండి</value></data>
+  <data name="Monsoon" xml:space="preserve"><value>వర్షాకాలం</value></data>
+  <data name="Mort" xml:space="preserve"><value>మరణాలు</value></data>
+  <data name="Mort {0} · Feed {1} · Wt {2:0}g" xml:space="preserve"><value>మరణాలు {0} · మేత {1} · బరువు {2:0}g</value></data>
+  <data name="Mortality" xml:space="preserve"><value>మరణాలు</value></data>
+  <data name="Mortality (birds)" xml:space="preserve"><value>మరణాలు (కోళ్లు)</value></data>
+  <data name="Mortality spikes to investigate" xml:space="preserve"><value>పరిశీలించాల్సిన మరణాల పెరుగుదల</value></data>
+  <data name="Mortality, feed, weight, water" xml:space="preserve"><value>మరణాలు, మేత, బరువు, నీళ్లు</value></data>
+  <data name="Name" xml:space="preserve"><value>పేరు</value></data>
+  <data name="Navigation" xml:space="preserve"><value>మెనూ</value></data>
+  <data name="Need another house? Contact your platform administrator to have it added to your account." xml:space="preserve"><value>మరో షెడ్ కావాలా? మీ ఖాతాకు జోడించడానికి ప్లాట్‌ఫారం నిర్వాహకుడిని సంప్రదించండి.</value></data>
+  <data name="Net Profit" xml:space="preserve"><value>నికర లాభం</value></data>
+  <data name="New Batch" xml:space="preserve"><value>కొత్త బ్యాచ్</value></data>
+  <data name="New Batch Placement" xml:space="preserve"><value>కొత్త బ్యాచ్ వేయండి</value></data>
+  <data name="New chat" xml:space="preserve"><value>కొత్త సంభాషణ</value></data>
+  <data name="No active batch" xml:space="preserve"><value>బ్యాచ్ లేదు</value></data>
+  <data name="No batches are currently active. Start a new placement to begin tracking a flock." xml:space="preserve"><value>ప్రస్తుతం ఏ బ్యాచ్ నడవడం లేదు. కొత్త బ్యాచ్ వేసి నమోదు ప్రారంభించండి.</value></data>
+  <data name="No batches match here." xml:space="preserve"><value>ఇక్కడ సరిపోయే బ్యాచ్‌లు లేవు.</value></data>
+  <data name="No batches match these filters." xml:space="preserve"><value>ఈ ఫిల్టర్లకు సరిపోయే బ్యాచ్‌లు లేవు.</value></data>
+  <data name="No booster for extended cycles" xml:space="preserve"><value>ఎక్కువ రోజుల బ్యాచ్‌కు బూస్టర్ టీకా ఇవ్వకపోవడం</value></data>
+  <data name="No daily records yet." xml:space="preserve"><value>ఇంకా రోజువారీ వివరాలు లేవు.</value></data>
+  <data name="No feed deliveries recorded." xml:space="preserve"><value>మేత సరఫరాలు నమోదు కాలేదు.</value></data>
+  <data name="No houses set up yet." xml:space="preserve"><value>ఇంకా షెడ్లు జోడించలేదు.</value></data>
+  <data name="No liftings recorded." xml:space="preserve"><value>లిఫ్టింగ్‌లు నమోదు కాలేదు.</value></data>
+  <data name="No logs recorded today yet." xml:space="preserve"><value>ఈరోజు ఇంకా నమోదులు లేవు.</value></data>
+  <data name="No major gaps found. Keep the same programme and aim to match or beat this result." xml:space="preserve"><value>పెద్ద లోపాలు కనబడలేదు. ఇదే పద్ధతి కొనసాగించి ఈ ఫలితాన్ని మించేలా ప్రయత్నించండి.</value></data>
+  <data name="No prior record" xml:space="preserve"><value>ముందటి నమోదు లేదు</value></data>
+  <data name="No shed expenses logged for this batch yet." xml:space="preserve"><value>ఈ బ్యాచ్‌కు ఇంకా షెడ్ ఖర్చులు నమోదు కాలేదు.</value></data>
+  <data name="No temperature/humidity readings logged yet — add them on the daily record to track brooding conditions." xml:space="preserve"><value>ఇంకా వేడి/తేమ నమోదు కాలేదు — బ్రూడింగ్ పరిస్థితి తెలుసుకోవడానికి రోజువారీ నమోదులో జోడించండి.</value></data>
+  <data name="No vaccination due yet at this age. Log the first dose (typically ND) here once given, so it&apos;s tracked." xml:space="preserve"><value>ఈ వయసులో ఇంకా టీకా సమయం రాలేదు. మొదటి టీకా (సాధారణంగా ND) వేసిన వెంటనే ఇక్కడ నమోదు చేయండి.</value></data>
+  <data name="No vaccinations/medications recorded." xml:space="preserve"><value>టీకాలు/మందులు నమోదు కాలేదు.</value></data>
+  <data name="No weight sample yet" xml:space="preserve"><value>ఇంకా బరువు నమూనా లేదు</value></data>
+  <data name="Not enough data for an FCR reading yet" xml:space="preserve"><value>FCR లెక్కించడానికి ఇంకా సరిపడా వివరాలు లేవు</value></data>
+  <data name="Not settled yet" xml:space="preserve"><value>ఇంకా సెటిల్ కాలేదు</value></data>
+  <data name="Notes" xml:space="preserve"><value>గమనికలు</value></data>
+  <data name="One dashboard for every house and active flock" xml:space="preserve"><value>ప్రతి షెడ్, ప్రతి బ్యాచ్‌కు ఒకే డ్యాష్‌బోర్డ్</value></data>
+  <data name="Only {0} vaccination(s) logged for a day-{1} batch — typically {2}+ would be given by now (e.g. ND around day 5-7, IBD around day 14-18). If a dose was given but not logged, add it here; if it was missed, talk to your vet about a catch-up schedule." xml:space="preserve"><value>{1}వ రోజు బ్యాచ్‌కు {0} టీకాలే నమోదయ్యాయి — సాధారణంగా ఈపాటికి {2}+ ఇచ్చి ఉండాలి (ఉదా. ND 5-7 రోజుల్లో, IBD 14-18 రోజుల్లో). టీకా వేసి నమోదు చేయకపోతే ఇక్కడ జోడించండి; మిస్ అయితే మళ్లీ ఎప్పుడు వేయాలో పశువైద్యుడిని అడగండి.</value></data>
+  <data name="Operational Hub" xml:space="preserve"><value>నిర్వహణ కేంద్రం</value></data>
+  <data name="Operations" xml:space="preserve"><value>నిర్వహణ</value></data>
+  <data name="Other" xml:space="preserve"><value>ఇతరం</value></data>
+  <data name="Other Shed Expenses Still Expected (₹)" xml:space="preserve"><value>ఇంకా రావాల్సిన ఇతర షెడ్ ఖర్చులు (₹)</value></data>
+  <data name="Overall Score" xml:space="preserve"><value>మొత్తం స్కోర్</value></data>
+  <data name="Overall score {0:0}/100" xml:space="preserve"><value>మొత్తం స్కోర్ {0:0}/100</value></data>
+  <data name="Overcrowding cutting effective airflow" xml:space="preserve"><value>కోళ్లు ఎక్కువై గాలి ప్రసరణ తగ్గడం</value></data>
+  <data name="Overstocking increasing competition at the feeder" xml:space="preserve"><value>కోళ్లు ఎక్కువై ఫీడర్ దగ్గర పోటీ పెరగడం</value></data>
+  <data name="Overview" xml:space="preserve"><value>సారాంశం</value></data>
+  <data name="Page" xml:space="preserve"><value>పేజీ</value></data>
+  <data name="Panting / heat" xml:space="preserve"><value>ఆయాసం / వేడి</value></data>
+  <data name="Password" xml:space="preserve"><value>పాస్‌వర్డ్</value></data>
+  <data name="Per bird placed / per kg live" xml:space="preserve"><value>వేసిన కోడికి / బతికున్న kg కు</value></data>
+  <data name="Performance Incentive" xml:space="preserve"><value>ప్రోత్సాహకం</value></data>
+  <data name="Photo {0}" xml:space="preserve"><value>ఫోటో {0}</value></data>
+  <data name="Photo Health Check" xml:space="preserve"><value>ఫోటోతో ఆరోగ్య పరీక్ష</value></data>
+  <data name="Placed" xml:space="preserve"><value>వేసిన తేదీ</value></data>
+  <data name="Placement date" xml:space="preserve"><value>పిల్లలు వేసిన తేదీ</value></data>
+  <data name="Poor vaccine cold-chain / storage" xml:space="preserve"><value>టీకాను చల్లగా నిల్వ చేయకపోవడం</value></data>
+  <data name="Poor ventilation / high humidity raising litter moisture" xml:space="preserve"><value>గాలి సరిగా ఆడకపోవడం / తేమ ఎక్కువై లిట్టర్ తడవడం</value></data>
+  <data name="Possible conditions" xml:space="preserve"><value>ఉండే అవకాశం ఉన్న సమస్యలు</value></data>
+  <data name="Possible notifiable disease." xml:space="preserve"><value>ప్రభుత్వానికి తెలియజేయాల్సిన వ్యాధి కావచ్చు.</value></data>
+  <data name="Precision Broiler Farm Operations Console" xml:space="preserve"><value>ఖచ్చితమైన బ్రాయిలర్ ఫారం నిర్వహణ</value></data>
+  <data name="Pre-starter" xml:space="preserve"><value>ప్రీ-స్టార్టర్</value></data>
+  <data name="Profit / Bird" xml:space="preserve"><value>లాభం / కోడి</value></data>
+  <data name="Projected Avg Weight at Sale (kg)" xml:space="preserve"><value>అమ్మే సమయానికి అంచనా సగటు బరువు (kg)</value></data>
+  <data name="Projected Live Birds" xml:space="preserve"><value>అంచనా బతికున్న కోళ్లు</value></data>
+  <data name="Projected Net Profit" xml:space="preserve"><value>అంచనా నికర లాభం</value></data>
+  <data name="Projected Sale Age (days)" xml:space="preserve"><value>అమ్మే వయసు అంచనా (రోజులు)</value></data>
+  <data name="Projected Total Weight" xml:space="preserve"><value>అంచనా మొత్తం బరువు</value></data>
+  <data name="Quick Links" xml:space="preserve"><value>త్వరిత లింకులు</value></data>
+  <data name="Ration density/energy too low for the growth stage" xml:space="preserve"><value>పెరుగుదల దశకు తగ్గ శక్తి మేతలో లేకపోవడం</value></data>
+  <data name="Ready for a new batch" xml:space="preserve"><value>కొత్త బ్యాచ్‌కు సిద్ధం</value></data>
+  <data name="Ready for DOC Intake" xml:space="preserve"><value>పిల్లలు వేయడానికి సిద్ధం</value></data>
+  <data name="Received {0} kg · consumed {1} kg · balance {2} kg" xml:space="preserve"><value>వచ్చింది {0} kg · వాడింది {1} kg · మిగిలింది {2} kg</value></data>
+  <data name="Recent Activity" xml:space="preserve"><value>ఇటీవలి నమోదులు</value></data>
+  <data name="Record an average body weight sample to start tracking growth against benchmark." xml:space="preserve"><value>ప్రమాణంతో పెరుగుదల పోల్చడానికి సగటు బరువు నమూనా నమోదు చేయండి.</value></data>
+  <data name="Record Feed Delivery" xml:space="preserve"><value>మేత సరఫరా నమోదు</value></data>
+  <data name="Recorded consumption exceeds recorded deliveries by {0} kg - some feed delivery challans are probably not entered, which also makes FCR unreliable." xml:space="preserve"><value>నమోదు చేసిన వాడకం, వచ్చిన మేత కంటే {0} kg ఎక్కువగా ఉంది - కొన్ని మేత DC లు నమోదు చేయలేదేమో; దీనివల్ల FCR కూడా సరిగా రాదు.</value></data>
+  <data name="Recorded feed deliveries are already {0:0} kg behind recorded consumption — check that all feed delivery DCs have been logged, then place the next order right away." xml:space="preserve"><value>నమోదైన మేత సరఫరా, వాడకం కంటే ఇప్పటికే {0:0} kg తక్కువ — అన్ని మేత DC లు నమోదయ్యాయో చూసి, వెంటనే తదుపరి ఆర్డర్ పెట్టండి.</value></data>
+  <data name="Remarks" xml:space="preserve"><value>వ్యాఖ్యలు</value></data>
+  <data name="Remove" xml:space="preserve"><value>తీసివేయండి</value></data>
+  <data name="Repairs" xml:space="preserve"><value>మరమ్మతులు</value></data>
+  <data name="Revenue" xml:space="preserve"><value>ఆదాయం</value></data>
+  <data name="Revenue Calculator" xml:space="preserve"><value>ఆదాయ లెక్కింపు</value></data>
+  <data name="Revenue vs Expenses vs Profit" xml:space="preserve"><value>ఆదాయం vs ఖర్చు vs లాభం</value></data>
+  <data name="RH %" xml:space="preserve"><value>తేమ %</value></data>
+  <data name="Role-based access for supervisors and field staff" xml:space="preserve"><value>సూపర్‌వైజర్లు, సిబ్బందికి పాత్ర ఆధారిత అనుమతులు</value></data>
+  <data name="Route" xml:space="preserve"><value>ఇచ్చే విధానం</value></data>
+  <data name="Routine" xml:space="preserve"><value>సాధారణం</value></data>
+  <data name="Running out mid-cycle forces a feed-type switch" xml:space="preserve"><value>మధ్యలో మేత అయిపోతే మేత రకం మార్చాల్సి వస్తుంది</value></data>
+  <data name="Sampled average body weight (g) by age in days" xml:space="preserve"><value>వయసు (రోజులు) వారీగా సగటు బరువు నమూనా (g)</value></data>
+  <data name="Save" xml:space="preserve"><value>సేవ్ చేయండి</value></data>
+  <data name="Score" xml:space="preserve"><value>స్కోర్</value></data>
+  <data name="Score Breakdown" xml:space="preserve"><value>స్కోర్ వివరాలు</value></data>
+  <data name="Search batch number or integrator…" xml:space="preserve"><value>బ్యాచ్ నంబర్ లేదా కంపెనీ పేరుతో వెతకండి…</value></data>
+  <data name="Season" xml:space="preserve"><value>కాలం</value></data>
+  <data name="Send" xml:space="preserve"><value>పంపండి</value></data>
+  <data name="Settings" xml:space="preserve"><value>సెట్టింగ్స్</value></data>
+  <data name="Settlement" xml:space="preserve"><value>సెటిల్‌మెంట్</value></data>
+  <data name="Settlement pending" xml:space="preserve"><value>సెటిల్‌మెంట్ రావాలి</value></data>
+  <data name="Share" xml:space="preserve"><value>వాటా</value></data>
+  <data name="Shed conditions may be stressing the flock" xml:space="preserve"><value>షెడ్ పరిస్థితులు కోళ్లను ఇబ్బంది పెడుతుండవచ్చు</value></data>
+  <data name="Shed ready for placement" xml:space="preserve"><value>పిల్లలు వేయడానికి షెడ్ సిద్ధం</value></data>
+  <data name="shed running ~{0:0.#}°C above the ~{1:0}°C target for this age (heat stress risk)" xml:space="preserve"><value>షెడ్ వేడి ఈ వయసు లక్ష్యం ~{1:0}°C కంటే ~{0:0.#}°C ఎక్కువ (వేడి ఒత్తిడి ప్రమాదం)</value></data>
+  <data name="shed running ~{0:0.#}°C below the ~{1:0}°C target for this age (chilling risk)" xml:space="preserve"><value>షెడ్ వేడి ఈ వయసు లక్ష్యం ~{1:0}°C కంటే ~{0:0.#}°C తక్కువ (చలి ప్రమాదం)</value></data>
+  <data name="Shed temperature &amp; humidity in range" xml:space="preserve"><value>షెడ్ వేడి &amp; తేమ సరిగా ఉన్నాయి</value></data>
+  <data name="Sign In" xml:space="preserve"><value>లాగిన్ అవ్వండి</value></data>
+  <data name="Sign in to continue" xml:space="preserve"><value>కొనసాగడానికి లాగిన్ అవ్వండి</value></data>
+  <data name="Sorry, the assistant couldn&apos;t answer. Please try again." xml:space="preserve"><value>క్షమించండి, సహాయకుడు సమాధానం ఇవ్వలేకపోయాడు. మళ్లీ ప్రయత్నించండి.</value></data>
+  <data name="Spray" xml:space="preserve"><value>స్ప్రే</value></data>
+  <data name="Standard" xml:space="preserve"><value>ప్రమాణం</value></data>
+  <data name="Start New Batch" xml:space="preserve"><value>కొత్త బ్యాచ్ ప్రారంభించండి</value></data>
+  <data name="Starter" xml:space="preserve"><value>స్టార్టర్</value></data>
+  <data name="Status" xml:space="preserve"><value>స్థితి</value></data>
+  <data name="Std {0:0.00} at day {1}" xml:space="preserve"><value>{1}వ రోజు ప్రమాణం {0:0.00}</value></data>
+  <data name="Std {0:0} g at day {1}" xml:space="preserve"><value>{1}వ రోజు ప్రమాణం {0:0} g</value></data>
+  <data name="Std FCR" xml:space="preserve"><value>ప్రమాణ FCR</value></data>
+  <data name="Std g" xml:space="preserve"><value>ప్రమాణ g</value></data>
+  <data name="Stop" xml:space="preserve"><value>ఆపండి</value></data>
+  <data name="Stop all bird, vehicle and people movement in and out of the shed and report to your local veterinary officer / animal husbandry department today. Do not sell or move birds until advised." xml:space="preserve"><value>షెడ్‌లోకి, బయటకు కోళ్లు, వాహనాలు, మనుషుల రాకపోకలు వెంటనే ఆపండి; ఈరోజే స్థానిక పశువైద్యాధికారి / పశుసంవర్ధక శాఖకు తెలియజేయండి. వారు చెప్పే వరకు కోళ్లను అమ్మవద్దు, తరలించవద్దు.</value></data>
+  <data name="Stress at vaccination reducing uptake" xml:space="preserve"><value>టీకా వేసేటప్పుడు ఒత్తిడి వల్ల టీకా సరిగా పనిచేయకపోవడం</value></data>
+  <data name="Sudden deaths" xml:space="preserve"><value>అకస్మాత్తు మరణాలు</value></data>
+  <data name="Suggestions" xml:space="preserve"><value>సూచనలు</value></data>
+  <data name="Summer" xml:space="preserve"><value>వేసవి</value></data>
+  <data name="Supplement" xml:space="preserve"><value>సప్లిమెంట్</value></data>
+  <data name="Swollen head / eyes" xml:space="preserve"><value>తల / కళ్ల వాపు</value></data>
+  <data name="Target {0:0.00} kg" xml:space="preserve"><value>లక్ష్యం {0:0.00} kg</value></data>
+  <data name="Target °C" xml:space="preserve"><value>లక్ష్యం °C</value></data>
+  <data name="Target 350+" xml:space="preserve"><value>లక్ష్యం 350+</value></data>
+  <data name="Target Weight" xml:space="preserve"><value>లక్ష్య బరువు</value></data>
+  <data name="temperature off-target by {0:0.0} °C vs {1:0.0} °C" xml:space="preserve"><value>లక్ష్యం నుండి వేడి తేడా {0:0.0} °C / {1:0.0} °C</value></data>
+  <data name="The assistant is busy right now. Please try again in a minute." xml:space="preserve"><value>సహాయకుడు ప్రస్తుతం బిజీగా ఉన్నాడు. ఒక నిమిషం తర్వాత మళ్లీ ప్రయత్నించండి.</value></data>
+  <data name="The health check couldn&apos;t be completed. Please try again; if birds are dying fast, call your vet now." xml:space="preserve"><value>ఆరోగ్య పరీక్ష పూర్తి కాలేదు. మళ్లీ ప్రయత్నించండి; కోళ్లు వేగంగా చనిపోతుంటే వెంటనే పశువైద్యుడికి ఫోన్ చేయండి.</value></data>
+  <data name="The latest day&apos;s mortality ({0}) is well above the recent average ({1:0.1}) — worth a closer look today, not at week&apos;s end." xml:space="preserve"><value>తాజా రోజు మరణాలు ({0}) ఇటీవలి సగటు ({1:0.1}) కంటే చాలా ఎక్కువ — వారం చివర కాదు, ఈరోజే పరిశీలించండి.</value></data>
+  <data name="The photo health check said: &quot;{0}&quot; Possible conditions: {1}. What exactly should I do in the next 24 hours, and what signs mean it is getting worse?" xml:space="preserve"><value>ఫోటో ఆరోగ్య పరీక్ష ఇలా చెప్పింది: &quot;{0}&quot; ఉండే అవకాశం ఉన్న సమస్యలు: {1}. రాబోయే 24 గంటల్లో నేను సరిగ్గా ఏమి చేయాలి, పరిస్థితి ముదురుతోందని ఏ లక్షణాలు చెబుతాయి?</value></data>
+  <data name="This account is deactivated. Contact your administrator for access." xml:space="preserve"><value>ఈ ఖాతా నిలిపివేయబడింది. అనుమతి కోసం మీ నిర్వాహకుడిని సంప్రదించండి.</value></data>
+  <data name="This batch" xml:space="preserve"><value>ఈ బ్యాచ్</value></data>
+  <data name="This is the farm&apos;s best batch so far by EEF ({0:0}). Document the brooding set-up, lighting and vaccination timing so it can be repeated." xml:space="preserve"><value>EEF ({0:0}) ప్రకారం ఇది ఇప్పటివరకు ఫారంలో ఉత్తమ బ్యాచ్. మళ్లీ ఇలాగే చేయడానికి బ్రూడింగ్ ఏర్పాటు, లైటింగ్, టీకాల సమయాలు రాసి పెట్టుకోండి.</value></data>
+  <data name="Today" xml:space="preserve"><value>ఈరోజు</value></data>
+  <data name="Today&apos;s Feed" xml:space="preserve"><value>ఈరోజు మేత</value></data>
+  <data name="Total" xml:space="preserve"><value>మొత్తం</value></data>
+  <data name="Total Expenses" xml:space="preserve"><value>మొత్తం ఖర్చులు</value></data>
+  <data name="Total farm cost" xml:space="preserve"><value>మొత్తం ఫారం ఖర్చు</value></data>
+  <data name="Total Live Birds" xml:space="preserve"><value>మొత్తం బతికున్న కోళ్లు</value></data>
+  <data name="Total Mortality" xml:space="preserve"><value>మొత్తం మరణాలు</value></data>
+  <data name="Total Weight (kg)" xml:space="preserve"><value>మొత్తం బరువు (kg)</value></data>
+  <data name="Track every house, batch and daily record in one place — from placement to settlement — across all your sheds." xml:space="preserve"><value>పిల్లలు వేసినప్పటి నుండి సెటిల్‌మెంట్ వరకు — ప్రతి షెడ్, బ్యాచ్, రోజువారీ వివరాలు ఒకే చోట.</value></data>
+  <data name="Transport" xml:space="preserve"><value>రవాణా</value></data>
+  <data name="Type" xml:space="preserve"><value>రకం</value></data>
+  <data name="Upload up to {0} clear photos — sick birds up close (head, eyes, comb, legs), fresh droppings, litter, or post-mortem findings. The assistant reads them together with this batch&apos;s records and suggests what it could be and what to do now." xml:space="preserve"><value>గరిష్ఠంగా {0} స్పష్టమైన ఫోటోలు పెట్టండి — జబ్బు కోళ్లను దగ్గరగా (తల, కళ్లు, జుట్టు, కాళ్లు), తాజా రెట్టలు, లిట్టర్ లేదా పోస్ట్-మార్టం. సహాయకుడు వాటిని ఈ బ్యాచ్ వివరాలతో కలిపి చూసి, సమస్య ఏమై ఉండొచ్చో, ఇప్పుడు ఏమి చేయాలో సూచిస్తాడు.</value></data>
+  <data name="Use Today&apos;s Numbers (Sell Now)" xml:space="preserve"><value>ఈరోజు లెక్కలు వాడండి (ఇప్పుడే అమ్మితే)</value></data>
+  <data name="Username" xml:space="preserve"><value>యూజర్‌నేమ్</value></data>
+  <data name="Vaccination" xml:space="preserve"><value>టీకా</value></data>
+  <data name="Vaccination &amp; medication log" xml:space="preserve"><value>టీకాలు &amp; మందుల నమోదు</value></data>
+  <data name="Vaccination log started — keep logging each dose as it&apos;s given." xml:space="preserve"><value>టీకాల నమోదు మొదలైంది — ప్రతి టీకా వేసినప్పుడు నమోదు చేస్తూ ఉండండి.</value></data>
+  <data name="Vaccination or medication" xml:space="preserve"><value>టీకా లేదా మందు</value></data>
+  <data name="Vaccination schedule needs attention" xml:space="preserve"><value>టీకాల షెడ్యూల్‌పై దృష్టి పెట్టాలి</value></data>
+  <data name="Vaccination schedule on track" xml:space="preserve"><value>టీకాల షెడ్యూల్ సరిగా ఉంది</value></data>
+  <data name="Value" xml:space="preserve"><value>విలువ</value></data>
+  <data name="Vehicle" xml:space="preserve"><value>వాహనం</value></data>
+  <data name="Vehicle Number" xml:space="preserve"><value>వాహనం నంబర్</value></data>
+  <data name="View Batch" xml:space="preserve"><value>బ్యాచ్ చూడండి</value></data>
+  <data name="Warning" xml:space="preserve"><value>హెచ్చరిక</value></data>
+  <data name="Water Consumed (ltr)" xml:space="preserve"><value>తాగిన నీళ్లు (లీటర్లు)</value></data>
+  <data name="Water spillage soaking litter (birds eat less, feed spoils)" xml:space="preserve"><value>నీళ్లు ఒలికి లిట్టర్ తడవడం (కోళ్లు తక్కువ తింటాయి, మేత పాడవుతుంది)</value></data>
+  <data name="Watery or white droppings" xml:space="preserve"><value>నీళ్ల లేదా తెల్లని రెట్టలు</value></data>
+  <data name="Week" xml:space="preserve"><value>వారం</value></data>
+  <data name="Week-by-week performance" xml:space="preserve"><value>వారం వారీ పనితీరు</value></data>
+  <data name="Weight / age" xml:space="preserve"><value>బరువు / వయసు</value></data>
+  <data name="Weight and cumulative FCR are at the last sample of each week" xml:space="preserve"><value>బరువు మరియు మొత్తం FCR ప్రతి వారం చివరి నమూనా ప్రకారం</value></data>
+  <data name="Weight g" xml:space="preserve"><value>బరువు g</value></data>
+  <data name="Weight Gain vs Yesterday" xml:space="preserve"><value>నిన్నటితో పోలిస్తే బరువు పెరుగుదల</value></data>
+  <data name="Weight vs standard" xml:space="preserve"><value>బరువు vs ప్రమాణం</value></data>
+  <data name="Weighted by live weight" xml:space="preserve"><value>బతికున్న బరువు ఆధారంగా</value></data>
+  <data name="Welcome — ask an admin to grant you access to a section." xml:space="preserve"><value>స్వాగతం — ఏదైనా విభాగం చూడటానికి నిర్వాహకుడిని అనుమతి అడగండి.</value></data>
+  <data name="What affects this" xml:space="preserve"><value>దీనిపై ప్రభావం చూపేవి</value></data>
+  <data name="What are you seeing? (tap any that apply, or type)" xml:space="preserve"><value>మీకు ఏమి కనబడుతోంది? (సరిపోయేవి నొక్కండి లేదా రాయండి)</value></data>
+  <data name="What should I check in the shed today?" xml:space="preserve"><value>ఈరోజు షెడ్‌లో ఏమి చూడాలి?</value></data>
+  <data name="What the assistant saw in the photos" xml:space="preserve"><value>ఫోటోల్లో సహాయకుడు గమనించినవి</value></data>
+  <data name="When is the best time to lift this batch?" xml:space="preserve"><value>ఈ బ్యాచ్ లిఫ్ట్ చేయడానికి సరైన సమయం ఎప్పుడు?</value></data>
+  <data name="Winter" xml:space="preserve"><value>చలికాలం</value></data>
+  <data name="Wt" xml:space="preserve"><value>బరువు</value></data>
+  <data name="Year" xml:space="preserve"><value>సంవత్సరం</value></data>
+  <data name="You don&apos;t have permission to do this." xml:space="preserve"><value>ఇది చేయడానికి మీకు అనుమతి లేదు.</value></data>
+  <data name="You don&apos;t have permission to view batches." xml:space="preserve"><value>బ్యాచ్‌లు చూడటానికి మీకు అనుమతి లేదు.</value></data>
+  <data name="You don&apos;t have permission to view houses." xml:space="preserve"><value>షెడ్లు చూడటానికి మీకు అనుమతి లేదు.</value></data>
+  <data name="Your Expenses, by Category" xml:space="preserve"><value>మీ ఖర్చులు, రకాల వారీగా</value></data>
+  <data name="Your Shed Expenses" xml:space="preserve"><value>మీ షెడ్ ఖర్చులు</value></data>
+  <data name="Powered by {0}" xml:space="preserve"><value>{0} సహకారంతో</value></data>
+  <data name="{0:0.000} (standard {1:0.00})" xml:space="preserve"><value>{0:0.000} (ప్రమాణం {1:0.00})</value></data>
+  <data name="{0:0} g (standard {1:0} g)" xml:space="preserve"><value>{0:0} g (ప్రమాణం {1:0} g)</value></data>
+  <data name="{0:N0} kg" xml:space="preserve"><value>{0:N0} kg</value></data>
+  <data name="{0:N0} kg (~{1:0.#} days)" xml:space="preserve"><value>{0:N0} kg (~{1:0.#} రోజులకు)</value></data>
+  <data name="{0:N0} kg in stock by the records, using about {1:N0} kg a day." xml:space="preserve"><value>నమోదుల ప్రకారం నిల్వ {0:N0} kg; రోజుకు సుమారు {1:N0} kg వాడుతున్నారు.</value></data>
+  <data name="{0} is usually given around day {1}. Tomorrow the batch is on day {2}." xml:space="preserve"><value>{0} సాధారణంగా {1}వ రోజు దగ్గర ఇస్తారు. రేపు బ్యాచ్ {2}వ రోజులో ఉంటుంది.</value></data>
+  <data name="{0} is usually given around day {1}; the batch is on day {2} with {3} vaccination(s) logged." xml:space="preserve"><value>{0} సాధారణంగా {1}వ రోజు దగ్గర ఇస్తారు; బ్యాచ్ {2}వ రోజులో ఉంది, {3} టీకాలు మాత్రమే నమోదయ్యాయి.</value></data>
+  <data name="{0} today (total {1:0.00}%)" xml:space="preserve"><value>ఈరోజు {0} (మొత్తం {1:0.00}%)</value></data>
+  <data name="Ask the integrator for the next feed delivery today, and log the DC in BroilIQ when it arrives (a missing DC also makes stock look low)." xml:space="preserve"><value>ఈరోజే కంపెనీని తదుపరి మేత సరఫరా అడగండి; మేత వచ్చాక DC ను BroilIQ లో నమోదు చేయండి (DC నమోదు కాకపోయినా నిల్వ తక్కువగా కనిపిస్తుంది).</value></data>
+  <data name="BroilIQ test message" xml:space="preserve"><value>BroilIQ పరీక్ష సందేశం</value></data>
+  <data name="Check the shed now, remove dead birds, note the symptoms and call your vet if deaths continue. You can use the Photo Health Check in BroilIQ." xml:space="preserve"><value>ఇప్పుడే షెడ్ చూడండి, చనిపోయిన కోళ్లను తీసివేయండి, లక్షణాలు గమనించండి; మరణాలు కొనసాగితే పశువైద్యుడికి ఫోన్ చేయండి. BroilIQ లో ఫోటో ఆరోగ్య పరీక్ష కూడా వాడవచ్చు.</value></data>
+  <data name="Chilling risk: shed down to {0:0.#} °C" xml:space="preserve"><value>చలి ప్రమాదం: షెడ్ {0:0.#} °C కి పడిపోయింది</value></data>
+  <data name="Close curtains on the wind side, check brooders and gas, and watch the chicks for huddling." xml:space="preserve"><value>గాలి వచ్చే వైపు కర్టెన్లు మూయండి, బ్రూడర్లు, గ్యాస్ చూడండి, పిల్లలు గుంపుగా చేరుతున్నాయేమో గమనించండి.</value></data>
+  <data name="Daily summary time" xml:space="preserve"><value>రోజువారీ సారాంశం సమయం</value></data>
+  <data name="Death spikes, heat, low feed, vaccinations and a daily summary on your phone" xml:space="preserve"><value>మరణాల పెరుగుదల, వేడి, మేత కొరత, టీకాలు మరియు రోజువారీ సారాంశం మీ ఫోన్‌కే</value></data>
+  <data name="Deaths spiked: {0} birds on {1}" xml:space="preserve"><value>మరణాలు పెరిగాయి: {1}న {0} కోళ్లు</value></data>
+  <data name="Feed running low: about {0:0.#} day(s) left" xml:space="preserve"><value>మేత తగ్గిపోతోంది: సుమారు {0:0.#} రోజులకే సరిపోతుంది</value></data>
+  <data name="Flock score {0:0}/100 — all on track." xml:space="preserve"><value>మంద స్కోర్ {0:0}/100 — అంతా సరిగా ఉంది.</value></data>
+  <data name="Flock score {0:0}/100 — check: {1}" xml:space="preserve"><value>మంద స్కోర్ {0:0}/100 — చూడండి: {1}</value></data>
+  <data name="Get urgent farm alerts and an evening summary on WhatsApp, for the houses you can see." xml:space="preserve"><value>మీరు చూడగలిగే షెడ్ల అత్యవసర హెచ్చరికలు, సాయంత్రం సారాంశం WhatsApp లో పొందండి.</value></data>
+  <data name="Heat stress risk: shed at {0:0.#} °C" xml:space="preserve"><value>వేడి ఒత్తిడి ప్రమాదం: షెడ్ {0:0.#} °C</value></data>
+  <data name="I agree to receive farm alerts and daily summaries from BroilIQ on WhatsApp. I can turn this off at any time." xml:space="preserve"><value>BroilIQ నుండి ఫారం హెచ్చరికలు, రోజువారీ సారాంశాలు WhatsApp లో పొందడానికి అంగీకరిస్తున్నాను. ఎప్పుడైనా ఆపేయవచ్చు.</value></data>
+  <data name="If it was given, log it in BroilIQ. If it was missed, ask your vet about a catch-up dose." xml:space="preserve"><value>టీకా వేసి ఉంటే BroilIQ లో నమోదు చేయండి. మిస్ అయితే మళ్లీ ఎప్పుడు వేయాలో పశువైద్యుడిని అడగండి.</value></data>
+  <data name="Keep the vaccine cold, stop water sanitiser 24 hours before, and log the dose in BroilIQ after giving it." xml:space="preserve"><value>టీకాను చల్లగా ఉంచండి, 24 గంటల ముందు నీటిలో శానిటైజర్ ఆపండి, వేసిన తర్వాత BroilIQ లో నమోదు చేయండి.</value></data>
+  <data name="Message history" xml:space="preserve"><value>సందేశాల చరిత్ర</value></data>
+  <data name="Mobile number" xml:space="preserve"><value>మొబైల్ నంబర్</value></data>
+  <data name="No action needed." xml:space="preserve"><value>ఏమీ చేయనవసరం లేదు.</value></data>
+  <data name="No daily record for {0} yet. Deaths, feed and weight every day are what let BroilIQ spot problems early." xml:space="preserve"><value>{0} రోజువారీ వివరాలు ఇంకా నమోదు కాలేదు. ప్రతిరోజూ మరణాలు, మేత, బరువు నమోదు చేస్తేనే BroilIQ సమస్యలను ముందే గుర్తించగలదు.</value></data>
+  <data name="No messages yet." xml:space="preserve"><value>ఇంకా సందేశాలు లేవు.</value></data>
+  <data name="no sample yet" xml:space="preserve"><value>ఇంకా నమూనా లేదు</value></data>
+  <data name="not entered yet (total {0:0.00}%)" xml:space="preserve"><value>ఇంకా నమోదు కాలేదు (మొత్తం {0:0.00}%)</value></data>
+  <data name="Open BroilIQ and add today&apos;s record before the day ends." xml:space="preserve"><value>రోజు ముగిసేలోపు BroilIQ తెరిచి ఈరోజు వివరాలు నమోదు చేయండి.</value></data>
+  <data name="Open curtains, run fans and foggers, give cool water with electrolytes, and avoid feeding in the hottest hours." xml:space="preserve"><value>కర్టెన్లు తెరవండి, ఫ్యాన్లు, ఫాగర్లు నడపండి, ఎలక్ట్రోలైట్లతో చల్లటి నీళ్లు ఇవ్వండి, బాగా ఎండగా ఉన్న సమయంలో మేత వేయవద్దు.</value></data>
+  <data name="Save your number with alerts turned on first." xml:space="preserve"><value>ముందుగా హెచ్చరికలు ఆన్ చేసి మీ నంబర్ సేవ్ చేయండి.</value></data>
+  <data name="Saved." xml:space="preserve"><value>సేవ్ అయింది.</value></data>
+  <data name="Send test message" xml:space="preserve"><value>పరీక్ష సందేశం పంపండి</value></data>
+  <data name="Test message sent. Check WhatsApp on your phone." xml:space="preserve"><value>పరీక్ష సందేశం పంపాం. మీ ఫోన్‌లో WhatsApp చూడండి.</value></data>
+  <data name="Test mode: messages are recorded in the history below but not delivered yet. Your administrator will switch this on once WhatsApp is connected." xml:space="preserve"><value>పరీక్ష మోడ్: సందేశాలు కింద చరిత్రలో నమోదవుతాయి కానీ ఇంకా పంపబడవు. WhatsApp అనుసంధానం అయ్యాక మీ నిర్వాహకుడు దీన్ని ఆన్ చేస్తారు.</value></data>
+  <data name="Test mode: the message was recorded below but not delivered." xml:space="preserve"><value>పరీక్ష మోడ్: సందేశం కింద నమోదైంది కానీ పంపబడలేదు.</value></data>
+  <data name="That is {0:0.#}x the recent daily average of {1:0.#}. Total mortality is now {2:0.00}%." xml:space="preserve"><value>ఇది ఇటీవలి రోజువారీ సగటు {1:0.#} కి {0:0.#} రెట్లు. మొత్తం మరణాలు ఇప్పుడు {2:0.00}%.</value></data>
+  <data name="The number that has WhatsApp. Indian numbers can be entered without +91." xml:space="preserve"><value>WhatsApp ఉన్న నంబర్. భారతీయ నంబర్లు +91 లేకుండా ఇవ్వవచ్చు.</value></data>
+  <data name="The target for day {0} is about {1:0} °C. A hot shed causes panting, lower feed intake and sudden deaths." xml:space="preserve"><value>{0}వ రోజుకు లక్ష్యం సుమారు {1:0} °C. షెడ్ వేడిగా ఉంటే కోళ్లు ఆయాసపడతాయి, తక్కువ తింటాయి, అకస్మాత్తుగా చనిపోవచ్చు.</value></data>
+  <data name="Today&apos;s record is not entered yet" xml:space="preserve"><value>ఈరోజు వివరాలు ఇంకా నమోదు కాలేదు</value></data>
+  <data name="Vaccination due tomorrow: {0}" xml:space="preserve"><value>రేపు టీకా వేయాలి: {0}</value></data>
+  <data name="Vaccination not logged: {0}" xml:space="preserve"><value>టీకా నమోదు కాలేదు: {0}</value></data>
+  <data name="What to send" xml:space="preserve"><value>ఏమి పంపాలి</value></data>
+  <data name="WhatsApp Alerts" xml:space="preserve"><value>WhatsApp హెచ్చరికలు</value></data>
+  <data name="WhatsApp alerts are set up for {0}. You will get alerts for your farm here." xml:space="preserve"><value>{0} కోసం WhatsApp హెచ్చరికలు సిద్ధమయ్యాయి. మీ ఫారం హెచ్చరికలు ఇక్కడికే వస్తాయి.</value></data>
+  <data name="WhatsApp didn&apos;t accept the message: {0}" xml:space="preserve"><value>WhatsApp సందేశాన్ని అంగీకరించలేదు: {0}</value></data>
+  <data name="Young chicks need about {0:0} °C at day {1}. Cold chicks huddle, eat less and fall behind on weight." xml:space="preserve"><value>{1}వ రోజున పిల్లలకు సుమారు {0:0} °C వేడి కావాలి. చలిగా ఉంటే పిల్లలు గుంపుగా చేరి, తక్కువ తిని, బరువులో వెనుకబడతాయి.</value></data>
+  <data name="Your WhatsApp number" xml:space="preserve"><value>మీ WhatsApp నంబర్</value></data>
+  <data name="Enter a valid mobile number, e.g. 98765 43210 or +91 98765 43210." xml:space="preserve"><value>సరైన మొబైల్ నంబర్ ఇవ్వండి, ఉదా. 98765 43210 లేదా +91 98765 43210.</value></data>
+  <data name="Enter your WhatsApp number to turn alerts on." xml:space="preserve"><value>హెచ్చరికలు ఆన్ చేయడానికి మీ WhatsApp నంబర్ ఇవ్వండి.</value></data>
+  <data name="Daily summary" xml:space="preserve"><value>రోజువారీ సారాంశం</value></data>
+  <data name="Deaths, weight, FCR, feed left and flock score for each batch, once every evening." xml:space="preserve"><value>ప్రతి బ్యాచ్ మరణాలు, బరువు, FCR, మిగిలిన మేత, మంద స్కోర్ — ప్రతి సాయంత్రం ఒకసారి.</value></data>
+  <data name="Death spikes" xml:space="preserve"><value>మరణాల పెరుగుదల</value></data>
+  <data name="When a day&apos;s deaths jump well above the recent average." xml:space="preserve"><value>ఒక రోజు మరణాలు ఇటీవలి సగటు కంటే బాగా పెరిగినప్పుడు.</value></data>
+  <data name="Heat and cold stress" xml:space="preserve"><value>వేడి, చలి ఒత్తిడి</value></data>
+  <data name="When the shed temperature is dangerous for the birds&apos; age." xml:space="preserve"><value>షెడ్ వేడి కోళ్ల వయసుకు ప్రమాదకరంగా ఉన్నప్పుడు.</value></data>
+  <data name="Feed running low" xml:space="preserve"><value>మేత తగ్గిపోతోంది</value></data>
+  <data name="When feed in stock covers about 2 days or less." xml:space="preserve"><value>నిల్వ మేత సుమారు 2 రోజులు లేదా అంతకంటే తక్కువకు సరిపోయినప్పుడు.</value></data>
+  <data name="Vaccinations" xml:space="preserve"><value>టీకాలు</value></data>
+  <data name="A reminder the day before each vaccine, and a note if one looks missed." xml:space="preserve"><value>ప్రతి టీకాకు ముందు రోజు గుర్తుచేస్తుంది; ఏదైనా మిస్ అయినట్టు ఉంటే తెలియజేస్తుంది.</value></data>
+  <data name="Missing daily record" xml:space="preserve"><value>రోజువారీ వివరాలు నమోదు కాలేదు</value></data>
+  <data name="At 8 PM if today&apos;s record hasn&apos;t been entered." xml:space="preserve"><value>రాత్రి 8 గంటలకు ఈరోజు వివరాలు నమోదు కాకపోతే.</value></data>
+  <data name="Heat stress" xml:space="preserve"><value>వేడి ఒత్తిడి</value></data>
+  <data name="Cold stress" xml:space="preserve"><value>చలి ఒత్తిడి</value></data>
+  <data name="Vaccination reminder" xml:space="preserve"><value>టీకా గుర్తింపు</value></data>
+  <data name="Vaccination not logged" xml:space="preserve"><value>టీకా నమోదు కాలేదు</value></data>
+  <data name="Test message" xml:space="preserve"><value>పరీక్ష సందేశం</value></data>
+  <data name="Sent" xml:space="preserve"><value>పంపబడింది</value></data>
+  <data name="Failed" xml:space="preserve"><value>విఫలమైంది</value></data>
+  <data name="Simulated" xml:space="preserve"><value>పరీక్ష మోడ్</value></data>
+  <data name="Pending" xml:space="preserve"><value>పంపుతోంది</value></data>
+  <data name="{0} birds lost in one day is unusually high — check the number, and call your vet if it is right." xml:space="preserve"><value>ఒక్క రోజులో {0} కోళ్లు పోవడం చాలా ఎక్కువ — సంఖ్య సరిచూడండి; నిజమైతే పశువైద్యుడికి ఫోన్ చేయండి.</value></data>
+  <data name="A record for {0} already exists." xml:space="preserve"><value>{0} వివరాలు ఇప్పటికే నమోదై ఉన్నాయి.</value></data>
+  <data name="Anything unusual: symptoms, power cut, feed quality…" xml:space="preserve"><value>ఏదైనా ప్రత్యేకం: లక్షణాలు, కరెంటు పోవడం, మేత నాణ్యత…</value></data>
+  <data name="Batch so far" xml:space="preserve"><value>ఇప్పటివరకు బ్యాచ్</value></data>
+  <data name="Couldn&apos;t save. Check your connection and try again." xml:space="preserve"><value>సేవ్ కాలేదు. ఇంటర్నెట్ చూసి మళ్లీ ప్రయత్నించండి.</value></data>
+  <data name="Deaths + culls ({0}) are more than the live birds ({1:N0}). Please check." xml:space="preserve"><value>మరణాలు + తీసివేసినవి ({0}) బతికున్న కోళ్ల ({1:N0}) కంటే ఎక్కువ. దయచేసి సరిచూడండి.</value></data>
+  <data name="Feed &amp; water" xml:space="preserve"><value>మేత &amp; నీళ్లు</value></data>
+  <data name="Feed is more than double yesterday&apos;s ({0:0.#} bags). Check the number." xml:space="preserve"><value>మేత నిన్నటి ({0:0.#} బస్తాలు) కంటే రెట్టింపు కంటే ఎక్కువ. సంఖ్య సరిచూడండి.</value></data>
+  <data name="Live birds before this record: {0:N0}" xml:space="preserve"><value>ఈ నమోదుకు ముందు బతికున్న కోళ్లు: {0:N0}</value></data>
+  <data name="Min temperature is higher than max temperature." xml:space="preserve"><value>కనిష్ఠ వేడి గరిష్ఠ వేడి కంటే ఎక్కువగా ఉంది.</value></data>
+  <data name="Open it to edit" xml:space="preserve"><value>మార్చడానికి తెరవండి</value></data>
+  <data name="Same as yesterday" xml:space="preserve"><value>నిన్నటిలాగే</value></data>
+  <data name="Same as yesterday ({0:0.#} bags)" xml:space="preserve"><value>నిన్నటిలాగే ({0:0.#} బస్తాలు)</value></data>
+  <data name="Shed conditions" xml:space="preserve"><value>షెడ్ పరిస్థితి</value></data>
+  <data name="Standard for day {0}: about {1:0} g" xml:space="preserve"><value>{0}వ రోజు ప్రమాణం: సుమారు {1:0} g</value></data>
+  <data name="Target for day {0}: about {1:0} °C" xml:space="preserve"><value>{0}వ రోజు లక్ష్యం: సుమారు {1:0} °C</value></data>
+  <data name="Weight" xml:space="preserve"><value>బరువు</value></data>
+  <data name="Weight is lower than the last sample ({0:0} g). Check the weighing." xml:space="preserve"><value>బరువు గత నమూనా ({0:0} g) కంటే తక్కువగా ఉంది. తూకం సరిచూడండి.</value></data>
+  <data name="Weight jumped more than 50% since the last sample ({0:0} g). Check the number." xml:space="preserve"><value>బరువు గత నమూనా ({0:0} g) కంటే 50% కంటే ఎక్కువ పెరిగింది. సంఖ్య సరిచూడండి.</value></data>
+  <data name="Integrators / Companies" xml:space="preserve"><value>ఇంటిగ్రేటర్లు / కంపెనీలు</value></data>
+  <data name="You don&apos;t have permission to view integrators." xml:space="preserve"><value>ఇంటిగ్రేటర్లను చూడటానికి మీకు అనుమతి లేదు.</value></data>
+  <data name="No integrators are enabled for your farm yet. Please ask the platform administrator to add one." xml:space="preserve"><value>మీ ఫారానికి ఇంకా ఏ ఇంటిగ్రేటర్ ఇవ్వలేదు. దయచేసి ప్లాట్‌ఫారమ్ అడ్మిన్‌ను జోడించమని అడగండి.</value></data>
+  <data name="These integrators and their rates are set by the platform administrator. Contact them if anything needs to change." xml:space="preserve"><value>ఈ ఇంటిగ్రేటర్లు, వాటి రేట్లు ప్లాట్‌ఫారమ్ అడ్మిన్ నిర్ణయిస్తారు. ఏదైనా మార్చాలంటే వారిని సంప్రదించండి.</value></data>
+  <data name="Inactive" xml:space="preserve"><value>నిలిపివేయబడింది</value></data>
+  <data name="Chick cost / bird" xml:space="preserve"><value>ఒక్కో పిల్ల ధర</value></data>
+  <data name="Feed bag weight" xml:space="preserve"><value>దాణా బస్తా బరువు</value></data>
+  <data name="Growing charge / kg" xml:space="preserve"><value>పెంపకం చార్జీ / kg</value></data>
+  <data name="Standard FCR" xml:space="preserve"><value>ప్రామాణిక FCR</value></data>
+  <data name="FCR incentive" xml:space="preserve"><value>FCR ప్రోత్సాహకం</value></data>
+  <data name="₹{0} / kg per 0.01" xml:space="preserve"><value>ప్రతి 0.01కి ₹{0} / kg</value></data>
+  <data name="Mortality allowed" xml:space="preserve"><value>అనుమతించిన మరణాలు</value></data>
+  <data name="Deduction above allowance" xml:space="preserve"><value>పరిమితి మించితే కోత</value></data>
+  <data name="₹{0} / bird" xml:space="preserve"><value>ఒక్కో కోడికి ₹{0}</value></data>
+  <data name="Payment due" xml:space="preserve"><value>చెల్లింపు గడువు</value></data>
+  <data name="{0} days after lifting" xml:space="preserve"><value>లిఫ్టింగ్ తర్వాత {0} రోజులు</value></data>
+  <data name="Set by the integrator" xml:space="preserve"><value>ఇంటిగ్రేటర్ నిర్ణయించింది</value></data>
+  <data name="~{0:0.#} day(s)" xml:space="preserve"><value>~{0:0.#} రోజులు</value></data>
+  <data name="All factors on track — keep the routine going." xml:space="preserve"><value>అన్నీ సరిగ్గా ఉన్నాయి — ఇదే పద్ధతి కొనసాగించండి.</value></data>
+  <data name="Batch score {0:0} of 100" xml:space="preserve"><value>బ్యాచ్ స్కోరు 100కి {0:0}</value></data>
+  <data name="Needs attention" xml:space="preserve"><value>శ్రద్ధ అవసరం</value></data>
+  <data name="Open batch for full advice" xml:space="preserve"><value>పూర్తి సలహా కోసం బ్యాచ్ తెరవండి</value></data>
+  <data name="target {0:0.000}" xml:space="preserve"><value>లక్ష్యం {0:0.000}</value></data>
+  <data name="target {0:N0} g" xml:space="preserve"><value>లక్ష్యం {0:N0} g</value></data>
+  <data name="Today vs target" xml:space="preserve"><value>ఈరోజు vs లక్ష్యం</value></data>
+  <data name="Excellent" xml:space="preserve"><value>అద్భుతం</value></data>
+  <data name="AI Assistant and WhatsApp alerts — see what&apos;s on or request them" xml:space="preserve"><value>AI అసిస్టెంట్, వాట్సాప్ హెచ్చరికలు — ఏవి ఆన్‌లో ఉన్నాయో చూడండి లేదా అభ్యర్థించండి</value></data>
+  <data name="Ask your farm admin to request this feature." xml:space="preserve"><value>ఈ సౌకర్యం కోసం మీ ఫారం అడ్మిన్‌ను అభ్యర్థించమని అడగండి.</value></data>
+  <data name="Choose your alerts and WhatsApp number" xml:space="preserve"><value>మీ హెచ్చరికలు, వాట్సాప్ నంబర్ ఎంచుకోండి</value></data>
+  <data name="Death spikes, heat, low feed, vaccination reminders and an evening summary sent to your phone on WhatsApp, in English or Telugu." xml:space="preserve"><value>మరణాలు పెరగడం, వేడి, మేత తక్కువ, టీకా గుర్తింపులు, సాయంత్రం సారాంశం — ఇంగ్లీష్ లేదా తెలుగులో మీ ఫోన్‌కు వాట్సాప్‌లో.</value></data>
+  <data name="Features" xml:space="preserve"><value>సౌకర్యాలు</value></data>
+  <data name="Open any batch and go to the AI Assistant tab." xml:space="preserve"><value>ఏదైనా బ్యాచ్ తెరిచి AI అసిస్టెంట్ ట్యాబ్‌కు వెళ్లండి.</value></data>
+  <data name="Optional features are switched on for your farm by the platform administrator. Request any you&apos;d like to use." xml:space="preserve"><value>అదనపు సౌకర్యాలను ప్లాట్‌ఫారమ్ అడ్మిన్ మీ ఫారానికి ఆన్ చేస్తారు. మీకు కావలసినవి అభ్యర్థించండి.</value></data>
+  <data name="Optional note for the administrator, e.g. number of sheds or a phone number to call" xml:space="preserve"><value>అడ్మిన్‌కు గమనిక (ఐచ్ఛికం), ఉదా. షెడ్ల సంఖ్య లేదా సంప్రదించాల్సిన ఫోన్ నంబర్</value></data>
+  <data name="Request sent. The platform administrator will contact you." xml:space="preserve"><value>అభ్యర్థన పంపబడింది. ప్లాట్‌ఫారమ్ అడ్మిన్ మిమ్మల్ని సంప్రదిస్తారు.</value></data>
+  <data name="Request this feature" xml:space="preserve"><value>ఈ సౌకర్యాన్ని అభ్యర్థించండి</value></data>
+  <data name="Requested on {0} by {1}. The platform administrator will contact you." xml:space="preserve"><value>{0}న {1} అభ్యర్థించారు. ప్లాట్‌ఫారమ్ అడ్మిన్ మిమ్మల్ని సంప్రదిస్తారు.</value></data>
+  <data name="Switched on for your farm — the platform administrator is finishing the setup. It will start working here automatically." xml:space="preserve"><value>మీ ఫారానికి ఆన్ చేయబడింది — ప్లాట్‌ఫారమ్ అడ్మిన్ సెటప్ పూర్తి చేస్తున్నారు. ఇది ఇక్కడ ఆటోమేటిక్‌గా పనిచేయడం మొదలవుతుంది.</value></data>
+  <data name="Upload photos of sick birds for an instant health check, and ask questions about your batch in English or Telugu. The assistant reads your own daily records, weights, feed and health log." xml:space="preserve"><value>జబ్బు పడిన కోళ్ల ఫోటోలు అప్‌లోడ్ చేసి వెంటనే ఆరోగ్య పరీక్ష పొందండి, మీ బ్యాచ్ గురించి ఇంగ్లీష్ లేదా తెలుగులో ప్రశ్నలు అడగండి. అసిస్టెంట్ మీ రోజువారీ రికార్డులు, బరువులు, మేత, ఆరోగ్య లాగ్ చదువుతుంది.</value></data>
+  <data name="Your last request was not approved." xml:space="preserve"><value>మీ గత అభ్యర్థన ఆమోదించబడలేదు.</value></data>
+  <data name="Being set up" xml:space="preserve"><value>సెటప్ జరుగుతోంది</value></data>
+  <data name="Not enabled" xml:space="preserve"><value>ఆన్ చేయలేదు</value></data>
+  <data name="Test mode" xml:space="preserve"><value>టెస్ట్ మోడ్</value></data>
+</root>
