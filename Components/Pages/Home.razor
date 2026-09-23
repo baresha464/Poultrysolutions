@@ -18,7 +18,7 @@ else if (!AuthService.HasPermission(Permissions.Houses.View))
 else
 {
     <div class="ops-hero">
-        <video class="ops-hero-video" autoplay muted loop playsinline poster="images/farm/hero-aerial.jpg">
+        <video class="ops-hero-video" autoplay muted loop playsinline poster="images/farm/farm-aerial-day.jpg">
             <source src="videos/farm/hero-live.mp4" type="video/mp4" />
         </video>
         <div class="ops-hero-top">
@@ -92,7 +92,7 @@ else
                     var today = active is null ? null : todayByBatch.GetValueOrDefault(active.Id);
                     var variant = VariantFor(h.Id);
 
-                    <div class="card op-card @(active is null ? "muted" : variant) @(active is null ? "" : "has-score")">
+                    <div class="card op-card @(active is null ? "muted empty-shed" : variant) @(active is null ? "" : "has-score")">
                         <div class="op-card-bar"></div>
                         <div class="op-card-body">
                             <div class="op-card-head">

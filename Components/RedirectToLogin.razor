@@ -3,7 +3,14 @@
 @code {
     protected override void OnInitialized()
     {
-        var returnUrl = Uri.EscapeDataString(Nav.ToBaseRelativePath(Nav.Uri));
-        Nav.NavigateTo($"Account/Login?returnUrl=/{returnUrl}", forceLoad: true);
+        var path = Nav.ToBaseRelativePath(Nav.Uri);
+        // A visitor opening the site itself gets the public landing page; any deeper link still
+        // goes straight to sign-in and returns there afterwards.
+        if (path.Length == 0 || path.StartsWith('?') || path.StartsWith('#'))
+        {
+            Nav.NavigateTo("welcome", forceLoad: true);
+            return;
+        }
+        Nav.NavigateTo($"Account/Login?returnUrl=/{Uri.EscapeDataString(path)}", forceLoad: true);
     }
 }

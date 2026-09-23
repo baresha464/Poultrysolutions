@@ -649,4 +649,209 @@
   <data name="Being set up" xml:space="preserve"><value>సెటప్ జరుగుతోంది</value></data>
   <data name="Not enabled" xml:space="preserve"><value>ఆన్ చేయలేదు</value></data>
   <data name="Test mode" xml:space="preserve"><value>టెస్ట్ మోడ్</value></data>
+  <data name="0–100" xml:space="preserve"><value>0–100</value></data>
+  <data name="1 minute" xml:space="preserve"><value>1 నిమిషం</value></data>
+  <data name="2 languages" xml:space="preserve"><value>2 భాషలు</value></data>
+  <data name="3 reports" xml:space="preserve"><value>3 రిపోర్టులు</value></data>
+  <data name="36 °C at 2 PM — start foggers, give extra water." xml:space="preserve"><value>మధ్యాహ్నం 2కి 36 °C — ఫాగర్లు ఆన్ చేయండి, ఎక్కువ నీరు ఇవ్వండి.</value></data>
+  <data name="Act and improve" xml:space="preserve"><value>చర్య తీసుకోండి, మెరుగుపరచండి</value></data>
+  <data name="Add users, choose what each role can see or edit, and assign houses." xml:space="preserve"><value>యూజర్లను జోడించండి, ప్రతి రోల్ ఏమి చూడగలదో/మార్చగలదో ఎంచుకోండి, షెడ్లు కేటాయించండి.</value></data>
+  <data name="Admins" xml:space="preserve"><value>అడ్మిన్లు</value></data>
+  <data name="AI &amp; WhatsApp" xml:space="preserve"><value>AI &amp; వాట్సాప్</value></data>
+  <data name="Back to home" xml:space="preserve"><value>హోమ్‌కు తిరిగి</value></data>
+  <data name="Batch close-out report with growth charts" xml:space="preserve"><value>పెరుగుదల చార్టులతో బ్యాచ్ ముగింపు రిపోర్ట్</value></data>
+  <data name="Batch comparison with the drivers of good results" xml:space="preserve"><value>మంచి ఫలితాలకు కారణాలతో బ్యాచ్‌ల పోలిక</value></data>
+  <data name="Batch score &amp; advice" xml:space="preserve"><value>బ్యాచ్ స్కోరు &amp; సలహా</value></data>
+  <data name="batch score, every day" xml:space="preserve"><value>బ్యాచ్ స్కోరు, ప్రతిరోజూ</value></data>
+  <data name="Big buttons for deaths, culls and feed bags, &quot;same as yesterday&quot; for routine values, and gentle warnings when a number looks wrong. Supervisors see only the houses they&apos;re assigned to." xml:space="preserve"><value>మరణాలు, కల్స్, మేత బస్తాలకు పెద్ద బటన్లు, రోజూ ఒకేలా ఉండే విలువలకు &quot;నిన్నటిలాగే&quot;, సంఖ్య తప్పుగా అనిపిస్తే హెచ్చరిక. సూపర్‌వైజర్లకు వారికి కేటాయించిన షెడ్లు మాత్రమే కనిపిస్తాయి.</value></data>
+  <data name="Breed standard" xml:space="preserve"><value>జాతి ప్రమాణం</value></data>
+  <data name="Broiler farm management for contract growers" xml:space="preserve"><value>కాంట్రాక్ట్ బ్రాయిలర్ రైతుల కోసం ఫారం నిర్వహణ</value></data>
+  <data name="Broiler shed" xml:space="preserve"><value>బ్రాయిలర్ షెడ్</value></data>
+  <data name="BroilIQ is a simple farm app for broiler growers. Record each shed&apos;s day in a minute, see how your flock compares with the breed standard, catch problems early, and know what the integrator owes you — on any phone, in English or Telugu." xml:space="preserve"><value>BroilIQ బ్రాయిలర్ రైతుల కోసం సులభమైన ఫారం యాప్. ప్రతి షెడ్ రోజువారీ వివరాలను ఒక్క నిమిషంలో నమోదు చేయండి, మీ కోళ్లు జాతి ప్రమాణంతో ఎలా ఉన్నాయో చూడండి, సమస్యలను ముందే గుర్తించండి, ఇంటిగ్రేటర్ మీకు ఎంత ఇవ్వాలో తెలుసుకోండి — ఏ ఫోన్‌లోనైనా, ఇంగ్లీష్ లేదా తెలుగులో.</value></data>
+  <data name="Built for the shed, not the office" xml:space="preserve"><value>ఆఫీసు కోసం కాదు, షెడ్ కోసం తయారైంది</value></data>
+  <data name="chicks" xml:space="preserve"><value>పిల్లలు</value></data>
+  <data name="Common questions" xml:space="preserve"><value>సాధారణ ప్రశ్నలు</value></data>
+  <data name="Days of feed left in stock" xml:space="preserve"><value>నిల్వలో ఎన్ని రోజుల మేత ఉంది</value></data>
+  <data name="Deaths, culls, feed, water, weight and shed temperature" xml:space="preserve"><value>మరణాలు, కల్స్, మేత, నీరు, బరువు, షెడ్ ఉష్ణోగ్రత</value></data>
+  <data name="Deaths, feed and weights scattered across notebooks" xml:space="preserve"><value>మరణాలు, మేత, బరువులు అనేక నోట్‌బుక్‌లలో చెల్లాచెదురుగా</value></data>
+  <data name="Deaths, feed, weight and temperature in about a minute per shed — from the shed itself, on a phone." xml:space="preserve"><value>మరణాలు, మేత, బరువు, ఉష్ణోగ్రత — ఒక్కో షెడ్‌కు సుమారు ఒక నిమిషం, షెడ్ నుంచే ఫోన్‌లో.</value></data>
+  <data name="Download PDF reports that show what made your best batch different from your weakest one — by house, season and integrator — with an action plan for the next placement." xml:space="preserve"><value>మీ ఉత్తమ బ్యాచ్ బలహీన బ్యాచ్‌కంటే ఎందుకు భిన్నంగా ఉందో చూపే PDF రిపోర్టులు — షెడ్, సీజన్, ఇంటిగ్రేటర్ వారీగా — తదుపరి బ్యాచ్‌కు చర్యల ప్రణాళికతో.</value></data>
+  <data name="Each active batch gets a 0–100 score from FCR, growth, livability, vaccinations and shed conditions. Hover on it for the breakdown and the one or two things that need attention today." xml:space="preserve"><value>ప్రతి యాక్టివ్ బ్యాచ్‌కు FCR, పెరుగుదల, బతికిన శాతం, టీకాలు, షెడ్ పరిస్థితుల నుండి 0–100 స్కోరు. వివరాలు, ఈరోజు శ్రద్ధ పెట్టాల్సిన విషయాల కోసం దానిపై చూడండి.</value></data>
+  <data name="Each person chooses which alerts they want." xml:space="preserve"><value>ఎవరికి ఏ హెచ్చరికలు కావాలో వారే ఎంచుకుంటారు.</value></data>
+  <data name="English &amp; Telugu" xml:space="preserve"><value>ఇంగ్లీష్ &amp; తెలుగు</value></data>
+  <data name="English and Telugu" xml:space="preserve"><value>ఇంగ్లీష్ మరియు తెలుగు</value></data>
+  <data name="Enter the day&apos;s record quickly and get reminders for feed and vaccinations." xml:space="preserve"><value>రోజువారీ వివరాలు త్వరగా నమోదు చేయండి, మేత మరియు టీకాల గుర్తింపులు పొందండి.</value></data>
+  <data name="Every shed, one dashboard" xml:space="preserve"><value>అన్ని షెడ్లు, ఒకే డాష్‌బోర్డ్</value></data>
+  <data name="Every shed&apos;s day in one place, entered in a minute" xml:space="preserve"><value>ప్రతి షెడ్ రోజువారీ వివరాలు ఒకే చోట, ఒక నిమిషంలో</value></data>
+  <data name="Everything a broiler farm needs, from placement to settlement" xml:space="preserve"><value>పిల్లలు వేసినప్పటి నుంచి సెటిల్‌మెంట్ వరకు బ్రాయిలర్ ఫారానికి కావలసినవన్నీ</value></data>
+  <data name="Expected settlement worked out from your own records" xml:space="preserve"><value>మీ రికార్డుల నుంచే లెక్కించిన అంచనా సెటిల్‌మెంట్</value></data>
+  <data name="Extra help when you need it" xml:space="preserve"><value>అవసరమైనప్పుడు అదనపు సహాయం</value></data>
+  <data name="FAQ" xml:space="preserve"><value>ప్రశ్నలు</value></data>
+  <data name="Farm owners" xml:space="preserve"><value>ఫారం యజమానులు</value></data>
+  <data name="Farm team reviewing records" xml:space="preserve"><value>రికార్డులు చూస్తున్న ఫారం బృందం</value></data>
+  <data name="Feed kg worked out from bags automatically" xml:space="preserve"><value>బస్తాల నుంచి మేత kg ఆటోమేటిక్‌గా లెక్కిస్తుంది</value></data>
+  <data name="Feed runs out or vaccinations are missed" xml:space="preserve"><value>మేత అయిపోవడం లేదా టీకాలు తప్పిపోవడం</value></data>
+  <data name="Financial summary of income and shed expenses" xml:space="preserve"><value>ఆదాయం మరియు షెడ్ ఖర్చుల ఆర్థిక సారాంశం</value></data>
+  <data name="Follow the score and warnings during the batch, check the settlement at the end, and compare batches to do better next time." xml:space="preserve"><value>బ్యాచ్ సమయంలో స్కోరు, హెచ్చరికలు గమనించండి, చివరలో సెటిల్‌మెంట్ సరిచూడండి, తదుపరి సారి మెరుగ్గా చేయడానికి బ్యాచ్‌లను పోల్చండి.</value></data>
+  <data name="Growth and FCR against the Cobb/Ross standard for the bird&apos;s age" xml:space="preserve"><value>కోడి వయసుకు Cobb/Ross ప్రమాణంతో పెరుగుదల, FCR పోలిక</value></data>
+  <data name="Healthy broiler flock" xml:space="preserve"><value>ఆరోగ్యకరమైన బ్రాయిలర్ కోళ్లు</value></data>
+  <data name="House 1" xml:space="preserve"><value>షెడ్ 1</value></data>
+  <data name="House 2 · heat stress" xml:space="preserve"><value>షెడ్ 2 · వేడి ఒత్తిడి</value></data>
+  <data name="How it works" xml:space="preserve"><value>ఇది ఎలా పనిచేస్తుంది</value></data>
+  <data name="In contract farming you are paid on weight, FCR and mortality. Notebook records make it hard to see a problem until the batch is over — and hard to question a settlement." xml:space="preserve"><value>కాంట్రాక్ట్ ఫార్మింగ్‌లో మీకు బరువు, FCR, మరణాల ఆధారంగా చెల్లిస్తారు. నోట్‌బుక్ రికార్డులతో బ్యాచ్ ముగిసే వరకు సమస్య కనిపించదు — సెటిల్‌మెంట్‌ను ప్రశ్నించడం కూడా కష్టం.</value></data>
+  <data name="Know how the flock is doing — and what to fix" xml:space="preserve"><value>కోళ్లు ఎలా ఉన్నాయో — ఏమి సరిచేయాలో తెలుసుకోండి</value></data>
+  <data name="Learn from every batch" xml:space="preserve"><value>ప్రతి బ్యాచ్ నుంచి నేర్చుకోండి</value></data>
+  <data name="Log each day" xml:space="preserve"><value>ప్రతిరోజూ నమోదు చేయండి</value></data>
+  <data name="Log in" xml:space="preserve"><value>లాగిన్</value></data>
+  <data name="Log in to your farm" xml:space="preserve"><value>మీ ఫారంలోకి లాగిన్ అవ్వండి</value></data>
+  <data name="Log in with the username and password from your farm admin." xml:space="preserve"><value>మీ ఫారం అడ్మిన్ ఇచ్చిన యూజర్‌నేమ్, పాస్‌వర్డ్‌తో లాగిన్ అవ్వండి.</value></data>
+  <data name="Made for contract broiler farms" xml:space="preserve"><value>కాంట్రాక్ట్ బ్రాయిలర్ ఫారాల కోసం</value></data>
+  <data name="Mortality against your integrator&apos;s allowance" xml:space="preserve"><value>మీ ఇంటిగ్రేటర్ అనుమతించిన పరిమితితో మరణాల పోలిక</value></data>
+  <data name="No easy way to check the integrator&apos;s settlement" xml:space="preserve"><value>ఇంటిగ్రేటర్ సెటిల్‌మెంట్‌ను సరిచూడటానికి సులభమైన మార్గం లేదు</value></data>
+  <data name="One app for everyone on the farm" xml:space="preserve"><value>ఫారంలో అందరికీ ఒకే యాప్</value></data>
+  <data name="Open dashboard" xml:space="preserve"><value>డాష్‌బోర్డ్ తెరవండి</value></data>
+  <data name="Optional add-ons" xml:space="preserve"><value>అదనపు సౌకర్యాలు</value></data>
+  <data name="Pick the house and integrator. Chick cost, feed bag weight and target weight fill in from the integrator&apos;s terms." xml:space="preserve"><value>షెడ్, ఇంటిగ్రేటర్ ఎంచుకోండి. పిల్ల ధర, మేత బస్తా బరువు, లక్ష్య బరువు ఇంటిగ్రేటర్ నిబంధనల నుంచి ఆటోమేటిక్‌గా వస్తాయి.</value></data>
+  <data name="Place the batch" xml:space="preserve"><value>బ్యాచ్ వేయండి</value></data>
+  <data name="Poor growth noticed only at lifting" xml:space="preserve"><value>పెరుగుదల తక్కువగా ఉందని లిఫ్టింగ్‌ సమయంలోనే తెలుస్తుంది</value></data>
+  <data name="Ready to open your farm?" xml:space="preserve"><value>మీ ఫారం తెరవడానికి సిద్ధమా?</value></data>
+  <data name="ready to print or share" xml:space="preserve"><value>ప్రింట్ లేదా షేర్ చేయడానికి సిద్ధం</value></data>
+  <data name="Reports" xml:space="preserve"><value>రిపోర్టులు</value></data>
+  <data name="Run every batch like your best batch." xml:space="preserve"><value>ప్రతి బ్యాచ్‌ను మీ ఉత్తమ బ్యాచ్‌లా నడపండి.</value></data>
+  <data name="See every shed at a glance, compare batches and check what you&apos;re paid." xml:space="preserve"><value>అన్ని షెడ్లను ఒక్క చూపులో చూడండి, బ్యాచ్‌లను పోల్చండి, మీకు ఎంత చెల్లించారో సరిచూడండి.</value></data>
+  <data name="See what it does" xml:space="preserve"><value>ఇది ఏమి చేస్తుందో చూడండి</value></data>
+  <data name="Suggestions only — always confirm with your vet." xml:space="preserve"><value>సూచనలు మాత్రమే — ఎప్పుడూ మీ వెట్‌తో నిర్ధారించుకోండి.</value></data>
+  <data name="Supervisors &amp; shed staff" xml:space="preserve"><value>సూపర్‌వైజర్లు &amp; షెడ్ సిబ్బంది</value></data>
+  <data name="Switched on for your farm on request." xml:space="preserve"><value>అభ్యర్థనపై మీ ఫారానికి ఆన్ చేస్తారు.</value></data>
+  <data name="Three steps, every batch" xml:space="preserve"><value>ప్రతి బ్యాచ్‌కు మూడు దశలు</value></data>
+  <data name="to log a shed&apos;s day" xml:space="preserve"><value>ఒక షెడ్ రోజువారీ నమోదుకు</value></data>
+  <data name="Vaccinations, medicines, feed deliveries and lifting" xml:space="preserve"><value>టీకాలు, మందులు, మేత డెలివరీలు, లిఫ్టింగ్</value></data>
+  <data name="Warnings for feed stock, heat and vaccinations" xml:space="preserve"><value>మేత నిల్వ, వేడి, టీకాలకు హెచ్చరికలు</value></data>
+  <data name="Weight and FCR compared with the breed standard daily" xml:space="preserve"><value>బరువు, FCR ప్రతిరోజూ జాతి ప్రమాణంతో పోలిక</value></data>
+  <data name="Who it&apos;s for" xml:space="preserve"><value>ఇది ఎవరి కోసం</value></data>
+  <data name="Why BroilIQ" xml:space="preserve"><value>ఎందుకు BroilIQ</value></data>
+  <data name="With BroilIQ" xml:space="preserve"><value>BroilIQ తో</value></data>
+  <data name="Without it" xml:space="preserve"><value>అది లేకుండా</value></data>
+  <data name="Works on any phone" xml:space="preserve"><value>ఏ ఫోన్‌లోనైనా పనిచేస్తుంది</value></data>
+  <data name="Your flock" xml:space="preserve"><value>మీ కోళ్లు</value></data>
+  <data name="Your income depends on a few numbers. Watch them every day." xml:space="preserve"><value>మీ ఆదాయం కొన్ని సంఖ్యలపై ఆధారపడి ఉంటుంది. వాటిని ప్రతిరోజూ గమనించండి.</value></data>
+  <data name="Quick daily records" xml:space="preserve"><value>త్వరిత రోజువారీ రికార్డులు</value></data>
+  <data name="Deaths, culls, feed bags, water, weight and shed temperature — with &quot;same as yesterday&quot; and checks for typing mistakes." xml:space="preserve"><value>మరణాలు, కల్స్, మేత బస్తాలు, నీరు, బరువు, షెడ్ ఉష్ణోగ్రత — &quot;నిన్నటిలాగే&quot; మరియు టైపింగ్ తప్పుల తనిఖీతో.</value></data>
+  <data name="Batch score &amp; advisor" xml:space="preserve"><value>బ్యాచ్ స్కోరు &amp; సలహాదారు</value></data>
+  <data name="A 0–100 score for every active batch, with plain advice on FCR, growth, livability, vaccinations and shed conditions." xml:space="preserve"><value>ప్రతి యాక్టివ్ బ్యాచ్‌కు 0–100 స్కోరు, FCR, పెరుగుదల, బతికిన శాతం, టీకాలు, షెడ్ పరిస్థితులపై సులభమైన సలహాతో.</value></data>
+  <data name="Growth vs breed standard" xml:space="preserve"><value>పెరుగుదల vs జాతి ప్రమాణం</value></data>
+  <data name="Body weight and FCR compared day by day with the Cobb/Ross target for the bird&apos;s age." xml:space="preserve"><value>శరీర బరువు, FCR ను కోడి వయసుకు Cobb/Ross లక్ష్యంతో రోజురోజుకూ పోలుస్తుంది.</value></data>
+  <data name="Deliveries minus consumption, and a warning before feed runs out." xml:space="preserve"><value>వచ్చిన మేత మైనస్ వాడిన మేత, మేత అయిపోకముందే హెచ్చరిక.</value></data>
+  <data name="Vaccination schedule" xml:space="preserve"><value>టీకాల షెడ్యూల్</value></data>
+  <data name="ND, IB and Gumboro doses on time, with reminders and a health log." xml:space="preserve"><value>ND, IB, గంబోరో డోసులు సమయానికి, గుర్తింపులు మరియు ఆరోగ్య లాగ్‌తో.</value></data>
+  <data name="Settlement check" xml:space="preserve"><value>సెటిల్‌మెంట్ తనిఖీ</value></data>
+  <data name="Expected growing charge, FCR incentive and mortality deduction from your integrator&apos;s terms and your own records." xml:space="preserve"><value>మీ ఇంటిగ్రేటర్ నిబంధనలు, మీ రికార్డుల నుంచి అంచనా పెంపకం చార్జీ, FCR ప్రోత్సాహకం, మరణాల కోత.</value></data>
+  <data name="PDF reports" xml:space="preserve"><value>PDF రిపోర్టులు</value></data>
+  <data name="Batch close-out, batch comparison and financial reports to print or share." xml:space="preserve"><value>బ్యాచ్ ముగింపు, బ్యాచ్ పోలిక, ఆర్థిక రిపోర్టులు — ప్రింట్ లేదా షేర్ చేయడానికి.</value></data>
+  <data name="Multiple houses &amp; roles" xml:space="preserve"><value>అనేక షెడ్లు &amp; రోల్స్</value></data>
+  <data name="Every shed on one dashboard; each user sees only the houses and actions allowed for their role." xml:space="preserve"><value>అన్ని షెడ్లు ఒకే డాష్‌బోర్డ్‌లో; ప్రతి యూజర్‌కు వారి రోల్‌కు అనుమతించిన షెడ్లు, పనులు మాత్రమే కనిపిస్తాయి.</value></data>
+  <data name="Switch language any time — screens, advice and reports follow." xml:space="preserve"><value>ఎప్పుడైనా భాష మార్చండి — స్క్రీన్లు, సలహాలు, రిపోర్టులు అదే భాషలో.</value></data>
+  <data name="How do I get an account?" xml:space="preserve"><value>నాకు ఖాతా ఎలా వస్తుంది?</value></data>
+  <data name="Your farm admin creates a username and password for you. New farms are set up by the BroilIQ platform team." xml:space="preserve"><value>మీ ఫారం అడ్మిన్ మీకు యూజర్‌నేమ్, పాస్‌వర్డ్ ఇస్తారు. కొత్త ఫారాలను BroilIQ ప్లాట్‌ఫారమ్ బృందం సెటప్ చేస్తుంది.</value></data>
+  <data name="Does it work on a mobile phone?" xml:space="preserve"><value>ఇది మొబైల్ ఫోన్‌లో పనిచేస్తుందా?</value></data>
+  <data name="Yes. BroilIQ runs in the phone&apos;s browser — no app to install — and is designed for use inside the shed." xml:space="preserve"><value>అవును. BroilIQ ఫోన్ బ్రౌజర్‌లో పనిచేస్తుంది — యాప్ ఇన్‌స్టాల్ అవసరం లేదు — షెడ్ లోపల వాడటానికి తయారైంది.</value></data>
+  <data name="Can I use it in Telugu?" xml:space="preserve"><value>తెలుగులో వాడవచ్చా?</value></data>
+  <data name="Yes. Tap EN / తె at the top of any page. Your choice is remembered on every device you sign in on." xml:space="preserve"><value>అవును. ఏ పేజీ పైభాగంలోనైనా EN / తె నొక్కండి. మీరు లాగిన్ అయ్యే ప్రతి పరికరంలో మీ ఎంపిక గుర్తుంటుంది.</value></data>
+  <data name="Is my farm&apos;s data private?" xml:space="preserve"><value>నా ఫారం డేటా సురక్షితమా?</value></data>
+  <data name="Yes. Each farm&apos;s data is kept separate, and users only see the houses they are assigned to." xml:space="preserve"><value>అవును. ప్రతి ఫారం డేటా వేరుగా ఉంటుంది, యూజర్లకు వారికి కేటాయించిన షెడ్లు మాత్రమే కనిపిస్తాయి.</value></data>
+  <data name="How do I get the AI Assistant or WhatsApp alerts?" xml:space="preserve"><value>AI అసిస్టెంట్ లేదా వాట్సాప్ హెచ్చరికలు ఎలా పొందాలి?</value></data>
+  <data name="Your farm admin can request them from Settings → Features; the platform team switches them on for your farm." xml:space="preserve"><value>మీ ఫారం అడ్మిన్ సెట్టింగ్స్ → సౌకర్యాలు నుంచి అభ్యర్థించవచ్చు; ప్లాట్‌ఫారమ్ బృందం వాటిని మీ ఫారానికి ఆన్ చేస్తుంది.</value></data>
+  <data name="38 deaths today — about 3× the usual. Check drinkers and send 2 birds for post-mortem." xml:space="preserve"><value>ఈరోజు 38 మరణాలు — సాధారణం కంటే సుమారు 3 రెట్లు. డ్రింకర్లు సరిచూడండి, 2 కోళ్లను పోస్ట్‌మార్టమ్‌కు పంపండి.</value></data>
+  <data name="A health check from a photo, and answers about your own batch" xml:space="preserve"><value>ఫోటోతో ఆరోగ్య పరీక్ష, మీ బ్యాచ్ గురించే సమాధానాలు</value></data>
+  <data name="a reminder the day before each dose, and a note if one looks missed" xml:space="preserve"><value>ప్రతి డోసుకు ముందు రోజు గుర్తింపు, ఏదైనా తప్పినట్టు అనిపిస్తే సూచన</value></data>
+  <data name="about 2 days before feed runs out" xml:space="preserve"><value>మేత అయిపోవడానికి సుమారు 2 రోజుల ముందు</value></data>
+  <data name="ask &quot;Why did mortality go up this week?&quot; or &quot;When should I lift?&quot; and get answers from your records" xml:space="preserve"><value>&quot;ఈ వారం మరణాలు ఎందుకు పెరిగాయి?&quot; లేదా &quot;ఎప్పుడు లిఫ్ట్ చేయాలి?&quot; అని అడగండి, మీ రికార్డుల నుంచే సమాధానాలు పొందండి</value></data>
+  <data name="at 8 PM if today&apos;s entry hasn&apos;t been made" xml:space="preserve"><value>ఈరోజు నమోదు చేయకపోతే రాత్రి 8 గంటలకు</value></data>
+  <data name="Call us" xml:space="preserve"><value>మాకు కాల్ చేయండి</value></data>
+  <data name="Chat with us on WhatsApp" xml:space="preserve"><value>వాట్సాప్‌లో మాతో మాట్లాడండి</value></data>
+  <data name="Clear result" xml:space="preserve"><value>స్పష్టమైన ఫలితం</value></data>
+  <data name="Coccidiosis" xml:space="preserve"><value>కాక్సిడియోసిస్</value></data>
+  <data name="Contact" xml:space="preserve"><value>సంప్రదించండి</value></data>
+  <data name="Daily summary · House 3" xml:space="preserve"><value>రోజువారీ సారాంశం · షెడ్ 3</value></data>
+  <data name="Day 24 · 11 deaths · 1.08 kg · FCR 1.38 · feed for 4 days · score 92" xml:space="preserve"><value>24వ రోజు · 11 మరణాలు · 1.08 kg · FCR 1.38 · 4 రోజుల మేత · స్కోరు 92</value></data>
+  <data name="Death spike" xml:space="preserve"><value>మరణాల పెరుగుదల</value></data>
+  <data name="deaths, weight, FCR, feed left and score for each batch, at the time you choose" xml:space="preserve"><value>ప్రతి బ్యాచ్‌కు మరణాలు, బరువు, FCR, మిగిలిన మేత, స్కోరు — మీరు ఎంచుకున్న సమయంలో</value></data>
+  <data name="Email" xml:space="preserve"><value>ఈమెయిల్</value></data>
+  <data name="Evening summary" xml:space="preserve"><value>సాయంత్రం సారాంశం</value></data>
+  <data name="Farm assistant chat" xml:space="preserve"><value>ఫారం అసిస్టెంట్ చాట్</value></data>
+  <data name="House 1 · heat stress" xml:space="preserve"><value>షెడ్ 1 · వేడి ఒత్తిడి</value></data>
+  <data name="House 2 · death spike" xml:space="preserve"><value>షెడ్ 2 · మరణాల పెరుగుదల</value></data>
+  <data name="Necrotic enteritis" xml:space="preserve"><value>నెక్రోటిక్ ఎంటెరైటిస్</value></data>
+  <data name="New farm? WhatsApp us" xml:space="preserve"><value>కొత్త ఫారమా? వాట్సాప్ చేయండి</value></data>
+  <data name="possible conditions with likelihood, how urgent it is, what to do now and what to check" xml:space="preserve"><value>సాధ్యమైన వ్యాధులు, వాటి అవకాశం, ఎంత అత్యవసరం, ఇప్పుడు ఏమి చేయాలి, ఏమి సరిచూడాలి</value></data>
+  <data name="Problems reach your phone before they cost you" xml:space="preserve"><value>నష్టం జరగకముందే సమస్యలు మీ ఫోన్‌కు చేరతాయి</value></data>
+  <data name="Remove wet litter around drinkers today" xml:space="preserve"><value>ఈరోజే డ్రింకర్ల చుట్టూ తడి లిట్టర్ తీసివేయండి</value></data>
+  <data name="Safety first" xml:space="preserve"><value>భద్రత ముందు</value></data>
+  <data name="Switched on for your farm on request — each farm uses its own AI and WhatsApp account, so costs stay separate." xml:space="preserve"><value>అభ్యర్థనపై మీ ఫారానికి ఆన్ చేస్తారు — ప్రతి ఫారం తన సొంత AI, వాట్సాప్ ఖాతా వాడుతుంది, కాబట్టి ఖర్చులు వేరుగా ఉంటాయి.</value></data>
+  <data name="Talk to the BroilIQ team" xml:space="preserve"><value>BroilIQ బృందంతో మాట్లాడండి</value></data>
+  <data name="tells you when to call the vet and warns about notifiable diseases such as bird flu" xml:space="preserve"><value>వెట్‌ను ఎప్పుడు పిలవాలో చెబుతుంది, బర్డ్ ఫ్లూ వంటి ప్రమాదకర వ్యాధుల గురించి హెచ్చరిస్తుంది</value></data>
+  <data name="up to 4 photos of birds, droppings, litter or post-mortem findings, with the symptoms you tick" xml:space="preserve"><value>కోళ్లు, రెట్టలు, లిట్టర్ లేదా పోస్ట్‌మార్టమ్ ఫోటోలు 4 వరకు, మీరు ఎంచుకున్న లక్షణాలతో</value></data>
+  <data name="Want BroilIQ for your farm, a demo, or help with your account? Call, WhatsApp or email us." xml:space="preserve"><value>మీ ఫారానికి BroilIQ కావాలా, డెమో కావాలా, లేదా ఖాతాలో సహాయం కావాలా? కాల్, వాట్సాప్ లేదా ఈమెయిల్ చేయండి.</value></data>
+  <data name="WhatsApp" xml:space="preserve"><value>వాట్సాప్</value></data>
+  <data name="when a day&apos;s deaths jump well above the recent average" xml:space="preserve"><value>ఒక రోజు మరణాలు ఇటీవలి సగటుకంటే బాగా పెరిగినప్పుడు</value></data>
+  <data name="when the shed temperature is dangerous for the birds&apos; age" xml:space="preserve"><value>షెడ్ ఉష్ణోగ్రత కోళ్ల వయసుకు ప్రమాదకరంగా ఉన్నప్పుడు</value></data>
+  <data name="Income &amp; expenses" xml:space="preserve"><value>ఆదాయం &amp; ఖర్చులు</value></data>
+  <data name="Shed expenses by batch, a live income projection before lifting, and profit per bird after settlement." xml:space="preserve"><value>బ్యాచ్ వారీగా షెడ్ ఖర్చులు, లిఫ్టింగ్‌కు ముందే ఆదాయ అంచనా, సెటిల్‌మెంట్ తర్వాత ఒక్కో కోడిపై లాభం.</value></data>
+  <data name="Integrator terms" xml:space="preserve"><value>ఇంటిగ్రేటర్ నిబంధనలు</value></data>
+  <data name="Chick cost, feed bag weight, growing charge, FCR incentive and mortality allowance for each integrator, kept up to date for you." xml:space="preserve"><value>ప్రతి ఇంటిగ్రేటర్‌కు పిల్ల ధర, మేత బస్తా బరువు, పెంపకం చార్జీ, FCR ప్రోత్సాహకం, మరణాల పరిమితి — మీ కోసం తాజాగా ఉంచుతాము.</value></data>
+  <data name="Lifting &amp; settlement" xml:space="preserve"><value>లిఫ్టింగ్ &amp; సెటిల్‌మెంట్</value></data>
+  <data name="Record each lifting with birds, weight, vehicle and DC number, then the settlement and payment due date." xml:space="preserve"><value>ప్రతి లిఫ్టింగ్‌ను కోళ్లు, బరువు, వాహనం, DC నంబర్‌తో నమోదు చేయండి, తర్వాత సెటిల్‌మెంట్, చెల్లింపు గడువు.</value></data>
+  <data name="AI health check" xml:space="preserve"><value>AI ఆరోగ్య పరీక్ష</value></data>
+  <data name="Photograph sick birds and get possible causes, urgency and what to do now — plus a farm assistant that answers questions about your batch." xml:space="preserve"><value>జబ్బు పడిన కోళ్ల ఫోటో తీసి సాధ్యమైన కారణాలు, అత్యవసరత, ఇప్పుడు ఏమి చేయాలో తెలుసుకోండి — మీ బ్యాచ్ గురించి ప్రశ్నలకు సమాధానమిచ్చే ఫారం అసిస్టెంట్ కూడా.</value></data>
+  <data name="Death spikes, heat, low feed, vaccinations and an evening summary sent to your phone." xml:space="preserve"><value>మరణాల పెరుగుదల, వేడి, మేత తక్కువ, టీకాలు, సాయంత్రం సారాంశం — మీ ఫోన్‌కు.</value></data>
+  <data name="Your farm&apos;s branding" xml:space="preserve"><value>మీ ఫారం బ్రాండింగ్</value></data>
+  <data name="Your farm name, logo and colours on every screen your team uses." xml:space="preserve"><value>మీ బృందం వాడే ప్రతి స్క్రీన్‌పై మీ ఫారం పేరు, లోగో, రంగులు.</value></data>
+  <data name="Your farm admin creates a username and password for you. For a new farm, call or WhatsApp the BroilIQ team on +91 90307 05320 and we&apos;ll set it up." xml:space="preserve"><value>మీ ఫారం అడ్మిన్ మీకు యూజర్‌నేమ్, పాస్‌వర్డ్ ఇస్తారు. కొత్త ఫారం కోసం BroilIQ బృందానికి +91 90307 05320 కు కాల్ లేదా వాట్సాప్ చేయండి, మేము సెటప్ చేస్తాము.</value></data>
+  <data name="Broiler farms" xml:space="preserve"><value>బ్రాయిలర్ ఫారాలు</value></data>
+  <data name="Brooding" xml:space="preserve"><value>బ్రూడింగ్</value></data>
+  <data name="Water" xml:space="preserve"><value>నీరు</value></data>
+  <data name="Cooling pads" xml:space="preserve"><value>కూలింగ్ ప్యాడ్లు</value></data>
+  <data name="Sample weighing" xml:space="preserve"><value>నమూనా తూకం</value></data>
+  <data name="Tunnel ventilation" xml:space="preserve"><value>టన్నెల్ వెంటిలేషన్</value></data>
+  <data name="Grow-out" xml:space="preserve"><value>పెంపకం</value></data>
+  <data name="Healthy flock" xml:space="preserve"><value>ఆరోగ్యకరమైన కోళ్లు</value></data>
+  <data name="Supervisor recording the day in the shed" xml:space="preserve"><value>షెడ్‌లో రోజువారీ వివరాలు నమోదు చేస్తున్న సూపర్‌వైజర్</value></data>
+  <data name="Weighing a sample bird" xml:space="preserve"><value>నమూనా కోడిని తూకం వేయడం</value></data>
+  <data name="A 20-minute call or farm visit, at a time that suits you" xml:space="preserve"><value>మీకు అనుకూలమైన సమయంలో 20 నిమిషాల కాల్ లేదా ఫారం సందర్శన</value></data>
+  <data name="A broiler farm at sunset" xml:space="preserve"><value>సూర్యాస్తమయ సమయంలో బ్రాయిలర్ ఫారం</value></data>
+  <data name="Also send it on WhatsApp" xml:space="preserve"><value>వాట్సాప్‌లో కూడా పంపండి</value></data>
+  <data name="Anything you&apos;d like us to know?" xml:space="preserve"><value>మాకు ఇంకేమైనా చెప్పాలనుకుంటున్నారా?</value></data>
+  <data name="Birds per batch" xml:space="preserve"><value>ఒక్కో బ్యాచ్‌కు కోళ్లు</value></data>
+  <data name="Book a free demo, or log in if your farm is already on BroilIQ." xml:space="preserve"><value>ఉచిత డెమో బుక్ చేసుకోండి, లేదా మీ ఫారం ఇప్పటికే BroilIQ లో ఉంటే లాగిన్ అవ్వండి.</value></data>
+  <data name="Built by broiler farmers, for broiler farmers" xml:space="preserve"><value>బ్రాయిలర్ రైతులు, బ్రాయిలర్ రైతుల కోసం తయారు చేసింది</value></data>
+  <data name="Built by farmers who have lived every batch" xml:space="preserve"><value>ప్రతి బ్యాచ్‌ను స్వయంగా అనుభవించిన రైతులు తయారు చేసింది</value></data>
+  <data name="Environment-controlled broiler shed" xml:space="preserve"><value>వాతావరణ నియంత్రిత (EC) బ్రాయిలర్ షెడ్</value></data>
+  <data name="Every batch is our family&apos;s income. We built this so no farmer has to lose a batch — or an argument about one — for lack of good records." xml:space="preserve"><value>ప్రతి బ్యాచ్ మా కుటుంబ ఆదాయం. సరైన రికార్డులు లేక ఏ రైతూ బ్యాచ్‌ను — లేదా దాని గురించి వాదనను — కోల్పోకూడదని దీన్ని తయారు చేశాం.</value></data>
+  <data name="Feed shortages and late deliveries" xml:space="preserve"><value>మేత కొరత, ఆలస్యమైన డెలివరీలు</value></data>
+  <data name="Free demo" xml:space="preserve"><value>ఉచిత డెమో</value></data>
+  <data name="From one farmer to another — let&apos;s grow better batches together." xml:space="preserve"><value>ఒక రైతు నుంచి మరో రైతుకు — కలిసి మెరుగైన బ్యాచ్‌లు పెంచుదాం.</value></data>
+  <data name="Heat waves and sudden mortality" xml:space="preserve"><value>వడగాలులు, అకస్మాత్తు మరణాలు</value></data>
+  <data name="Integrator you grow for" xml:space="preserve"><value>మీరు పెంచే ఇంటిగ్రేటర్</value></data>
+  <data name="No payment details needed" xml:space="preserve"><value>చెల్లింపు వివరాలు అవసరం లేదు</value></data>
+  <data name="Number of sheds" xml:space="preserve"><value>షెడ్ల సంఖ్య</value></data>
+  <data name="Our story" xml:space="preserve"><value>మా కథ</value></data>
+  <data name="Please enter your name and mobile number." xml:space="preserve"><value>దయచేసి మీ పేరు, మొబైల్ నంబర్ ఇవ్వండి.</value></data>
+  <data name="Prefer to talk now?" xml:space="preserve"><value>ఇప్పుడే మాట్లాడాలనుకుంటున్నారా?</value></data>
+  <data name="Request a demo" xml:space="preserve"><value>డెమో కోరండి</value></data>
+  <data name="Request a free demo" xml:space="preserve"><value>ఉచిత డెమో కోరండి</value></data>
+  <data name="Request my free demo" xml:space="preserve"><value>నాకు ఉచిత డెమో కావాలి</value></data>
+  <data name="See BroilIQ on your own farm" xml:space="preserve"><value>మీ సొంత ఫారంలో BroilIQ ను చూడండి</value></data>
+  <data name="Settlement cuts we couldn&apos;t check" xml:space="preserve"><value>సరిచూడలేకపోయిన సెటిల్‌మెంట్ కోతలు</value></data>
+  <data name="Tell us a little about your farm. A farmer from our team will call you, show you the app on your phone in English or Telugu, and help set up your sheds — free of cost." xml:space="preserve"><value>మీ ఫారం గురించి కొంచెం చెప్పండి. మా బృందంలోని ఒక రైతు మీకు కాల్ చేసి, మీ ఫోన్‌లోనే ఇంగ్లీష్ లేదా తెలుగులో యాప్ చూపిస్తారు, మీ షెడ్లను సెటప్ చేయడంలో సహాయం చేస్తారు — ఉచితంగా.</value></data>
+  <data name="Thank you, {0}!" xml:space="preserve"><value>ధన్యవాదాలు, {0}!</value></data>
+  <data name="The BroilIQ founding farmers" xml:space="preserve"><value>BroilIQ వ్యవస్థాపక రైతులు</value></data>
+  <data name="Village / district" xml:space="preserve"><value>గ్రామం / జిల్లా</value></data>
+  <data name="We already have your request — our team will call you soon." xml:space="preserve"><value>మీ అభ్యర్థన ఇప్పటికే మాకు అందింది — మా బృందం త్వరలో మీకు కాల్ చేస్తుంది.</value></data>
+  <data name="We are broiler farmers. For more than ten years we have raised flocks for integrators — through summer heat that took birds overnight, sick flocks we noticed too late, feed that ran out on a Sunday, and settlements we couldn&apos;t question because our records were in a torn notebook." xml:space="preserve"><value>మేము బ్రాయిలర్ రైతులం. పదేళ్లకు పైగా ఇంటిగ్రేటర్ల కోసం కోళ్లను పెంచాం — రాత్రికి రాత్రే కోళ్లను తీసుకెళ్లిన వేసవి వేడి, ఆలస్యంగా గుర్తించిన జబ్బు కోళ్లు, ఆదివారం అయిపోయిన మేత, చిరిగిన నోట్‌బుక్‌లో రికార్డులు ఉండటంతో ప్రశ్నించలేకపోయిన సెటిల్‌మెంట్లు — అన్నీ చూశాం.</value></data>
+  <data name="We have your request. Our team will call you on {0} within one working day." xml:space="preserve"><value>మీ అభ్యర్థన అందింది. మా బృందం ఒక పని దినంలోగా {0} కు కాల్ చేస్తుంది.</value></data>
+  <data name="We learned every lesson the hard way. BroilIQ is everything we wish we had on day one: a simple way to see how the flock is really doing, catch trouble early, and stand up for the fair price of our hard work." xml:space="preserve"><value>ప్రతి పాఠాన్ని కష్టపడి నేర్చుకున్నాం. మొదటి రోజే మాకు ఉండాలనుకున్నదంతా BroilIQ: కోళ్లు నిజంగా ఎలా ఉన్నాయో సులభంగా చూడటం, సమస్యను ముందే పట్టుకోవడం, మా కష్టానికి న్యాయమైన ధర కోసం నిలబడటం.</value></data>
+  <data name="years in broiler farming" xml:space="preserve"><value>సంవత్సరాల బ్రాయిలర్ ఫార్మింగ్ అనుభవం</value></data>
+  <data name="Years of notebook records" xml:space="preserve"><value>ఏళ్ల తరబడి నోట్‌బుక్ రికార్డులు</value></data>
+  <data name="Your name" xml:space="preserve"><value>మీ పేరు</value></data>
+  <data name="Your sheds and integrator set up for you" xml:space="preserve"><value>మీ షెడ్లు, ఇంటిగ్రేటర్ మీ కోసం సెటప్ చేస్తాము</value></data>
 </root>

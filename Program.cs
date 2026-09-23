@@ -60,6 +60,13 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.ExpireTimeSpan = TimeSpan.FromDays(30);
         options.SlidingExpiration = true;
         options.Cookie.Name = "AmrPoultryFarm.Auth";
+        // Signed-out visitors opening the site root see the public landing page, not the login form.
+        options.Events.OnRedirectToLogin = ctx =>
+        {
+            var target = ctx.Request.Path == "/" ? "/welcome" : ctx.RedirectUri;
+            ctx.Response.Redirect(target);
+            return Task.CompletedTask;
+        };
     });
 builder.Services.AddAuthorization();
 builder.Services.AddCascadingAuthenticationState();
@@ -83,6 +90,7 @@ builder.Services.AddDataProtection()
     .SetApplicationName(AppBrand.Name)
     .PersistKeysToFileSystem(new DirectoryInfo(keysPath));
 builder.Services.AddSingleton<TenantFeatureService>();
+builder.Services.AddSingleton<DemoRequestService>();
 
 // Claude-powered photo health check + farm assistant, using the signed-in client's own API key.
 builder.Services.AddScoped<AmrPoultryFarmWeb.Services.Ai.FarmAiService>();
@@ -303,7 +311,7 @@ app.MapPost("/Account/LoginSubmit", async (HttpContext http, AuthService authSer
 app.MapPost("/Account/Logout", async (HttpContext http) =>
 {
     await http.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-    return Results.Redirect("/Account/Login");
+    return Results.Redirect("/welcome");
 }).DisableAntiforgery();
 
 // Language switch (EN | తె): sets the culture cookie, saves the choice on the signed-in user so it

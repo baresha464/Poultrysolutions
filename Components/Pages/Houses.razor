@@ -26,7 +26,7 @@ else
         var batchCount = countByHouse.GetValueOrDefault(h.Id);
 
         <a class="card house-card" href="@($"houses/{h.Id}")">
-            <div class="house-card-photo @VariantFor(h.Id)">
+            <div class="house-card-photo @VariantFor(h.Id) @(active is null ? "empty" : "")">
                 <div class="house-card-photo-title">@h.Name</div>
             </div>
             <div class="house-card-head">

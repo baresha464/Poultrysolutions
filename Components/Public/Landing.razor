@@ -1,0 +1,596 @@
+﻿@page "/welcome"
+@attribute [AllowAnonymous]
+@layout EmptyLayout
+
+@* Public start page: what BroilIQ is and what it does, for visitors who aren't signed in yet.
+   Anonymous visits to "/" land here (see RedirectToLogin and the cookie OnRedirectToLogin event);
+   "Log in" goes to the normal sign-in page. Signed-in users get "Open dashboard" instead. *@
+
+<PageTitle>@AppBrand.Name — @L["Broiler farm management for contract growers"]</PageTitle>
+
+<div class="lp">
+    @* ---------------- Top bar ---------------- *@
+    <header class="lp-nav">
+        <a class="lp-brand" href="welcome">
+            <img src="@AppBrand.MarkUrl" alt="" />
+            <span>@AppBrand.Name</span>
+        </a>
+        <nav class="lp-nav-links">
+            <a href="welcome#story">@L["Our story"]</a>
+            <a href="welcome#features">@L["Features"]</a>
+            <a href="welcome#how">@L["How it works"]</a>
+            <a href="welcome#addons">@L["AI & WhatsApp"]</a>
+            <a href="welcome#faq">@L["FAQ"]</a>
+            <a href="welcome#contact">@L["Contact"]</a>
+        </nav>
+        <div class="lp-nav-actions">
+            <LanguageToggle />
+            @if (signedIn)
+            {
+                <a class="btn btn-primary" href="">@L["Open dashboard"] <span class="material-symbols-outlined">arrow_forward</span></a>
+            }
+            else
+            {
+                <a class="btn btn-amber lp-nav-demo" href="welcome#demo">@L["Request a demo"]</a>
+                <a class="btn btn-primary" href="Account/Login">@L["Log in"] <span class="material-symbols-outlined">login</span></a>
+            }
+        </div>
+    </header>
+
+    @* ---------------- Hero ---------------- *@
+    <section class="lp-hero">
+        <div class="lp-hero-bg" style="background-image:url('images/farm/farm-aerial-day.jpg')"></div>
+        <div class="lp-hero-inner">
+            <div class="lp-hero-copy">
+                <span class="lp-eyebrow"><span class="material-symbols-outlined">agriculture</span> @L["Built by broiler farmers, for broiler farmers"]</span>
+                <h1>@L["Run every batch like your best batch."]</h1>
+                <p>@L["BroilIQ is a simple farm app for broiler growers. Record each shed's day in a minute, see how your flock compares with the breed standard, catch problems early, and know what the integrator owes you — on any phone, in English or Telugu."]</p>
+                <div class="lp-hero-cta">
+                    @if (signedIn)
+                    {
+                        <a class="btn btn-amber lp-btn-lg" href="">@L["Open dashboard"] <span class="material-symbols-outlined">arrow_forward</span></a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-amber lp-btn-lg" href="welcome#demo">@L["Request a free demo"] <span class="material-symbols-outlined">event_available</span></a>
+                        <a class="btn btn-ghost lp-btn-lg" href="Account/Login">@L["Log in to your farm"] <span class="material-symbols-outlined">login</span></a>
+                    }
+                </div>
+                <ul class="lp-hero-points">
+                    <li><span class="material-symbols-outlined">translate</span> @L["English & Telugu"]</li>
+                    <li><span class="material-symbols-outlined">smartphone</span> @L["Works on any phone"]</li>
+                    <li><span class="material-symbols-outlined">home_work</span> @L["Every shed, one dashboard"]</li>
+                </ul>
+            </div>
+
+            @* Illustrative product preview (sample numbers) *@
+            <div class="lp-hero-visual" aria-hidden="true">
+                <div class="lp-mock">
+                    <div class="lp-mock-head">
+                        <div class="lp-mock-chip" style="background-image:url('images/farm/thumb-1.jpg')">H1</div>
+                        <div>
+                            <div class="lp-mock-title">@L["House 1"] <span class="lp-mock-day">@L["Day {0}", 24]</span></div>
+                            <div class="lp-mock-sub">Cobb 430Y · 5,000 @L["chicks"]</div>
+                        </div>
+                        <div class="lp-mock-score"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="18" class="t" /><circle cx="22" cy="22" r="18" class="f" stroke-dasharray="104 113.1" transform="rotate(-90 22 22)" /></svg><b>92</b></div>
+                    </div>
+                    <div class="lp-mock-progress"><span style="width:57%"></span></div>
+                    <div class="lp-mock-stats">
+                        <div><span>@L["Live Birds"]</span><b>4,921</b></div>
+                        <div><span>@L["Avg Weight"]</span><b>1.08 kg</b></div>
+                        <div><span>FCR</span><b>1.38</b></div>
+                        <div><span>@L["Livability"]</span><b>98.4%</b></div>
+                    </div>
+                    <div class="lp-mock-spark">
+                        <svg viewBox="0 0 300 70" preserveAspectRatio="none">
+                            <path d="M0,66 C40,64 70,60 100,52 C140,42 170,32 200,22 C230,14 260,8 300,4" class="std" />
+                            <path d="M0,67 C40,65 70,59 100,50 C140,39 170,29 200,19 C230,11 260,6 300,2" class="act" />
+                        </svg>
+                        <div class="lp-mock-legend"><span class="act"></span>@L["Your flock"] <span class="std"></span>@L["Breed standard"]</div>
+                    </div>
+                </div>
+                <div class="lp-bubble">
+                    <span class="material-symbols-outlined">chat</span>
+                    <div>
+                        <b>@L["House 2 · heat stress"]</b>
+                        <span>@L["36 °C at 2 PM — start foggers, give extra water."]</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @* ---------------- What it answers ---------------- *@
+    <section class="lp-strip">
+        <div><span class="material-symbols-outlined">timer</span><b>@L["1 minute"]</b><span>@L["to log a shed's day"]</span></div>
+        <div><span class="material-symbols-outlined">speed</span><b>@L["0–100"]</b><span>@L["batch score, every day"]</span></div>
+        <div><span class="material-symbols-outlined">picture_as_pdf</span><b>@L["3 reports"]</b><span>@L["ready to print or share"]</span></div>
+        <div><span class="material-symbols-outlined">translate</span><b>@L["2 languages"]</b><span>@L["English and Telugu"]</span></div>
+    </section>
+
+    @* ---------------- Photo strip (slow auto-scroll; the list is doubled so it loops seamlessly) ---------------- *@
+    <section class="lp-gallery" aria-label="@L["Broiler farms"]">
+        <div class="lp-gallery-track">
+            @for (var pass = 0; pass < 2; pass++)
+            {
+                foreach (var g in Gallery)
+                {
+                    <figure aria-hidden="@(pass == 1 ? "true" : "false")">
+                        <img src="images/farm/@g.File" alt="@(pass == 0 ? L[g.Caption].Value : "")" loading="lazy" />
+                        <figcaption>@L[g.Caption]</figcaption>
+                    </figure>
+                }
+            }
+        </div>
+    </section>
+
+    @* ---------------- Our story ---------------- *@
+    <section class="lp-section lp-story" id="story">
+        <div class="lp-story-photo">
+            <img src="images/farm/farm-aerial-sunset.jpg" alt="@L["A broiler farm at sunset"]" loading="lazy" />
+            <div class="lp-story-stamp"><b>10+</b><span>@L["years in broiler farming"]</span></div>
+        </div>
+        <div class="lp-story-copy">
+            <span class="lp-kicker">@L["Our story"]</span>
+            <h2>@L["Built by farmers who have lived every batch"]</h2>
+            <p>@L["We are broiler farmers. For more than ten years we have raised flocks for integrators — through summer heat that took birds overnight, sick flocks we noticed too late, feed that ran out on a Sunday, and settlements we couldn't question because our records were in a torn notebook."]</p>
+            <p>@L["We learned every lesson the hard way. BroilIQ is everything we wish we had on day one: a simple way to see how the flock is really doing, catch trouble early, and stand up for the fair price of our hard work."]</p>
+            <blockquote class="lp-story-quote">
+                <span class="material-symbols-outlined">format_quote</span>
+                @L["Every batch is our family's income. We built this so no farmer has to lose a batch — or an argument about one — for lack of good records."]
+                <cite>— @L["The BroilIQ founding farmers"]</cite>
+            </blockquote>
+            <ul class="lp-story-points">
+                <li><span class="material-symbols-outlined">thermostat</span> @L["Heat waves and sudden mortality"]</li>
+                <li><span class="material-symbols-outlined">receipt_long</span> @L["Settlement cuts we couldn't check"]</li>
+                <li><span class="material-symbols-outlined">inventory_2</span> @L["Feed shortages and late deliveries"]</li>
+                <li><span class="material-symbols-outlined">menu_book</span> @L["Years of notebook records"]</li>
+            </ul>
+        </div>
+    </section>
+
+    @* ---------------- Problem → solution ---------------- *@
+    <section class="lp-section">
+        <div class="lp-section-head">
+            <span class="lp-kicker">@L["Why BroilIQ"]</span>
+            <h2>@L["Your income depends on a few numbers. Watch them every day."]</h2>
+            <p>@L["In contract farming you are paid on weight, FCR and mortality. Notebook records make it hard to see a problem until the batch is over — and hard to question a settlement."]</p>
+        </div>
+        <div class="lp-compare">
+            <div class="lp-compare-col before">
+                <h3><span class="material-symbols-outlined">menu_book</span> @L["Without it"]</h3>
+                <ul>
+                    <li>@L["Deaths, feed and weights scattered across notebooks"]</li>
+                    <li>@L["Poor growth noticed only at lifting"]</li>
+                    <li>@L["Feed runs out or vaccinations are missed"]</li>
+                    <li>@L["No easy way to check the integrator's settlement"]</li>
+                </ul>
+            </div>
+            <div class="lp-compare-col after">
+                <h3><span class="material-symbols-outlined">verified</span> @L["With BroilIQ"]</h3>
+                <ul>
+                    <li>@L["Every shed's day in one place, entered in a minute"]</li>
+                    <li>@L["Weight and FCR compared with the breed standard daily"]</li>
+                    <li>@L["Warnings for feed stock, heat and vaccinations"]</li>
+                    <li>@L["Expected settlement worked out from your own records"]</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    @* ---------------- Features ---------------- *@
+    <section class="lp-section lp-alt" id="features">
+        <div class="lp-section-head">
+            <span class="lp-kicker">@L["Features"]</span>
+            <h2>@L["Everything a broiler farm needs, from placement to settlement"]</h2>
+        </div>
+        <div class="lp-features">
+            @foreach (var f in FeatureList)
+            {
+                <div class="lp-feature">
+                    <span class="lp-feature-icon material-symbols-outlined">@f.Icon</span>
+                    <h3>@L[f.Title]</h3>
+                    <p>@L[f.Text]</p>
+                </div>
+            }
+        </div>
+    </section>
+
+    @* ---------------- Showcase rows ---------------- *@
+    <section class="lp-section">
+        <div class="lp-show">
+            <img src="images/farm/supervisor-tablet.jpg" alt="@L["Supervisor recording the day in the shed"]" loading="lazy" />
+            <div>
+                <span class="lp-kicker">@L["Daily Record"]</span>
+                <h2>@L["Built for the shed, not the office"]</h2>
+                <p>@L["Big buttons for deaths, culls and feed bags, \"same as yesterday\" for routine values, and gentle warnings when a number looks wrong. Supervisors see only the houses they're assigned to."]</p>
+                <ul class="lp-checks">
+                    <li>@L["Deaths, culls, feed, water, weight and shed temperature"]</li>
+                    <li>@L["Feed kg worked out from bags automatically"]</li>
+                    <li>@L["Vaccinations, medicines, feed deliveries and lifting"]</li>
+                </ul>
+            </div>
+        </div>
+        <div class="lp-show reverse">
+            <img src="images/farm/bird-weighing.jpg" alt="@L["Weighing a sample bird"]" loading="lazy" />
+            <div>
+                <span class="lp-kicker">@L["Batch score & advice"]</span>
+                <h2>@L["Know how the flock is doing — and what to fix"]</h2>
+                <p>@L["Each active batch gets a 0–100 score from FCR, growth, livability, vaccinations and shed conditions. Hover on it for the breakdown and the one or two things that need attention today."]</p>
+                <ul class="lp-checks">
+                    <li>@L["Growth and FCR against the Cobb/Ross standard for the bird's age"]</li>
+                    <li>@L["Mortality against your integrator's allowance"]</li>
+                    <li>@L["Days of feed left in stock"]</li>
+                </ul>
+            </div>
+        </div>
+        <div class="lp-show">
+            <img src="images/farm/cooling-pads.jpg" alt="@L["Environment-controlled broiler shed"]" loading="lazy" />
+            <div>
+                <span class="lp-kicker">@L["Reports"]</span>
+                <h2>@L["Learn from every batch"]</h2>
+                <p>@L["Download PDF reports that show what made your best batch different from your weakest one — by house, season and integrator — with an action plan for the next placement."]</p>
+                <ul class="lp-checks">
+                    <li>@L["Batch close-out report with growth charts"]</li>
+                    <li>@L["Batch comparison with the drivers of good results"]</li>
+                    <li>@L["Financial summary of income and shed expenses"]</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    @* ---------------- How it works ---------------- *@
+    <section class="lp-section lp-alt" id="how">
+        <div class="lp-section-head">
+            <span class="lp-kicker">@L["How it works"]</span>
+            <h2>@L["Three steps, every batch"]</h2>
+        </div>
+        <div class="lp-steps">
+            <div class="lp-step"><img class="lp-step-img" src="images/farm/chicks-brooding.jpg" alt="" loading="lazy" /><span class="lp-step-n">1</span><h3>@L["Place the batch"]</h3><p>@L["Pick the house and integrator. Chick cost, feed bag weight and target weight fill in from the integrator's terms."]</p></div>
+            <div class="lp-step"><img class="lp-step-img" src="images/farm/bird-drinking-line.jpg" alt="" loading="lazy" /><span class="lp-step-n">2</span><h3>@L["Log each day"]</h3><p>@L["Deaths, feed, weight and temperature in about a minute per shed — from the shed itself, on a phone."]</p></div>
+            <div class="lp-step"><img class="lp-step-img" src="images/farm/healthy-birds.jpg" alt="" loading="lazy" /><span class="lp-step-n">3</span><h3>@L["Act and improve"]</h3><p>@L["Follow the score and warnings during the batch, check the settlement at the end, and compare batches to do better next time."]</p></div>
+        </div>
+    </section>
+
+    @* ---------------- Who it's for ---------------- *@
+    <section class="lp-section">
+        <div class="lp-section-head">
+            <span class="lp-kicker">@L["Who it's for"]</span>
+            <h2>@L["One app for everyone on the farm"]</h2>
+        </div>
+        <div class="lp-roles">
+            <div class="lp-role" style="background-image:linear-gradient(180deg, rgba(7,40,60,.1), rgba(7,40,60,.85)), url('images/farm/farm-aerial-sunset.jpg')">
+                <span class="material-symbols-outlined">person</span>
+                <h3>@L["Farm owners"]</h3>
+                <p>@L["See every shed at a glance, compare batches and check what you're paid."]</p>
+            </div>
+            <div class="lp-role" style="background-image:linear-gradient(180deg, rgba(7,40,60,.1), rgba(7,40,60,.85)), url('images/farm/shed-feeders.jpg')">
+                <span class="material-symbols-outlined">engineering</span>
+                <h3>@L["Supervisors & shed staff"]</h3>
+                <p>@L["Enter the day's record quickly and get reminders for feed and vaccinations."]</p>
+            </div>
+            <div class="lp-role" style="background-image:linear-gradient(180deg, rgba(7,40,60,.1), rgba(7,40,60,.85)), url('images/farm/feed-silo.jpg')">
+                <span class="material-symbols-outlined">admin_panel_settings</span>
+                <h3>@L["Admins"]</h3>
+                <p>@L["Add users, choose what each role can see or edit, and assign houses."]</p>
+            </div>
+        </div>
+    </section>
+
+    @* ---------------- Add-ons ---------------- *@
+    <section class="lp-section lp-dark" id="addons">
+        <div class="lp-section-head">
+            <span class="lp-kicker">@L["Optional add-ons"]</span>
+            <h2>@L["Extra help when you need it"]</h2>
+            <p>@L["Switched on for your farm on request — each farm uses its own AI and WhatsApp account, so costs stay separate."]</p>
+        </div>
+        @* ---- AI Assistant ---- *@
+        <div class="lp-addon-row">
+            <div class="lp-addon-copy">
+                <span class="lp-addon-badge ai"><span class="material-symbols-outlined">smart_toy</span> @L["AI Assistant"]</span>
+                <h3>@L["A health check from a photo, and answers about your own batch"]</h3>
+                <p>@L["Upload photos of sick birds for an instant health check, and ask questions about your batch in English or Telugu. The assistant reads your own daily records, weights, feed and health log."]</p>
+                <ul class="lp-addon-list">
+                    <li><b>@L["Photo Health Check"]</b> — @L["up to 4 photos of birds, droppings, litter or post-mortem findings, with the symptoms you tick"]</li>
+                    <li><b>@L["Clear result"]</b> — @L["possible conditions with likelihood, how urgent it is, what to do now and what to check"]</li>
+                    <li><b>@L["Safety first"]</b> — @L["tells you when to call the vet and warns about notifiable diseases such as bird flu"]</li>
+                    <li><b>@L["Farm assistant chat"]</b> — @L["ask \"Why did mortality go up this week?\" or \"When should I lift?\" and get answers from your records"]</li>
+                </ul>
+                <small>@L["Suggestions only — always confirm with your vet."]</small>
+            </div>
+            <div class="lp-ai-mock" aria-hidden="true">
+                <div class="lp-ai-photos">
+                    <img src="images/farm/shed-dim-stress.jpg" alt="" />
+                    <img src="images/farm/healthy-birds.jpg" alt="" />
+                    <span class="lp-ai-add"><span class="material-symbols-outlined">add_a_photo</span></span>
+                </div>
+                <div class="lp-ai-result">
+                    <div class="lp-ai-tags"><span class="u">@L["Act today"]</span><span class="v"><span class="material-symbols-outlined">call</span> @L["Call your vet"]</span></div>
+                    <div class="lp-ai-cond"><b>@L["Coccidiosis"]</b><span class="hi">@L["high likelihood"]</span></div>
+                    <div class="lp-ai-cond"><b>@L["Necrotic enteritis"]</b><span class="md">@L["medium likelihood"]</span></div>
+                    <div class="lp-ai-do"><span class="material-symbols-outlined">task_alt</span> @L["Remove wet litter around drinkers today"]</div>
+                </div>
+                <div class="lp-ai-chat">
+                    <div class="q">@L["How can I improve FCR in the remaining days?"]</div>
+                    <div class="a"><span class="lp-typing"><span></span><span></span><span></span></span></div>
+                </div>
+            </div>
+        </div>
+
+        @* ---- WhatsApp alerts ---- *@
+        <div class="lp-addon-row reverse">
+            <div class="lp-addon-copy">
+                <span class="lp-addon-badge wa"><span class="material-symbols-outlined">chat</span> @L["WhatsApp Alerts"]</span>
+                <h3>@L["Problems reach your phone before they cost you"]</h3>
+                <p>@L["Death spikes, heat, low feed, vaccination reminders and an evening summary sent to your phone on WhatsApp, in English or Telugu."]</p>
+                <ul class="lp-addon-list">
+                    <li><b>@L["Death spike"]</b> — @L["when a day's deaths jump well above the recent average"]</li>
+                    <li><b>@L["Heat and cold stress"]</b> — @L["when the shed temperature is dangerous for the birds' age"]</li>
+                    <li><b>@L["Feed running low"]</b> — @L["about 2 days before feed runs out"]</li>
+                    <li><b>@L["Vaccinations"]</b> — @L["a reminder the day before each dose, and a note if one looks missed"]</li>
+                    <li><b>@L["Missing daily record"]</b> — @L["at 8 PM if today's entry hasn't been made"]</li>
+                    <li><b>@L["Evening summary"]</b> — @L["deaths, weight, FCR, feed left and score for each batch, at the time you choose"]</li>
+                </ul>
+                <small>@L["Each person chooses which alerts they want."]</small>
+            </div>
+            <div class="lp-phone" aria-hidden="true">
+                <div class="lp-phone-top"><img src="@AppBrand.MarkUrl" alt="" /> <b>@AppBrand.Name</b></div>
+                <div class="lp-wa-msg"><b>⚠ @L["House 2 · death spike"]</b>@L["38 deaths today — about 3× the usual. Check drinkers and send 2 birds for post-mortem."]<span>7:42 AM</span></div>
+                <div class="lp-wa-msg"><b>🌡 @L["House 1 · heat stress"]</b>@L["36 °C at 2 PM — start foggers, give extra water."]<span>2:05 PM</span></div>
+                <div class="lp-wa-msg"><b>📊 @L["Daily summary · House 3"]</b>@L["Day 24 · 11 deaths · 1.08 kg · FCR 1.38 · feed for 4 days · score 92"]<span>7:00 PM</span></div>
+            </div>
+        </div>
+    </section>
+
+    @* ---------------- FAQ ---------------- *@
+    <section class="lp-section" id="faq">
+        <div class="lp-section-head">
+            <span class="lp-kicker">@L["FAQ"]</span>
+            <h2>@L["Common questions"]</h2>
+        </div>
+        <div class="lp-faq">
+            @foreach (var q in Faq)
+            {
+                <details>
+                    <summary>@L[q.Q]</summary>
+                    <p>@L[q.A]</p>
+                </details>
+            }
+        </div>
+    </section>
+
+    @* ---------------- Request a demo ---------------- *@
+    <section class="lp-section lp-alt" id="demo">
+        <div class="lp-demo">
+            <div class="lp-demo-intro">
+                <span class="lp-kicker">@L["Free demo"]</span>
+                <h2>@L["See BroilIQ on your own farm"]</h2>
+                <p>@L["Tell us a little about your farm. A farmer from our team will call you, show you the app on your phone in English or Telugu, and help set up your sheds — free of cost."]</p>
+                <ul class="lp-checks">
+                    <li>@L["A 20-minute call or farm visit, at a time that suits you"]</li>
+                    <li>@L["Your sheds and integrator set up for you"]</li>
+                    <li>@L["No payment details needed"]</li>
+                </ul>
+                <img src="images/farm/supervisor-tablet.jpg" alt="" loading="lazy" class="lp-demo-photo" />
+            </div>
+
+            <div class="lp-demo-card">
+                @if (demoSent)
+                {
+                    <div class="lp-demo-done">
+                        <span class="material-symbols-outlined">check_circle</span>
+                        <h3>@L["Thank you, {0}!", demo.Name]</h3>
+                        <p>@L["We have your request. Our team will call you on {0} within one working day.", demo.Phone]</p>
+                        <a class="btn btn-ghost-dark" href="@DemoWhatsAppLink" target="_blank" rel="noopener">
+                            <span class="material-symbols-outlined">chat</span> @L["Also send it on WhatsApp"]
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <h3>@L["Request a free demo"]</h3>
+                    <div class="form-grid">
+                        <div class="field">
+                            <label>@L["Your name"] *</label>
+                            <input @bind="demo.Name" maxlength="80" autocomplete="name" />
+                        </div>
+                        <div class="field">
+                            <label>@L["Mobile number"] *</label>
+                            <input @bind="demo.Phone" type="tel" inputmode="tel" maxlength="20" autocomplete="tel" placeholder="98765 43210" />
+                        </div>
+                        <div class="field">
+                            <label>@L["Village / district"]</label>
+                            <input @bind="demo.Location" maxlength="100" />
+                        </div>
+                        <div class="field">
+                            <label>@L["Integrator you grow for"]</label>
+                            <input @bind="demo.Integrator" maxlength="80" />
+                        </div>
+                        <div class="field">
+                            <label>@L["Number of sheds"]</label>
+                            <input @bind="demo.Sheds" type="number" min="1" max="999" inputmode="numeric" />
+                        </div>
+                        <div class="field">
+                            <label>@L["Birds per batch"]</label>
+                            <input @bind="demo.BirdsPerBatch" type="number" min="100" step="500" inputmode="numeric" />
+                        </div>
+                        <div class="field full">
+                            <label>@L["Anything you'd like us to know?"]</label>
+                            <textarea @bind="demo.Message" rows="2" maxlength="500"></textarea>
+                        </div>
+                        @* Honeypot: hidden from people, often filled in by bots. *@
+                        <div class="lp-hp" aria-hidden="true">
+                            <label>Website</label>
+                            <input @bind="honeypot" tabindex="-1" autocomplete="off" />
+                        </div>
+                    </div>
+                    @if (demoError is not null)
+                    {
+                        <div class="ai-error">@demoError</div>
+                    }
+                    <button class="btn btn-amber btn-block lp-btn-lg" @onclick="SubmitDemo" disabled="@demoBusy">
+                        <span class="material-symbols-outlined">event_available</span> @L["Request my free demo"]
+                    </button>
+                    <div class="lp-demo-alt">
+                        @L["Prefer to talk now?"]
+                        <a href="@AppBrand.PhoneLink">@AppBrand.PhoneDisplay</a> ·
+                        <a href="@AppBrand.WhatsAppLink" target="_blank" rel="noopener">WhatsApp</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    @* ---------------- Contact ---------------- *@
+    <section class="lp-section" id="contact">
+        <div class="lp-section-head">
+            <span class="lp-kicker">@L["Contact"]</span>
+            <h2>@L["Talk to the BroilIQ team"]</h2>
+            <p>@L["Want BroilIQ for your farm, a demo, or help with your account? Call, WhatsApp or email us."]</p>
+        </div>
+        <div class="lp-contact">
+            <a class="lp-contact-card" href="@AppBrand.PhoneLink">
+                <span class="lp-contact-icon phone"><span class="material-symbols-outlined">call</span></span>
+                <span class="lp-contact-label">@L["Call us"]</span>
+                <b>@AppBrand.PhoneDisplay</b>
+            </a>
+            <a class="lp-contact-card" href="@AppBrand.WhatsAppLink" target="_blank" rel="noopener">
+                <span class="lp-contact-icon wa"><span class="material-symbols-outlined">chat</span></span>
+                <span class="lp-contact-label">@L["WhatsApp"]</span>
+                <b>@AppBrand.WhatsAppDisplay</b>
+            </a>
+            <a class="lp-contact-card" href="mailto:@AppBrand.Email">
+                <span class="lp-contact-icon mail"><span class="material-symbols-outlined">mail</span></span>
+                <span class="lp-contact-label">@L["Email"]</span>
+                <b>@AppBrand.Email</b>
+            </a>
+        </div>
+    </section>
+
+    @* ---------------- Final CTA ---------------- *@
+    <section class="lp-cta" style="background-image:linear-gradient(90deg, rgba(7,40,60,.92), rgba(7,89,133,.7)), url('images/farm/tunnel-fans-sunset.jpg')">
+        <h2>@L["From one farmer to another — let's grow better batches together."]</h2>
+        <p>@L["Book a free demo, or log in if your farm is already on BroilIQ."]</p>
+        @if (signedIn)
+        {
+            <a class="btn btn-amber lp-btn-lg" href="">@L["Open dashboard"] <span class="material-symbols-outlined">arrow_forward</span></a>
+        }
+        else
+        {
+            <div class="lp-hero-cta" style="justify-content:center; margin:0;">
+                <a class="btn btn-amber lp-btn-lg" href="welcome#demo">@L["Request a free demo"] <span class="material-symbols-outlined">event_available</span></a>
+                <a class="btn btn-ghost lp-btn-lg" href="Account/Login">@L["Log in"] <span class="material-symbols-outlined">login</span></a>
+            </div>
+        }
+    </section>
+
+    <footer class="lp-footer">
+        <img src="@AppBrand.LogoUrl" alt="@AppBrand.Name" />
+        <span>© @DateTime.Now.Year @AppBrand.Name · @AppBrand.Tagline</span>
+        <span class="lp-footer-links">
+            <a href="@AppBrand.PhoneLink"><span class="material-symbols-outlined">call</span> @AppBrand.PhoneDisplay</a>
+            <a href="mailto:@AppBrand.Email"><span class="material-symbols-outlined">mail</span> @AppBrand.Email</a>
+        </span>
+    </footer>
+
+    <a class="lp-wa-float" href="@AppBrand.WhatsAppLink" target="_blank" rel="noopener" title="@L["Chat with us on WhatsApp"]" aria-label="@L["Chat with us on WhatsApp"]">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16 3C8.8 3 3 8.7 3 15.8c0 2.5.7 4.9 2 7L3 29l6.4-2c2 1.1 4.3 1.7 6.6 1.7 7.2 0 13-5.7 13-12.8S23.2 3 16 3zm0 23.4c-2.1 0-4.1-.6-5.9-1.7l-.4-.3-3.8 1.2 1.2-3.7-.3-.4c-1.2-1.8-1.9-3.9-1.9-6 0-5.9 4.9-10.6 11-10.6S27 9.9 27 15.8s-4.9 10.6-11 10.6zm6-7.9c-.3-.2-1.9-1-2.2-1.1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-1.9-1.8-2.2-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.3.3-.6.1-.2 0-.4 0-.6l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8s1.2 3.3 1.4 3.5c.2.2 2.4 3.6 5.8 5 .8.3 1.4.5 1.9.7.8.3 1.6.2 2.2.1.7-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5-.1-.1-.3-.2-.6-.3z" /></svg>
+    </a>
+</div>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthState { get; set; }
+    [Inject] private DemoRequestService DemoRequests { get; set; } = default!;
+    private bool signedIn;
+
+    // ---- Request a demo ----
+    private DemoRequest demo = new();
+    private string honeypot = "";
+    private bool demoSent, demoBusy;
+    private string? demoError;
+
+    private async Task SubmitDemo()
+    {
+        demoError = null;
+        if (!string.IsNullOrEmpty(honeypot)) { demoSent = true; return; }   // bot: pretend it worked
+        if (string.IsNullOrWhiteSpace(demo.Name) || string.IsNullOrWhiteSpace(demo.Phone))
+        {
+            demoError = L["Please enter your name and mobile number."];
+            return;
+        }
+        demoBusy = true;
+        demo.Language = AppLanguages.Current;
+        var result = await DemoRequests.SubmitAsync(demo);
+        demoBusy = false;
+        switch (result)
+        {
+            case DemoRequestService.SubmitResult.Saved: demoSent = true; break;
+            case DemoRequestService.SubmitResult.Invalid: demoError = L["Enter a valid mobile number, e.g. 98765 43210 or +91 98765 43210."]; break;
+            default: demoError = L["We already have your request — our team will call you soon."]; break;
+        }
+    }
+
+    /// <summary>The same request as a pre-filled WhatsApp message to the BroilIQ team.</summary>
+    private string DemoWhatsAppLink
+    {
+        get
+        {
+            var parts = new List<string> { $"Hi BroilIQ, I'd like a free demo.", $"Name: {demo.Name}", $"Phone: {demo.Phone}" };
+            if (!string.IsNullOrWhiteSpace(demo.Location)) parts.Add($"Location: {demo.Location}");
+            if (!string.IsNullOrWhiteSpace(demo.Integrator)) parts.Add($"Integrator: {demo.Integrator}");
+            if (demo.Sheds is > 0) parts.Add($"Sheds: {demo.Sheds}");
+            if (demo.BirdsPerBatch is > 0) parts.Add($"Birds per batch: {demo.BirdsPerBatch}");
+            if (!string.IsNullOrWhiteSpace(demo.Message)) parts.Add(demo.Message);
+            return $"https://wa.me/{AppBrand.WhatsAppNumber}?text=" + Uri.EscapeDataString(string.Join("\n", parts));
+        }
+    }
+
+    private record FeatureItem(string Icon, string Title, string Text);
+    private static readonly FeatureItem[] FeatureList =
+    {
+        new("edit_note", "Quick daily records", "Deaths, culls, feed bags, water, weight and shed temperature — with \"same as yesterday\" and checks for typing mistakes."),
+        new("speed", "Batch score & advisor", "A 0–100 score for every active batch, with plain advice on FCR, growth, livability, vaccinations and shed conditions."),
+        new("monitoring", "Growth vs breed standard", "Body weight and FCR compared day by day with the Cobb/Ross target for the bird's age."),
+        new("inventory_2", "Feed Stock", "Deliveries minus consumption, and a warning before feed runs out."),
+        new("vaccines", "Vaccination schedule", "ND, IB and Gumboro doses on time, with reminders and a health log."),
+        new("request_quote", "Settlement check", "Expected growing charge, FCR incentive and mortality deduction from your integrator's terms and your own records."),
+        new("picture_as_pdf", "PDF reports", "Batch close-out, batch comparison and financial reports to print or share."),
+        new("payments", "Income & expenses", "Shed expenses by batch, a live income projection before lifting, and profit per bird after settlement."),
+        new("handshake", "Integrator terms", "Chick cost, feed bag weight, growing charge, FCR incentive and mortality allowance for each integrator, kept up to date for you."),
+        new("local_shipping", "Lifting & settlement", "Record each lifting with birds, weight, vehicle and DC number, then the settlement and payment due date."),
+        new("home_work", "Multiple houses & roles", "Every shed on one dashboard; each user sees only the houses and actions allowed for their role."),
+        new("smart_toy", "AI health check", "Photograph sick birds and get possible causes, urgency and what to do now — plus a farm assistant that answers questions about your batch."),
+        new("chat", "WhatsApp Alerts", "Death spikes, heat, low feed, vaccinations and an evening summary sent to your phone."),
+        new("translate", "English & Telugu", "Switch language any time — screens, advice and reports follow."),
+        new("palette", "Your farm's branding", "Your farm name, logo and colours on every screen your team uses."),
+    };
+
+    private record GalleryItem(string File, string Caption);
+    private static readonly GalleryItem[] Gallery =
+    {
+        new("chicks-brooding.jpg", "Brooding"),
+        new("bird-drinking.jpg", "Water"),
+        new("cooling-pads.jpg", "Cooling pads"),
+        new("bird-weighing.jpg", "Sample weighing"),
+        new("tunnel-fans-sunset.jpg", "Tunnel ventilation"),
+        new("shed-interior.jpg", "Grow-out"),
+        new("feed-silo.jpg", "Feed"),
+        new("healthy-birds.jpg", "Healthy flock"),
+    };
+
+    private record FaqItem(string Q, string A);
+    private static readonly FaqItem[] Faq =
+    {
+        new("How do I get an account?", "Your farm admin creates a username and password for you. For a new farm, call or WhatsApp the BroilIQ team on +91 90307 05320 and we'll set it up."),
+        new("Does it work on a mobile phone?", "Yes. BroilIQ runs in the phone's browser — no app to install — and is designed for use inside the shed."),
+        new("Can I use it in Telugu?", "Yes. Tap EN / తె at the top of any page. Your choice is remembered on every device you sign in on."),
+        new("Is my farm's data private?", "Yes. Each farm's data is kept separate, and users only see the houses they are assigned to."),
+        new("How do I get the AI Assistant or WhatsApp alerts?", "Your farm admin can request them from Settings → Features; the platform team switches them on for your farm."),
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthState is not null)
+            signedIn = (await AuthState).User.Identity?.IsAuthenticated == true;
+    }
+}

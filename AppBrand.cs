@@ -1,4 +1,4 @@
-namespace AmrPoultryFarmWeb;
+﻿namespace AmrPoultryFarmWeb;
 
 /// <summary>
 /// The platform's own identity (BroilIQ), shown on the login screen, in the side menu for every
@@ -15,4 +15,14 @@ public static class AppBrand
 
     /// <summary>Icon-only mark — for small placements (menu, favicon, loading screen).</summary>
     public const string MarkUrl = "images/broiliq-mark.svg";
+
+    // ---- Public contact details (landing page) ----
+    public const string PhoneDisplay = "+91 90307 05320";
+    public const string PhoneLink = "tel:+919030705320";
+    public const string Email = "info@broillq.com";
+    public const string WhatsAppDisplay = "+91 90307 05320";
+    public const string WhatsAppNumber = "919030705320";   // digits only, for wa.me links
+
+    /// <summary>Opens a WhatsApp chat with the BroilIQ team, with a short opening message.</summary>
+    public const string WhatsAppLink = "https://wa.me/919030705320?text=Hi%20BroilIQ%2C%20I%27d%20like%20to%20know%20more%20about%20the%20app%20for%20my%20farm.";
 }

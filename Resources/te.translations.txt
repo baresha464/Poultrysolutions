@@ -645,3 +645,208 @@ Your last request was not approved. ||| మీ గత అభ్యర్థన �
 Being set up ||| సెటప్ జరుగుతోంది
 Not enabled ||| ఆన్ చేయలేదు
 Test mode ||| టెస్ట్ మోడ్
+0–100 ||| 0–100
+1 minute ||| 1 నిమిషం
+2 languages ||| 2 భాషలు
+3 reports ||| 3 రిపోర్టులు
+36 °C at 2 PM — start foggers, give extra water. ||| మధ్యాహ్నం 2కి 36 °C — ఫాగర్లు ఆన్ చేయండి, ఎక్కువ నీరు ఇవ్వండి.
+Act and improve ||| చర్య తీసుకోండి, మెరుగుపరచండి
+Add users, choose what each role can see or edit, and assign houses. ||| యూజర్లను జోడించండి, ప్రతి రోల్ ఏమి చూడగలదో/మార్చగలదో ఎంచుకోండి, షెడ్లు కేటాయించండి.
+Admins ||| అడ్మిన్లు
+AI & WhatsApp ||| AI & వాట్సాప్
+Back to home ||| హోమ్‌కు తిరిగి
+Batch close-out report with growth charts ||| పెరుగుదల చార్టులతో బ్యాచ్ ముగింపు రిపోర్ట్
+Batch comparison with the drivers of good results ||| మంచి ఫలితాలకు కారణాలతో బ్యాచ్‌ల పోలిక
+Batch score & advice ||| బ్యాచ్ స్కోరు & సలహా
+batch score, every day ||| బ్యాచ్ స్కోరు, ప్రతిరోజూ
+Big buttons for deaths, culls and feed bags, "same as yesterday" for routine values, and gentle warnings when a number looks wrong. Supervisors see only the houses they're assigned to. ||| మరణాలు, కల్స్, మేత బస్తాలకు పెద్ద బటన్లు, రోజూ ఒకేలా ఉండే విలువలకు "నిన్నటిలాగే", సంఖ్య తప్పుగా అనిపిస్తే హెచ్చరిక. సూపర్‌వైజర్లకు వారికి కేటాయించిన షెడ్లు మాత్రమే కనిపిస్తాయి.
+Breed standard ||| జాతి ప్రమాణం
+Broiler farm management for contract growers ||| కాంట్రాక్ట్ బ్రాయిలర్ రైతుల కోసం ఫారం నిర్వహణ
+Broiler shed ||| బ్రాయిలర్ షెడ్
+BroilIQ is a simple farm app for broiler growers. Record each shed's day in a minute, see how your flock compares with the breed standard, catch problems early, and know what the integrator owes you — on any phone, in English or Telugu. ||| BroilIQ బ్రాయిలర్ రైతుల కోసం సులభమైన ఫారం యాప్. ప్రతి షెడ్ రోజువారీ వివరాలను ఒక్క నిమిషంలో నమోదు చేయండి, మీ కోళ్లు జాతి ప్రమాణంతో ఎలా ఉన్నాయో చూడండి, సమస్యలను ముందే గుర్తించండి, ఇంటిగ్రేటర్ మీకు ఎంత ఇవ్వాలో తెలుసుకోండి — ఏ ఫోన్‌లోనైనా, ఇంగ్లీష్ లేదా తెలుగులో.
+Built for the shed, not the office ||| ఆఫీసు కోసం కాదు, షెడ్ కోసం తయారైంది
+chicks ||| పిల్లలు
+Common questions ||| సాధారణ ప్రశ్నలు
+Days of feed left in stock ||| నిల్వలో ఎన్ని రోజుల మేత ఉంది
+Deaths, culls, feed, water, weight and shed temperature ||| మరణాలు, కల్స్, మేత, నీరు, బరువు, షెడ్ ఉష్ణోగ్రత
+Deaths, feed and weights scattered across notebooks ||| మరణాలు, మేత, బరువులు అనేక నోట్‌బుక్‌లలో చెల్లాచెదురుగా
+Deaths, feed, weight and temperature in about a minute per shed — from the shed itself, on a phone. ||| మరణాలు, మేత, బరువు, ఉష్ణోగ్రత — ఒక్కో షెడ్‌కు సుమారు ఒక నిమిషం, షెడ్ నుంచే ఫోన్‌లో.
+Download PDF reports that show what made your best batch different from your weakest one — by house, season and integrator — with an action plan for the next placement. ||| మీ ఉత్తమ బ్యాచ్ బలహీన బ్యాచ్‌కంటే ఎందుకు భిన్నంగా ఉందో చూపే PDF రిపోర్టులు — షెడ్, సీజన్, ఇంటిగ్రేటర్ వారీగా — తదుపరి బ్యాచ్‌కు చర్యల ప్రణాళికతో.
+Each active batch gets a 0–100 score from FCR, growth, livability, vaccinations and shed conditions. Hover on it for the breakdown and the one or two things that need attention today. ||| ప్రతి యాక్టివ్ బ్యాచ్‌కు FCR, పెరుగుదల, బతికిన శాతం, టీకాలు, షెడ్ పరిస్థితుల నుండి 0–100 స్కోరు. వివరాలు, ఈరోజు శ్రద్ధ పెట్టాల్సిన విషయాల కోసం దానిపై చూడండి.
+Each person chooses which alerts they want. ||| ఎవరికి ఏ హెచ్చరికలు కావాలో వారే ఎంచుకుంటారు.
+English & Telugu ||| ఇంగ్లీష్ & తెలుగు
+English and Telugu ||| ఇంగ్లీష్ మరియు తెలుగు
+Enter the day's record quickly and get reminders for feed and vaccinations. ||| రోజువారీ వివరాలు త్వరగా నమోదు చేయండి, మేత మరియు టీకాల గుర్తింపులు పొందండి.
+Every shed, one dashboard ||| అన్ని షెడ్లు, ఒకే డాష్‌బోర్డ్
+Every shed's day in one place, entered in a minute ||| ప్రతి షెడ్ రోజువారీ వివరాలు ఒకే చోట, ఒక నిమిషంలో
+Everything a broiler farm needs, from placement to settlement ||| పిల్లలు వేసినప్పటి నుంచి సెటిల్‌మెంట్ వరకు బ్రాయిలర్ ఫారానికి కావలసినవన్నీ
+Expected settlement worked out from your own records ||| మీ రికార్డుల నుంచే లెక్కించిన అంచనా సెటిల్‌మెంట్
+Extra help when you need it ||| అవసరమైనప్పుడు అదనపు సహాయం
+FAQ ||| ప్రశ్నలు
+Farm owners ||| ఫారం యజమానులు
+Farm team reviewing records ||| రికార్డులు చూస్తున్న ఫారం బృందం
+Feed kg worked out from bags automatically ||| బస్తాల నుంచి మేత kg ఆటోమేటిక్‌గా లెక్కిస్తుంది
+Feed runs out or vaccinations are missed ||| మేత అయిపోవడం లేదా టీకాలు తప్పిపోవడం
+Financial summary of income and shed expenses ||| ఆదాయం మరియు షెడ్ ఖర్చుల ఆర్థిక సారాంశం
+Follow the score and warnings during the batch, check the settlement at the end, and compare batches to do better next time. ||| బ్యాచ్ సమయంలో స్కోరు, హెచ్చరికలు గమనించండి, చివరలో సెటిల్‌మెంట్ సరిచూడండి, తదుపరి సారి మెరుగ్గా చేయడానికి బ్యాచ్‌లను పోల్చండి.
+Growth and FCR against the Cobb/Ross standard for the bird's age ||| కోడి వయసుకు Cobb/Ross ప్రమాణంతో పెరుగుదల, FCR పోలిక
+Healthy broiler flock ||| ఆరోగ్యకరమైన బ్రాయిలర్ కోళ్లు
+House 1 ||| షెడ్ 1
+House 2 · heat stress ||| షెడ్ 2 · వేడి ఒత్తిడి
+How it works ||| ఇది ఎలా పనిచేస్తుంది
+In contract farming you are paid on weight, FCR and mortality. Notebook records make it hard to see a problem until the batch is over — and hard to question a settlement. ||| కాంట్రాక్ట్ ఫార్మింగ్‌లో మీకు బరువు, FCR, మరణాల ఆధారంగా చెల్లిస్తారు. నోట్‌బుక్ రికార్డులతో బ్యాచ్ ముగిసే వరకు సమస్య కనిపించదు — సెటిల్‌మెంట్‌ను ప్రశ్నించడం కూడా కష్టం.
+Know how the flock is doing — and what to fix ||| కోళ్లు ఎలా ఉన్నాయో — ఏమి సరిచేయాలో తెలుసుకోండి
+Learn from every batch ||| ప్రతి బ్యాచ్ నుంచి నేర్చుకోండి
+Log each day ||| ప్రతిరోజూ నమోదు చేయండి
+Log in ||| లాగిన్
+Log in to your farm ||| మీ ఫారంలోకి లాగిన్ అవ్వండి
+Log in with the username and password from your farm admin. ||| మీ ఫారం అడ్మిన్ ఇచ్చిన యూజర్‌నేమ్, పాస్‌వర్డ్‌తో లాగిన్ అవ్వండి.
+Made for contract broiler farms ||| కాంట్రాక్ట్ బ్రాయిలర్ ఫారాల కోసం
+Mortality against your integrator's allowance ||| మీ ఇంటిగ్రేటర్ అనుమతించిన పరిమితితో మరణాల పోలిక
+No easy way to check the integrator's settlement ||| ఇంటిగ్రేటర్ సెటిల్‌మెంట్‌ను సరిచూడటానికి సులభమైన మార్గం లేదు
+One app for everyone on the farm ||| ఫారంలో అందరికీ ఒకే యాప్
+Open dashboard ||| డాష్‌బోర్డ్ తెరవండి
+Optional add-ons ||| అదనపు సౌకర్యాలు
+Pick the house and integrator. Chick cost, feed bag weight and target weight fill in from the integrator's terms. ||| షెడ్, ఇంటిగ్రేటర్ ఎంచుకోండి. పిల్ల ధర, మేత బస్తా బరువు, లక్ష్య బరువు ఇంటిగ్రేటర్ నిబంధనల నుంచి ఆటోమేటిక్‌గా వస్తాయి.
+Place the batch ||| బ్యాచ్ వేయండి
+Poor growth noticed only at lifting ||| పెరుగుదల తక్కువగా ఉందని లిఫ్టింగ్‌ సమయంలోనే తెలుస్తుంది
+Ready to open your farm? ||| మీ ఫారం తెరవడానికి సిద్ధమా?
+ready to print or share ||| ప్రింట్ లేదా షేర్ చేయడానికి సిద్ధం
+Reports ||| రిపోర్టులు
+Run every batch like your best batch. ||| ప్రతి బ్యాచ్‌ను మీ ఉత్తమ బ్యాచ్‌లా నడపండి.
+See every shed at a glance, compare batches and check what you're paid. ||| అన్ని షెడ్లను ఒక్క చూపులో చూడండి, బ్యాచ్‌లను పోల్చండి, మీకు ఎంత చెల్లించారో సరిచూడండి.
+See what it does ||| ఇది ఏమి చేస్తుందో చూడండి
+Suggestions only — always confirm with your vet. ||| సూచనలు మాత్రమే — ఎప్పుడూ మీ వెట్‌తో నిర్ధారించుకోండి.
+Supervisors & shed staff ||| సూపర్‌వైజర్లు & షెడ్ సిబ్బంది
+Switched on for your farm on request. ||| అభ్యర్థనపై మీ ఫారానికి ఆన్ చేస్తారు.
+Three steps, every batch ||| ప్రతి బ్యాచ్‌కు మూడు దశలు
+to log a shed's day ||| ఒక షెడ్ రోజువారీ నమోదుకు
+Vaccinations, medicines, feed deliveries and lifting ||| టీకాలు, మందులు, మేత డెలివరీలు, లిఫ్టింగ్
+Warnings for feed stock, heat and vaccinations ||| మేత నిల్వ, వేడి, టీకాలకు హెచ్చరికలు
+Weight and FCR compared with the breed standard daily ||| బరువు, FCR ప్రతిరోజూ జాతి ప్రమాణంతో పోలిక
+Who it's for ||| ఇది ఎవరి కోసం
+Why BroilIQ ||| ఎందుకు BroilIQ
+With BroilIQ ||| BroilIQ తో
+Without it ||| అది లేకుండా
+Works on any phone ||| ఏ ఫోన్‌లోనైనా పనిచేస్తుంది
+Your flock ||| మీ కోళ్లు
+Your income depends on a few numbers. Watch them every day. ||| మీ ఆదాయం కొన్ని సంఖ్యలపై ఆధారపడి ఉంటుంది. వాటిని ప్రతిరోజూ గమనించండి.
+Quick daily records ||| త్వరిత రోజువారీ రికార్డులు
+Deaths, culls, feed bags, water, weight and shed temperature — with "same as yesterday" and checks for typing mistakes. ||| మరణాలు, కల్స్, మేత బస్తాలు, నీరు, బరువు, షెడ్ ఉష్ణోగ్రత — "నిన్నటిలాగే" మరియు టైపింగ్ తప్పుల తనిఖీతో.
+Batch score & advisor ||| బ్యాచ్ స్కోరు & సలహాదారు
+A 0–100 score for every active batch, with plain advice on FCR, growth, livability, vaccinations and shed conditions. ||| ప్రతి యాక్టివ్ బ్యాచ్‌కు 0–100 స్కోరు, FCR, పెరుగుదల, బతికిన శాతం, టీకాలు, షెడ్ పరిస్థితులపై సులభమైన సలహాతో.
+Growth vs breed standard ||| పెరుగుదల vs జాతి ప్రమాణం
+Body weight and FCR compared day by day with the Cobb/Ross target for the bird's age. ||| శరీర బరువు, FCR ను కోడి వయసుకు Cobb/Ross లక్ష్యంతో రోజురోజుకూ పోలుస్తుంది.
+Deliveries minus consumption, and a warning before feed runs out. ||| వచ్చిన మేత మైనస్ వాడిన మేత, మేత అయిపోకముందే హెచ్చరిక.
+Vaccination schedule ||| టీకాల షెడ్యూల్
+ND, IB and Gumboro doses on time, with reminders and a health log. ||| ND, IB, గంబోరో డోసులు సమయానికి, గుర్తింపులు మరియు ఆరోగ్య లాగ్‌తో.
+Settlement check ||| సెటిల్‌మెంట్ తనిఖీ
+Expected growing charge, FCR incentive and mortality deduction from your integrator's terms and your own records. ||| మీ ఇంటిగ్రేటర్ నిబంధనలు, మీ రికార్డుల నుంచి అంచనా పెంపకం చార్జీ, FCR ప్రోత్సాహకం, మరణాల కోత.
+PDF reports ||| PDF రిపోర్టులు
+Batch close-out, batch comparison and financial reports to print or share. ||| బ్యాచ్ ముగింపు, బ్యాచ్ పోలిక, ఆర్థిక రిపోర్టులు — ప్రింట్ లేదా షేర్ చేయడానికి.
+Multiple houses & roles ||| అనేక షెడ్లు & రోల్స్
+Every shed on one dashboard; each user sees only the houses and actions allowed for their role. ||| అన్ని షెడ్లు ఒకే డాష్‌బోర్డ్‌లో; ప్రతి యూజర్‌కు వారి రోల్‌కు అనుమతించిన షెడ్లు, పనులు మాత్రమే కనిపిస్తాయి.
+Switch language any time — screens, advice and reports follow. ||| ఎప్పుడైనా భాష మార్చండి — స్క్రీన్లు, సలహాలు, రిపోర్టులు అదే భాషలో.
+How do I get an account? ||| నాకు ఖాతా ఎలా వస్తుంది?
+Your farm admin creates a username and password for you. New farms are set up by the BroilIQ platform team. ||| మీ ఫారం అడ్మిన్ మీకు యూజర్‌నేమ్, పాస్‌వర్డ్ ఇస్తారు. కొత్త ఫారాలను BroilIQ ప్లాట్‌ఫారమ్ బృందం సెటప్ చేస్తుంది.
+Does it work on a mobile phone? ||| ఇది మొబైల్ ఫోన్‌లో పనిచేస్తుందా?
+Yes. BroilIQ runs in the phone's browser — no app to install — and is designed for use inside the shed. ||| అవును. BroilIQ ఫోన్ బ్రౌజర్‌లో పనిచేస్తుంది — యాప్ ఇన్‌స్టాల్ అవసరం లేదు — షెడ్ లోపల వాడటానికి తయారైంది.
+Can I use it in Telugu? ||| తెలుగులో వాడవచ్చా?
+Yes. Tap EN / తె at the top of any page. Your choice is remembered on every device you sign in on. ||| అవును. ఏ పేజీ పైభాగంలోనైనా EN / తె నొక్కండి. మీరు లాగిన్ అయ్యే ప్రతి పరికరంలో మీ ఎంపిక గుర్తుంటుంది.
+Is my farm's data private? ||| నా ఫారం డేటా సురక్షితమా?
+Yes. Each farm's data is kept separate, and users only see the houses they are assigned to. ||| అవును. ప్రతి ఫారం డేటా వేరుగా ఉంటుంది, యూజర్లకు వారికి కేటాయించిన షెడ్లు మాత్రమే కనిపిస్తాయి.
+How do I get the AI Assistant or WhatsApp alerts? ||| AI అసిస్టెంట్ లేదా వాట్సాప్ హెచ్చరికలు ఎలా పొందాలి?
+Your farm admin can request them from Settings → Features; the platform team switches them on for your farm. ||| మీ ఫారం అడ్మిన్ సెట్టింగ్స్ → సౌకర్యాలు నుంచి అభ్యర్థించవచ్చు; ప్లాట్‌ఫారమ్ బృందం వాటిని మీ ఫారానికి ఆన్ చేస్తుంది.
+38 deaths today — about 3× the usual. Check drinkers and send 2 birds for post-mortem. ||| ఈరోజు 38 మరణాలు — సాధారణం కంటే సుమారు 3 రెట్లు. డ్రింకర్లు సరిచూడండి, 2 కోళ్లను పోస్ట్‌మార్టమ్‌కు పంపండి.
+A health check from a photo, and answers about your own batch ||| ఫోటోతో ఆరోగ్య పరీక్ష, మీ బ్యాచ్ గురించే సమాధానాలు
+a reminder the day before each dose, and a note if one looks missed ||| ప్రతి డోసుకు ముందు రోజు గుర్తింపు, ఏదైనా తప్పినట్టు అనిపిస్తే సూచన
+about 2 days before feed runs out ||| మేత అయిపోవడానికి సుమారు 2 రోజుల ముందు
+ask "Why did mortality go up this week?" or "When should I lift?" and get answers from your records ||| "ఈ వారం మరణాలు ఎందుకు పెరిగాయి?" లేదా "ఎప్పుడు లిఫ్ట్ చేయాలి?" అని అడగండి, మీ రికార్డుల నుంచే సమాధానాలు పొందండి
+at 8 PM if today's entry hasn't been made ||| ఈరోజు నమోదు చేయకపోతే రాత్రి 8 గంటలకు
+Call us ||| మాకు కాల్ చేయండి
+Chat with us on WhatsApp ||| వాట్సాప్‌లో మాతో మాట్లాడండి
+Clear result ||| స్పష్టమైన ఫలితం
+Coccidiosis ||| కాక్సిడియోసిస్
+Contact ||| సంప్రదించండి
+Daily summary · House 3 ||| రోజువారీ సారాంశం · షెడ్ 3
+Day 24 · 11 deaths · 1.08 kg · FCR 1.38 · feed for 4 days · score 92 ||| 24వ రోజు · 11 మరణాలు · 1.08 kg · FCR 1.38 · 4 రోజుల మేత · స్కోరు 92
+Death spike ||| మరణాల పెరుగుదల
+deaths, weight, FCR, feed left and score for each batch, at the time you choose ||| ప్రతి బ్యాచ్‌కు మరణాలు, బరువు, FCR, మిగిలిన మేత, స్కోరు — మీరు ఎంచుకున్న సమయంలో
+Email ||| ఈమెయిల్
+Evening summary ||| సాయంత్రం సారాంశం
+Farm assistant chat ||| ఫారం అసిస్టెంట్ చాట్
+House 1 · heat stress ||| షెడ్ 1 · వేడి ఒత్తిడి
+House 2 · death spike ||| షెడ్ 2 · మరణాల పెరుగుదల
+Necrotic enteritis ||| నెక్రోటిక్ ఎంటెరైటిస్
+New farm? WhatsApp us ||| కొత్త ఫారమా? వాట్సాప్ చేయండి
+possible conditions with likelihood, how urgent it is, what to do now and what to check ||| సాధ్యమైన వ్యాధులు, వాటి అవకాశం, ఎంత అత్యవసరం, ఇప్పుడు ఏమి చేయాలి, ఏమి సరిచూడాలి
+Problems reach your phone before they cost you ||| నష్టం జరగకముందే సమస్యలు మీ ఫోన్‌కు చేరతాయి
+Remove wet litter around drinkers today ||| ఈరోజే డ్రింకర్ల చుట్టూ తడి లిట్టర్ తీసివేయండి
+Safety first ||| భద్రత ముందు
+Switched on for your farm on request — each farm uses its own AI and WhatsApp account, so costs stay separate. ||| అభ్యర్థనపై మీ ఫారానికి ఆన్ చేస్తారు — ప్రతి ఫారం తన సొంత AI, వాట్సాప్ ఖాతా వాడుతుంది, కాబట్టి ఖర్చులు వేరుగా ఉంటాయి.
+Talk to the BroilIQ team ||| BroilIQ బృందంతో మాట్లాడండి
+tells you when to call the vet and warns about notifiable diseases such as bird flu ||| వెట్‌ను ఎప్పుడు పిలవాలో చెబుతుంది, బర్డ్ ఫ్లూ వంటి ప్రమాదకర వ్యాధుల గురించి హెచ్చరిస్తుంది
+up to 4 photos of birds, droppings, litter or post-mortem findings, with the symptoms you tick ||| కోళ్లు, రెట్టలు, లిట్టర్ లేదా పోస్ట్‌మార్టమ్ ఫోటోలు 4 వరకు, మీరు ఎంచుకున్న లక్షణాలతో
+Want BroilIQ for your farm, a demo, or help with your account? Call, WhatsApp or email us. ||| మీ ఫారానికి BroilIQ కావాలా, డెమో కావాలా, లేదా ఖాతాలో సహాయం కావాలా? కాల్, వాట్సాప్ లేదా ఈమెయిల్ చేయండి.
+WhatsApp ||| వాట్సాప్
+when a day's deaths jump well above the recent average ||| ఒక రోజు మరణాలు ఇటీవలి సగటుకంటే బాగా పెరిగినప్పుడు
+when the shed temperature is dangerous for the birds' age ||| షెడ్ ఉష్ణోగ్రత కోళ్ల వయసుకు ప్రమాదకరంగా ఉన్నప్పుడు
+Income & expenses ||| ఆదాయం & ఖర్చులు
+Shed expenses by batch, a live income projection before lifting, and profit per bird after settlement. ||| బ్యాచ్ వారీగా షెడ్ ఖర్చులు, లిఫ్టింగ్‌కు ముందే ఆదాయ అంచనా, సెటిల్‌మెంట్ తర్వాత ఒక్కో కోడిపై లాభం.
+Integrator terms ||| ఇంటిగ్రేటర్ నిబంధనలు
+Chick cost, feed bag weight, growing charge, FCR incentive and mortality allowance for each integrator, kept up to date for you. ||| ప్రతి ఇంటిగ్రేటర్‌కు పిల్ల ధర, మేత బస్తా బరువు, పెంపకం చార్జీ, FCR ప్రోత్సాహకం, మరణాల పరిమితి — మీ కోసం తాజాగా ఉంచుతాము.
+Lifting & settlement ||| లిఫ్టింగ్ & సెటిల్‌మెంట్
+Record each lifting with birds, weight, vehicle and DC number, then the settlement and payment due date. ||| ప్రతి లిఫ్టింగ్‌ను కోళ్లు, బరువు, వాహనం, DC నంబర్‌తో నమోదు చేయండి, తర్వాత సెటిల్‌మెంట్, చెల్లింపు గడువు.
+AI health check ||| AI ఆరోగ్య పరీక్ష
+Photograph sick birds and get possible causes, urgency and what to do now — plus a farm assistant that answers questions about your batch. ||| జబ్బు పడిన కోళ్ల ఫోటో తీసి సాధ్యమైన కారణాలు, అత్యవసరత, ఇప్పుడు ఏమి చేయాలో తెలుసుకోండి — మీ బ్యాచ్ గురించి ప్రశ్నలకు సమాధానమిచ్చే ఫారం అసిస్టెంట్ కూడా.
+Death spikes, heat, low feed, vaccinations and an evening summary sent to your phone. ||| మరణాల పెరుగుదల, వేడి, మేత తక్కువ, టీకాలు, సాయంత్రం సారాంశం — మీ ఫోన్‌కు.
+Your farm's branding ||| మీ ఫారం బ్రాండింగ్
+Your farm name, logo and colours on every screen your team uses. ||| మీ బృందం వాడే ప్రతి స్క్రీన్‌పై మీ ఫారం పేరు, లోగో, రంగులు.
+Your farm admin creates a username and password for you. For a new farm, call or WhatsApp the BroilIQ team on +91 90307 05320 and we'll set it up. ||| మీ ఫారం అడ్మిన్ మీకు యూజర్‌నేమ్, పాస్‌వర్డ్ ఇస్తారు. కొత్త ఫారం కోసం BroilIQ బృందానికి +91 90307 05320 కు కాల్ లేదా వాట్సాప్ చేయండి, మేము సెటప్ చేస్తాము.
+Broiler farms ||| బ్రాయిలర్ ఫారాలు
+Brooding ||| బ్రూడింగ్
+Water ||| నీరు
+Cooling pads ||| కూలింగ్ ప్యాడ్లు
+Sample weighing ||| నమూనా తూకం
+Tunnel ventilation ||| టన్నెల్ వెంటిలేషన్
+Grow-out ||| పెంపకం
+Healthy flock ||| ఆరోగ్యకరమైన కోళ్లు
+Supervisor recording the day in the shed ||| షెడ్‌లో రోజువారీ వివరాలు నమోదు చేస్తున్న సూపర్‌వైజర్
+Weighing a sample bird ||| నమూనా కోడిని తూకం వేయడం
+A 20-minute call or farm visit, at a time that suits you ||| మీకు అనుకూలమైన సమయంలో 20 నిమిషాల కాల్ లేదా ఫారం సందర్శన
+A broiler farm at sunset ||| సూర్యాస్తమయ సమయంలో బ్రాయిలర్ ఫారం
+Also send it on WhatsApp ||| వాట్సాప్‌లో కూడా పంపండి
+Anything you'd like us to know? ||| మాకు ఇంకేమైనా చెప్పాలనుకుంటున్నారా?
+Birds per batch ||| ఒక్కో బ్యాచ్‌కు కోళ్లు
+Book a free demo, or log in if your farm is already on BroilIQ. ||| ఉచిత డెమో బుక్ చేసుకోండి, లేదా మీ ఫారం ఇప్పటికే BroilIQ లో ఉంటే లాగిన్ అవ్వండి.
+Built by broiler farmers, for broiler farmers ||| బ్రాయిలర్ రైతులు, బ్రాయిలర్ రైతుల కోసం తయారు చేసింది
+Built by farmers who have lived every batch ||| ప్రతి బ్యాచ్‌ను స్వయంగా అనుభవించిన రైతులు తయారు చేసింది
+Environment-controlled broiler shed ||| వాతావరణ నియంత్రిత (EC) బ్రాయిలర్ షెడ్
+Every batch is our family's income. We built this so no farmer has to lose a batch — or an argument about one — for lack of good records. ||| ప్రతి బ్యాచ్ మా కుటుంబ ఆదాయం. సరైన రికార్డులు లేక ఏ రైతూ బ్యాచ్‌ను — లేదా దాని గురించి వాదనను — కోల్పోకూడదని దీన్ని తయారు చేశాం.
+Feed shortages and late deliveries ||| మేత కొరత, ఆలస్యమైన డెలివరీలు
+Free demo ||| ఉచిత డెమో
+From one farmer to another — let's grow better batches together. ||| ఒక రైతు నుంచి మరో రైతుకు — కలిసి మెరుగైన బ్యాచ్‌లు పెంచుదాం.
+Heat waves and sudden mortality ||| వడగాలులు, అకస్మాత్తు మరణాలు
+Integrator you grow for ||| మీరు పెంచే ఇంటిగ్రేటర్
+No payment details needed ||| చెల్లింపు వివరాలు అవసరం లేదు
+Number of sheds ||| షెడ్ల సంఖ్య
+Our story ||| మా కథ
+Please enter your name and mobile number. ||| దయచేసి మీ పేరు, మొబైల్ నంబర్ ఇవ్వండి.
+Prefer to talk now? ||| ఇప్పుడే మాట్లాడాలనుకుంటున్నారా?
+Request a demo ||| డెమో కోరండి
+Request a free demo ||| ఉచిత డెమో కోరండి
+Request my free demo ||| నాకు ఉచిత డెమో కావాలి
+See BroilIQ on your own farm ||| మీ సొంత ఫారంలో BroilIQ ను చూడండి
+Settlement cuts we couldn't check ||| సరిచూడలేకపోయిన సెటిల్‌మెంట్ కోతలు
+Tell us a little about your farm. A farmer from our team will call you, show you the app on your phone in English or Telugu, and help set up your sheds — free of cost. ||| మీ ఫారం గురించి కొంచెం చెప్పండి. మా బృందంలోని ఒక రైతు మీకు కాల్ చేసి, మీ ఫోన్‌లోనే ఇంగ్లీష్ లేదా తెలుగులో యాప్ చూపిస్తారు, మీ షెడ్లను సెటప్ చేయడంలో సహాయం చేస్తారు — ఉచితంగా.
+Thank you, {0}! ||| ధన్యవాదాలు, {0}!
+The BroilIQ founding farmers ||| BroilIQ వ్యవస్థాపక రైతులు
+Village / district ||| గ్రామం / జిల్లా
+We already have your request — our team will call you soon. ||| మీ అభ్యర్థన ఇప్పటికే మాకు అందింది — మా బృందం త్వరలో మీకు కాల్ చేస్తుంది.
+We are broiler farmers. For more than ten years we have raised flocks for integrators — through summer heat that took birds overnight, sick flocks we noticed too late, feed that ran out on a Sunday, and settlements we couldn't question because our records were in a torn notebook. ||| మేము బ్రాయిలర్ రైతులం. పదేళ్లకు పైగా ఇంటిగ్రేటర్ల కోసం కోళ్లను పెంచాం — రాత్రికి రాత్రే కోళ్లను తీసుకెళ్లిన వేసవి వేడి, ఆలస్యంగా గుర్తించిన జబ్బు కోళ్లు, ఆదివారం అయిపోయిన మేత, చిరిగిన నోట్‌బుక్‌లో రికార్డులు ఉండటంతో ప్రశ్నించలేకపోయిన సెటిల్‌మెంట్లు — అన్నీ చూశాం.
+We have your request. Our team will call you on {0} within one working day. ||| మీ అభ్యర్థన అందింది. మా బృందం ఒక పని దినంలోగా {0} కు కాల్ చేస్తుంది.
+We learned every lesson the hard way. BroilIQ is everything we wish we had on day one: a simple way to see how the flock is really doing, catch trouble early, and stand up for the fair price of our hard work. ||| ప్రతి పాఠాన్ని కష్టపడి నేర్చుకున్నాం. మొదటి రోజే మాకు ఉండాలనుకున్నదంతా BroilIQ: కోళ్లు నిజంగా ఎలా ఉన్నాయో సులభంగా చూడటం, సమస్యను ముందే పట్టుకోవడం, మా కష్టానికి న్యాయమైన ధర కోసం నిలబడటం.
+years in broiler farming ||| సంవత్సరాల బ్రాయిలర్ ఫార్మింగ్ అనుభవం
+Years of notebook records ||| ఏళ్ల తరబడి నోట్‌బుక్ రికార్డులు
+Your name ||| మీ పేరు
+Your sheds and integrator set up for you ||| మీ షెడ్లు, ఇంటిగ్రేటర్ మీ కోసం సెటప్ చేస్తాము

@@ -39,6 +39,7 @@ public class FarmDbContext : DbContext
     public DbSet<NotificationLog> NotificationLogs => Set<NotificationLog>();
     public DbSet<TenantFeature> TenantFeatures => Set<TenantFeature>();
     public DbSet<FeatureRequest> FeatureRequests => Set<FeatureRequest>();
+    public DbSet<DemoRequest> DemoRequests => Set<DemoRequest>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -162,6 +163,9 @@ public class FarmDbContext : DbContext
         modelBuilder.Entity<FeatureRequest>().HasQueryFilter(e => TenantId != null && e.TenantId == TenantId);
         modelBuilder.Entity<FeatureRequest>().HasIndex(r => new { r.Status, r.CreatedAtUtc });
         modelBuilder.Entity<FeatureRequest>().HasIndex(r => new { r.TenantId, r.Feature });
+
+        // Public landing-page leads (platform-level, Super Admin only).
+        modelBuilder.Entity<DemoRequest>().HasIndex(r => new { r.Status, r.CreatedAtUtc });
     }
 
     // Stamps TenantId onto every newly-added ITenantScoped entity from this context's own

@@ -1,0 +1,110 @@
+@page "/superadmin/demo-requests"
+@layout SuperAdminLayout
+@inject DemoRequestService DemoRequests
+
+<PageTitle>Demo Requests — Platform Admin</PageTitle>
+
+<div class="page-title">Demo Requests</div>
+<p class="field-hint" style="margin:0 4px 10px;">Farmers who asked for a free demo on the website. Call or WhatsApp them, then update the status.</p>
+
+<div class="demo-filter">
+    @foreach (var f in Filters)
+    {
+        <button class="btn @(filter == f.Status ? "btn-primary" : "btn-outline")" @onclick="() => SetFilter(f.Status)">@f.Label</button>
+    }
+</div>
+
+@if (loading)
+{
+    <p class="empty-state">Loading…</p>
+}
+else if (requests.Count == 0)
+{
+    <div class="card empty-state">No demo requests here yet.</div>
+}
+else
+{
+    @foreach (var r in requests)
+    {
+        <div class="card demo-req">
+            <div class="demo-req-head">
+                <div>
+                    <div class="list-row-title">@r.Name <span class="status-chip @StatusClass(r.Status)">@r.Status</span></div>
+                    <div class="list-row-sub">
+                        @r.CreatedAtUtc.ToLocalTime().ToString("dd MMM yyyy, h:mm tt")
+                        @(string.IsNullOrWhiteSpace(r.Location) ? "" : $" · {r.Location}")
+                        · @(r.Language == "te" ? "Telugu" : "English")
+                    </div>
+                </div>
+                <div class="demo-req-actions">
+                    <a class="btn btn-outline" href="tel:+@r.Phone"><span class="material-symbols-outlined">call</span> +@r.Phone</a>
+                    <a class="btn btn-outline" href="@($"https://wa.me/{r.Phone}")" target="_blank" rel="noopener"><span class="material-symbols-outlined">chat</span> WhatsApp</a>
+                </div>
+            </div>
+            <div class="terms-grid">
+                <div>Sheds<b>@(r.Sheds?.ToString("N0") ?? "—")</b></div>
+                <div>Birds per batch<b>@(r.BirdsPerBatch?.ToString("N0") ?? "—")</b></div>
+                <div>Integrator<b>@(string.IsNullOrWhiteSpace(r.Integrator) ? "—" : r.Integrator)</b></div>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(r.Message))
+            {
+                <div class="list-row-sub" style="white-space:normal; margin-bottom:8px;">“@r.Message”</div>
+            }
+            <div class="demo-req-edit">
+                <select value="@((int)edits[r.Id].Status)" @onchange="e => edits[r.Id].Status = (DemoRequestStatus)int.Parse(e.Value!.ToString()!)">
+                    @foreach (var s in Enum.GetValues<DemoRequestStatus>())
+                    {
+                        <option value="@((int)s)">@s</option>
+                    }
+                </select>
+                <input @bind="edits[r.Id].Notes" placeholder="Notes (e.g. called, demo on Monday)" maxlength="500" />
+                <button class="btn btn-primary" @onclick="() => Save(r.Id)">Save</button>
+            </div>
+        </div>
+    }
+}
+
+@code {
+    private record FilterItem(DemoRequestStatus? Status, string Label);
+    private static readonly FilterItem[] Filters =
+    {
+        new(DemoRequestStatus.New, "New"), new(DemoRequestStatus.Contacted, "Contacted"),
+        new(DemoRequestStatus.Converted, "Converted"), new(DemoRequestStatus.Closed, "Closed"), new(null, "All"),
+    };
+
+    private class Edit { public DemoRequestStatus Status; public string Notes = ""; }
+
+    private DemoRequestStatus? filter = DemoRequestStatus.New;
+    private List<DemoRequest> requests = new();
+    private Dictionary<int, Edit> edits = new();
+    private bool loading = true;
+
+    protected override Task OnInitializedAsync() => LoadAsync();
+
+    private async Task SetFilter(DemoRequestStatus? s)
+    {
+        filter = s;
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        loading = true;
+        requests = await DemoRequests.GetAsync(filter);
+        edits = requests.ToDictionary(r => r.Id, r => new Edit { Status = r.Status, Notes = r.AdminNotes });
+        loading = false;
+    }
+
+    private async Task Save(int id)
+    {
+        await DemoRequests.UpdateAsync(id, edits[id].Status, edits[id].Notes);
+        await LoadAsync();
+    }
+
+    private static string StatusClass(DemoRequestStatus s) => s switch
+    {
+        DemoRequestStatus.New => "amber",
+        DemoRequestStatus.Converted => "",
+        _ => "muted",
+    };
+}

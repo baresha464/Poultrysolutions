@@ -1,6 +1,7 @@
 @inherits LayoutComponentBase
 @inject AuthService AuthService
 @inject NavigationManager Nav
+@inject DemoRequestService DemoRequests
 
 <CascadingValue Value="AuthService">
 @if (!authReady)
@@ -35,6 +36,13 @@ else
                 </NavLink>
                 <NavLink href="superadmin/integrators" class="sidebar-link" title="Integrators">
                     <span class="material-symbols-outlined">handshake</span><span>Integrators</span>
+                </NavLink>
+                <NavLink href="superadmin/demo-requests" class="sidebar-link" title="Demo Requests">
+                    <span class="material-symbols-outlined">event_available</span><span>Demo Requests</span>
+                    @if (newDemoRequests > 0)
+                    {
+                        <span class="sidebar-count">@newDemoRequests</span>
+                    }
                 </NavLink>
             </nav>
 
@@ -108,6 +116,10 @@ else
         if (authReady && !AuthService.IsSuperAdmin)
         {
             Nav.NavigateTo("/", forceLoad: true);
+            return;
         }
+        newDemoRequests = await DemoRequests.CountNewAsync();
     }
+
+    private int newDemoRequests;
 }
